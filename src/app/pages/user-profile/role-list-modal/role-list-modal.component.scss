@@ -1,0 +1,31 @@
+@import '../../../../assets/scss/variables';
+.role-list-modal-body{
+    .role-list-hight{
+        height: calc(100vh - 21em);
+        overflow-y: auto;
+    }
+    .border-color{
+        color: #{$border-color};
+    }
+    .accordion-button:focus{
+        box-shadow: none;
+    }
+    .accordion-button:not(.collapsed) em::before{
+        transform: rotate(90deg);
+    }
+    .accordion-button:not(.collapsed)::after, .accordion-button.collapsed::after{
+        background-image: none;
+    }
+    .accordion-button:not(.collapsed){
+        background-color: #{$soft-sky-blue};
+    }
+    ul {
+        li {
+        list-style: none;
+        }
+        li:nth-child(odd) {
+            background-color: #{$light-grey};
+        }
+    }
+}
+

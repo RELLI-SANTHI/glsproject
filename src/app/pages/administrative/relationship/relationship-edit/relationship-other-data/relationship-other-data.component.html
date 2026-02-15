@@ -1,0 +1,336 @@
+@if (isWriting()) {
+  <div class="row mt-3">
+    <div class="col-md-4">
+      <h2 class="fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipOtherData.title' | translate }}</h2>
+    </div>
+
+    <div class="col-md-8">
+      <div class="form-check mb-2">
+        <p class="mb-1 form-label gls-form-label">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.chargeForStampDutyExpenses' | translate }}
+        </p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'chargeForStampDutyExpensesYes'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'chargeForStampDutyExpenses'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('chargeForStampDutyExpenses')?.value === true"
+            (valueChange)="relationshipOtherDataForm().get('chargeForStampDutyExpenses')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'chargeForStampDutyExpensesNo'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'chargeForStampDutyExpenses'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('chargeForStampDutyExpenses')?.value === false"
+            (valueChange)="relationshipOtherDataForm().get('chargeForStampDutyExpenses')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+
+      <div class="form-check mb-2">
+        <p class="mb-1 form-label gls-form-label">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.bankChargesBilling' | translate }}
+        </p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'bankChargesBillingYes'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'bankChargesBilling'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('bankChargesBilling')?.value === true"
+            (valueChange)="relationshipOtherDataForm().get('bankChargesBilling')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'bankChargesBillingNo'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'bankChargesBilling'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('bankChargesBilling')?.value === false"
+            (valueChange)="relationshipOtherDataForm().get('bankChargesBilling')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+
+      <div class="form-check mb-2">
+        <p class="mb-1 form-label gls-form-label">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.chargeForStampingFeesReceipt' | translate }}
+        </p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'chargeForStampingFeesReceiptYes'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'chargeForStampingFeesReceipt'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('chargeForStampingFeesReceipt')?.value === true"
+            (valueChange)="relationshipOtherDataForm().get('chargeForStampingFeesReceipt')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'chargeForStampingFeesReceiptNo'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'chargeForStampingFeesReceipt'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('chargeForStampingFeesReceipt')?.value === false"
+            (valueChange)="relationshipOtherDataForm().get('chargeForStampingFeesReceipt')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row mt-3">
+    <div class="col-md-4">
+      <h2 class="fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipOtherData.titleAdministrative' | translate }}</h2>
+    </div>
+
+    <div class="col-md-8">
+      <div class="form-check mb-2">
+        <p class="mb-1 form-label gls-form-label">{{ 'administrative.relationshipEdit.relationshipOtherData.expired' | translate }}</p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'expiredYes'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'expired'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('expired')?.value === true"
+            (valueChange)="relationshipOtherDataForm().get('expired')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'expiredNo'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'expired'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('expired')?.value === false"
+            (valueChange)="relationshipOtherDataForm().get('expired')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+
+      <div class="form-check mb-2">
+        <p class="mb-1 form-label gls-form-label">{{ 'administrative.relationshipEdit.relationshipOtherData.blocked' | translate }}</p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'blockedYes'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'blocked'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('blocked')?.value === true"
+            (valueChange)="relationshipOtherDataForm().get('blocked')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'blockedNo'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'blocked'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('blocked')?.value === false"
+            (valueChange)="relationshipOtherDataForm().get('blocked')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+
+      <div class="form-check mb-2">
+        <p class="mb-1 form-label gls-form-label">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.sendingAccountStatement' | translate }}
+        </p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'sendingAccountStatementYes'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'sendingAccountStatement'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('sendingAccountStatement')?.value === true"
+            (valueChange)="relationshipOtherDataForm().get('sendingAccountStatement')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'sendingAccountStatementNo'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'sendingAccountStatement'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('sendingAccountStatement')?.value === false"
+            (valueChange)="relationshipOtherDataForm().get('sendingAccountStatement')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+
+      <div class="form-check mb-2">
+        <gls-input-dropdown
+          [id]="'reminder'"
+          [formGroup]="relationshipOtherDataForm()"
+          [controlName]="'reminder'"
+          [options]="reminderOptions"
+          [emptyOption]="'generic.none'"
+          [emptyOptionValue]="''"
+          [label]="'administrative.relationshipEdit.relationshipOtherData.reminder' | translate"
+          [keyValue]="'value'"
+          [keyDecsName]="'value'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input-dropdown>
+      </div>
+
+      <div class="form-check mb-2">
+        <p class="mb-1 form-label gls-form-label">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.genericCustomer' | translate }}
+        </p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'genericCustomerYes'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'genericCustomer'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('genericCustomer')?.value === true"
+            (valueChange)="relationshipOtherDataForm().get('genericCustomer')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'genericCustomerNo'"
+            [formGroup]="relationshipOtherDataForm()"
+            [controlName]="'genericCustomer'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="relationshipOtherDataForm().get('genericCustomer')?.value === false"
+            (valueChange)="relationshipOtherDataForm().get('genericCustomer')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="row mb-3 mt-3">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.relationshipEdit.relationshipOtherData.title' | translate }}</h2>
+    </div>
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.chargeForStampDutyExpenses' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipOtherDataForm().get('chargeForStampDutyExpenses')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.bankChargesBilling' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipOtherDataForm().get('bankChargesBilling')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.chargeForStampingFeesReceipt' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipOtherDataForm().get('chargeForStampingFeesReceipt')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row mb-3 mt-3">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.relationshipEdit.relationshipOtherData.titleAdministrative' | translate }}</h2>
+    </div>
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipOtherData.expired' | translate }}</div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipOtherDataForm().get('expired')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipOtherData.blocked' | translate }}</div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipOtherDataForm().get('blocked')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.sendingAccountStatement' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipOtherDataForm().get('sendingAccountStatement')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipOtherData.reminder' | translate }}</div>
+        <div class="col-6 text-break">{{ relationshipOtherDataForm().get('reminder')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipOtherData.genericCustomer' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipOtherDataForm().get('genericCustomer')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+}

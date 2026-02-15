@@ -1,0 +1,124 @@
+@if (roleData().length > 0) {
+  <div class="accordion-outer-container">
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+      <div *ngFor="let role of roleData(); let i = index" class="accordion-item">
+        <span class="accordion-header" id="flush-heading-{{ i }}">
+          <button
+            (click)="toggleExpandRow(role)"
+            [attr.aria-controls]="'flush-collapse' + i"
+            [attr.data-bs-target]="'#flush-collapse' + i"
+            aria-expanded="false"
+            class="accordion-button collapsed d-flex align-items-center py-3 px-2 w-auto flex-shrink-0 pe-none border-0 bg-transparent shadow-none outline-0"
+            data-bs-toggle="collapse"
+            style="outline: none !important; box-shadow: none !important"
+            type="button">
+            &nbsp;
+          </button>
+          <div class="d-flex align-items-center w-100">
+            <input
+              [disabled]="!!role.customSubjectIct10"
+              (change)="selectSubject(role)"
+              [checked]="selectedId() === role.id"
+              [value]="role.id"
+              class="form-check-input feature-radio me-3 custom-radio"
+              name="selectedRole"
+              type="radio" />
+
+            <div class="d-flex align-items-center flex-wrap">
+              <span class="fw-bold me-2">{{ role.surnameNameCompanyName }}</span>
+              <span class="text-muted me-2">|</span>
+
+              <span class="fw-semibold me-2">
+                {{ 'administrative.relationshipEdit.relationshipSubjectContainer.subjectAccordions.labelVatNumber' | translate }}:
+                {{ role.vatNumber }}
+              </span>
+              <span class="text-muted me-2">|</span>
+
+              <span class="fw-semibold me-2">
+                {{ 'administrative.relationshipEdit.relationshipSubjectContainer.subjectAccordions.labelFiscalCode' | translate }}:
+                {{ role.taxCode }}
+              </span>
+              <span class="text-muted me-2">|</span>
+
+              <span class="fw-semibold">{{ role.nation }}</span>
+            </div>
+          </div>
+        </span>
+
+        <div [id]="'flush-collapse' + i" class="accordion-collapse collapse mb-2" data-bs-parent="#accordionFlushExample">
+          <div class="container">
+            @if (showSelectionWarningMessage() && !!role.customSubjectIct10) {
+              <div class="alert alert-warning mt-4 alert-dismissible d-flex align-items-center" role="alert">
+                <em class="bi bi-exclamation-circle-fill me-2 warning-icon"></em>
+                <p class="mb-0 warning-message-body">
+                  {{ 'administrative.relationshipEdit.relationshipSubjectContainer.subjectAccordions.showUserWarningMessage' | translate }}
+                </p>
+                <button
+                  aria-label="Close"
+                  class="btn-close"
+                  (click)="messageStatusService.hide()"
+                  data-bs-dismiss="alert"
+                  type="button"></button>
+              </div>
+            }
+
+            @if (showEditSuccessMessage() && i === idAccordSuccess()) {
+              <div class="alert alert-success rounded-lg mt-4 alert-dismissible d-flex align-items-center" role="alert">
+                <em aria-label="Success:" class="bi bi-check-circle-fill me-2 text-success"></em>
+                <p class="mb-0 success-message-body">
+                  {{ 'administrative.relationshipEdit.relationshipSubjectContainer.subjectAccordions.showUserSuccessMessage' | translate }}
+                </p>
+                <button
+                  aria-label="Close"
+                  class="btn-close"
+                  (click)="messageStatusService.hide()"
+                  data-bs-dismiss="alert"
+                  type="button"></button>
+              </div>
+            }
+          </div>
+
+          @if (hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeSubject, PERMISSION.write)) {
+            <div class="d-flex justify-content-end align-items-end pe-3 mb-2">
+              <button (click)="openSubjectCodeModal()" class="btn btn-outline-primary">
+                {{ 'administrative.relationshipEdit.relationshipSubjectContainer.subjectAccordions.editData' | translate }}
+                <em class="bi bi-pencil-square"></em>
+              </button>
+            </div>
+          }
+
+          <div class="p-2">
+            <app-subject-edit-body
+              [formParent]="formParent"
+              [isWrite]="false"
+              [showTabs]="false"
+              [viewData]="accordingSubjectDetail"
+              [nationList]="nationList()"
+              [nationDefault]="nationDefault()"
+              [isDraft]="isDraft()" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end align-items-center mt-3">
+    <b class="pb-3 pe-2 result">
+      {{
+        'generic.results'
+          | translate
+            : {
+                firstResult: getFirstResult(),
+                lastResult: getLastResult(),
+                listLength: totalItems()
+              }
+      }}
+    </b>
+    <gls-paginator
+      (pageChange)="onPageChange($event)"
+      [pageSize]="pageSize()"
+      [page]="currentPage()"
+      [totalItems]="totalItems()"
+      [totalPages]="totalPages()">
+    </gls-paginator>
+  </div>
+}

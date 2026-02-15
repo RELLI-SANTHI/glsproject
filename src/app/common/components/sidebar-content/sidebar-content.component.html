@@ -1,0 +1,216 @@
+<nav
+  class="sidebar-container custom-filter-height p-2 d-flex flex-column justify-content-between gls-navlink"
+  role="navigation"
+  aria-label="Sidebar Navigation">
+  <div class="d-flex flex-column">
+    <div [ngClass]="{ active: pageActive('home') }" class="my-2">
+      <button (click)="goToPage('home')" [attr.aria-label]="'generic.goToHome' | translate" class="btn btn-link-dark" type="button">
+        @if (onlyIcons()) {
+          <em class="bi bi-grid pe-2"></em>
+        } @else {
+          <span class="notranslate"><em class="bi bi-grid pe-2"></em> {{ 'navmenu.home' | translate }}</span>
+        }
+      </button>
+    </div>
+
+    <div class="my-2">
+      @if (onlyIcons()) {
+        <div [ngClass]="{ active: pageActive('user-list') || pageActive('role-list') }" class="my-2">
+          <button
+            *ngIf="
+              hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any) ||
+              hasAccess(PROFILE.EVA_FIELD, FUNCTIONALITY.any, PERMISSION.any)
+            "
+            (click)="onToggleSidebar()"
+            aria-label="Toggle Structures"
+            class="btn btn-link-dark w-100 d-flex justify-content-between align-items-center"
+            type="button">
+            <em class="bi bi-person pe-2"></em>
+          </button>
+        </div>
+        <div [ngClass]="{ active: pageActive('structure-list') || pageActive('template-list') }" class="my-2">
+          <button
+            *ngIf="
+              hasAccess(PROFILE.any, FUNCTIONALITY.networkStructure, PERMISSION.any) ||
+              hasAccess(PROFILE.any, FUNCTIONALITY.networkTemplate, PERMISSION.any)
+            "
+            (click)="onToggleSidebar()"
+            aria-label="Toggle Structures"
+            class="btn btn-link-dark w-100 d-flex justify-content-between align-items-center"
+            type="button">
+            <em class="bi bi-shop-window pe-2"></em>
+          </button>
+        </div>
+        <div
+          *ngIf="
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCompany, PERMISSION.any) ||
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeSubject, PERMISSION.any) ||
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCustomer, PERMISSION.any) ||
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeAgent, PERMISSION.any)
+          "
+          [ngClass]="{ active: pageActive('company-list') || pageActive('company-list') }"
+          class="my-2">
+          <button
+            (click)="onToggleSidebar()"
+            aria-label="Toggle Structures"
+            class="btn btn-link-dark w-100 d-flex justify-content-between align-items-center"
+            type="button">
+            <em class="bi bi-wallet2 pe-2"></em>
+          </button>
+        </div>
+      } @else {
+        <button
+          *ngIf="
+            hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any) ||
+            hasAccess(PROFILE.EVA_FIELD, FUNCTIONALITY.any, PERMISSION.any)
+          "
+          (click)="userCollapse.toggle()"
+          [attr.aria-label]="'navmenu.userProfile' | translate"
+          class="btn btn-link-dark w-100 d-flex justify-content-between align-items-center my-3"
+          type="button">
+          <span><em class="bi bi-person pe-2"></em> {{ 'navmenu.userProfile' | translate }}</span>
+          <i [ngClass]="{ 'bi-chevron-down': isUserCollapsed, 'bi-chevron-up': !isUserCollapsed }"></i>
+        </button>
+        <div #userCollapse="ngbCollapse" [(ngbCollapse)]="isUserCollapsed" class="ps-3 my-2">
+          <div class="d-flex w-100" [ngClass]="{ active: pageActive('user-list') }">
+            <!-- user management button in the sidebar gestione utenti  -->
+            <button
+              *ngIf="
+                hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any) ||
+                hasAccess(PROFILE.EVA_FIELD, FUNCTIONALITY.any, PERMISSION.any)
+              "
+              (click)="goToPage('user-profile/user-list')"
+              [attr.aria-label]="'navmenu.userManagement' | translate"
+              class="btn btn-link-dark py-2"
+              type="button">
+              <span class="ps-3 text-wrap text-start">{{ 'navmenu.userManagement' | translate }}</span>
+            </button>
+          </div>
+          <div class="d-flex w-100" [ngClass]="{ active: pageActive('role-list') }">
+            <!-- role management button in the side bar gestione ruoli-->
+            <button
+              *ngIf="
+                hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any) ||
+                hasAccess(PROFILE.EVA_FIELD, FUNCTIONALITY.any, PERMISSION.any)
+              "
+              (click)="goToPage('user-profile/role-list')"
+              [attr.aria-label]="'navmenu.roleManagement' | translate"
+              class="btn btn-link-dark py-2"
+              type="button">
+              <span class="ps-3 text-wrap text-start">{{ 'navmenu.roleManagement' | translate }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- menu item strutture -->
+        <button
+          *ngIf="
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkStructure, PERMISSION.any) ||
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkTemplate, PERMISSION.any)
+          "
+          (click)="collapse.toggle()"
+          [attr.aria-label]="'navmenu.structures' | translate"
+          class="btn btn-link-dark w-100 d-flex justify-content-between align-items-center my-3"
+          type="button">
+          <span class="notranslate"><em class="bi bi-shop-window pe-2"></em> {{ 'navmenu.structures' | translate }}</span>
+          <i [ngClass]="{ 'bi-chevron-down': isCollapsed, 'bi-chevron-up': !isCollapsed }"></i>
+        </button>
+        <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="ps-3 my-2">
+          <div class="d-flex w-100" [ngClass]="{ active: pageActive('structure-list') }">
+            <!-- Anagrafica Button -->
+            <button
+              *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkStructure, PERMISSION.any)"
+              (click)="goToPage('anagrafica/structure-list')"
+              [attr.aria-label]="'navmenu.anagrafica' | translate"
+              class="btn btn-link-dark py-2"
+              type="button">
+              <span class="ps-3 text-wrap text-start">{{ 'navmenu.anagrafica' | translate }}</span>
+            </button>
+          </div>
+          <div class="d-flex w-100" [ngClass]="{ active: pageActive('template-list') }">
+            <!-- Gestione template Button -->
+            <button
+              *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkTemplate, PERMISSION.any)"
+              (click)="goToPage('anagrafica/template-list')"
+              [attr.aria-label]="'navmenu.templatelist' | translate"
+              class="btn btn-link-dark py-2 text-start"
+              type="button">
+              <span class="ps-3 text-wrap text-start">{{ 'navmenu.templatelist' | translate }}</span>
+            </button>
+          </div>
+        </div>
+        <!---->
+        <button
+          *ngIf="
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCompany, PERMISSION.any) ||
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeSubject, PERMISSION.any) ||
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCustomer, PERMISSION.any) ||
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCustomerLAC, PERMISSION.any) ||
+            hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeAgent, PERMISSION.any)
+          "
+          (click)="administrativeCollapse.toggle()"
+          [attr.aria-label]="'navmenu.administrative' | translate"
+          class="btn btn-link-dark w-100 d-flex justify-content-between align-items-center my-3"
+          type="button">
+          <span><em class="bi bi-wallet2 pe-2"></em> {{ 'navmenu.administrative' | translate }}</span>
+          <i [ngClass]="{ 'bi-chevron-down': isAdministrativeCollapsed, 'bi-chevron-up': !isAdministrativeCollapsed }"></i>
+        </button>
+        <div #administrativeCollapse="ngbCollapse" [(ngbCollapse)]="isAdministrativeCollapsed" class="ps-3 my-2">
+          <div class="d-flex w-100" [ngClass]="{ active: pageActive('company-list') }">
+            <!-- Company details button in the sidebar gestione utenti  -->
+            <button
+              *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCompany, PERMISSION.any)"
+              (click)="goToPage('administrative/company-list')"
+              aria-label="Go to Company details"
+              class="btn btn-link-dark py-2"
+              type="button">
+              <span class="ps-3 text-wrap text-start">{{ 'navmenu.companyDetails' | translate }}</span>
+            </button>
+          </div>
+          <div class="d-flex w-100" [ngClass]="{ active: pageActive('subject-list') }">
+            <!-- Subjects' personal data button in the side bar gestione ruoli-->
+            <button
+              *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeSubject, PERMISSION.any)"
+              (click)="goToPage('administrative/subject-list')"
+              aria-label="Go to Subjects' personal data"
+              class="btn btn-link-dark py-2"
+              type="button">
+              <span class="ps-3 text-wrap text-start">{{ 'navmenu.subjectsPersonalData' | translate }}</span>
+            </button>
+          </div>
+          <div class="d-flex w-100" [ngClass]="{ active: pageActive('relationship-customers-list') }">
+            <button
+              *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCustomer, PERMISSION.any)"
+              (click)="goToPage('administrative/relationship-customers-list')"
+              aria-label="Go to Customer Master Data"
+              class="btn btn-link-dark py-2"
+              type="button">
+              <span class="ps-3 text-wrap text-start">{{ 'navmenu.customerMasterData' | translate }}</span>
+            </button>
+          </div>
+          <div class="d-flex w-100" [ngClass]="{ active: pageActive('relationship-customers-list-lac') }">
+            <button
+              *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCustomer, PERMISSION.any)"
+              (click)="goToPage('administrative/relationship-customers-list-lac')"
+              aria-label="Go to Customer Master Data"
+              class="btn btn-link-dark py-2"
+              type="button">
+              <span class="ps-3 text-wrap text-start">{{ 'navmenu.customerMasterDataLac' | translate }}</span>
+            </button>
+          </div>
+          <div class="d-flex w-100" [ngClass]="{ active: pageActive('relationship-agents-list') }">
+            <!-- agents personal data button in the side bar anagrafica agenti-->
+            <button
+              *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeAgent, PERMISSION.any)"
+              (click)="goToPage('administrative/relationship-agents-list')"
+              aria-label="Go to Customer Master Data"
+              class="btn btn-link-dark py-2"
+              type="button">
+              <span class="ps-3 text-wrap text-start">{{ 'navmenu.agentsPersonalData' | translate }}</span>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</nav>

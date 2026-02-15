@@ -1,0 +1,110 @@
+@if (isWrite()) {
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <h2 class="fw-bold text-break">
+        {{ 'administrative.relationshipEdit.relationshipSubjectContainer.title' | translate }}
+      </h2>
+      <p class="fw-semibold text-break">
+        {{ 'administrative.relationshipEdit.relationshipSubjectContainer.subTitle' | translate }}
+      </p>
+    </div>
+  </div>
+
+  <div class="row align-items-center">
+    <form (submit)="onSearchClick()" [formGroup]="customersListFg" class="input-group">
+      <div class="col-lg-7">
+        <div class="d-flex align-items-center flex-nowrap gap-3">
+          <gls-input-dropdown
+            [controlName]="'filterType'"
+            [formGroup]="customersListFg"
+            [id]="'filterStyle'"
+            [keyDecsName]="'value'"
+            [keyValue]="'id'"
+            [options]="filterTypeOptions"
+            [required]="false"
+            [showError]="false"
+            [showStatus]="false">
+          </gls-input-dropdown>
+
+          <gls-input
+            [class]="'form-control'"
+            [controlName]="'filterValue'"
+            [formGroup]="customersListFg"
+            [placeholder]="'structureList.search'"
+            [showError]="true"
+            [type]="'text'">
+          </gls-input>
+
+          <button
+            (click)="onSearchClick()"
+            [disabled]="
+              customersListFg.get('filterValue')?.value.length < 1 ||
+              customersListFg.invalid ||
+              customersListFg.get('filterType')?.value.length < 1
+            "
+            class="btn btn-primary"
+            type="button">
+            {{ 'structureList.search' | translate }}
+          </button>
+        </div>
+
+        <!-- info selected -->
+        @if (showLabelMessage) {
+          <p class="fw-semibold text-break mt-3 flex-start">
+            {{ 'administrative.relationshipEdit.relationshipSubjectContainer.lableResult' | translate }}
+            <span class="search-result-number">{{ searchFilterType | translate }} {{ searchFilterValue }} </span>
+          </p>
+        }
+      </div>
+    </form>
+  </div>
+
+  @if (showNoResultsWarning()) {
+    <div class="alert alert-warning alert-dismissible fade show mt-3 d-flex" role="alert">
+      <em class="bi bi-exclamation-circle-fill me-2 warning-icon"></em>
+      <div>
+        <span class="warning-message-title">
+          {{
+            'administrative.relationshipEdit.relationshipSubjectContainer.warningTitle' | translate: { type: searchFilterType | translate }
+          }}
+        </span>
+        <p class="mb-0 warning-message-body">
+          {{ 'administrative.relationshipEdit.relationshipSubjectContainer.warningMessage' | translate }}
+        </p>
+      </div>
+      <button
+        type="button"
+        class="btn-close warning-close-icon"
+        aria-label="Close"
+        (click)="showNoResultsWarning.set(false)"
+        (keyup.enter)="showNoResultsWarning.set(false)"></button>
+    </div>
+  }
+
+  @if (isTableVisible()) {
+    <app-subject-accordions
+      (pageChange)="pageChange($event)"
+      (subjectIdChange)="setSubjectId($event)"
+      (reloadSearch)="onSearchClick()"
+      [currentPage]="currentPage()"
+      [pageSize]="pageSize()"
+      [roleData]="listSubjects()"
+      [nationList]="nationList()"
+      [nationDefault]="nationDefault()"
+      [showEditSuccessMessage]="showEditSuccessMessage()"
+      [showSelectionWarningMessage]="showSelectionWarningMessage()"
+      [totalItems]="totalItems()"
+      [totalPages]="totalPages()"
+      [isDraft]="isDraft()" />
+  }
+} @else {
+  @if (formParent) {
+    <app-subject-edit-body
+      [formParent]="formParent"
+      [isWrite]="false"
+      [showTabs]="false"
+      [isDraft]="isDraft()"
+      [nationList]="nationList()"
+      [nationDefault]="nationDefault()" />
+  }
+}

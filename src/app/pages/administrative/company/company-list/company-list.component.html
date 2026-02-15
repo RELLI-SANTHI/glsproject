@@ -1,0 +1,157 @@
+<div class="container-fluid p-0">
+  <app-content-header
+    (btnCreateEvent)="society()"
+    (btnExportEvent)="exportData()"
+    [disableExportBtn]="false"
+    [image]="companyType() === 'viewCorporateGroup' || isSmallMobile() ? '' : 'assets/img/transparent/PNG-Corporate office_blue.png'"
+    [isSmallMobile]="isSmallMobile()"
+    [labelBtnCreate]="'administrative.companyList.createCompany'"
+    [showBtnCreate]="
+      ((hasAccess(PROFILE.EVA_USER, FUNCTIONALITY.networkAdministrativeCompany, PERMISSION.write) ||
+        hasAccess(PROFILE.EVA_FIELD, FUNCTIONALITY.networkAdministrativeCompany, PERMISSION.write)) &&
+        !hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any)) ||
+      companyType() === 'viewCorporateGroup'
+    "
+    [showBtnExport]="true"
+    [subTitle]="companyType() === 'viewCorporateGroup' ? 'administrative.companyGroupList.subtitle' : 'administrative.companyList.subtitle'"
+    [title]="getTitle()"
+    [isEditTitle]="companyType() === 'viewCorporateGroup'">
+    <ng-container leftContainer>
+      <div class="d-flex flex-column justify-content-between align-items-start">
+        <div class="d-flex flex-row justify-content-end align-items-center gap-2 mt-4">
+          @if (groupEditFlag) {
+            <gls-input
+              [class]="'form-control'"
+              [controlName]="'groupName'"
+              [formGroup]="GroupNameEditFg"
+              [placeholder]="'administrative.companyList.corporateGroupName' | translate"
+              [showError]="!GroupNameEditFg.valid"
+              [type]="'text'" />
+            <button
+              (click)="saveCorporateGroupName()"
+              [disabled]="!GroupNameEditFg.valid"
+              aria-pressed="true"
+              class="btn btn-primary ms-2 mb-2"
+              type="button">
+              {{ 'administrative.companyList.confirm' | translate }}
+            </button>
+            <button (click)="cancelGroupNameEdit()" class="btn btn-outline-primary mx-2 mb-2 btn-round" type="button">
+              {{ 'administrative.companyList.cancel' | translate }}
+            </button>
+          } @else {
+            <h1 class="container-header title pt-2">{{ getTitle() | translate }}</h1>
+            <button (click)="editCompanyGroup()" aria-pressed="true" class="me-2 btn btn-outline-secondary btn-no-border" type="button">
+              <em class="bi bi-pencil-square pe-2"></em>
+            </button>
+            <button
+              (click)="deleteCompanyGroup()"
+              *ngIf="hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any)"
+              aria-pressed="true"
+              class="me-2 btn btn-outline-secondary btn-no-border"
+              type="button">
+              <em class="bi bi-trash-fill pe-2"></em>
+            </button>
+          }
+        </div>
+        <p class="desc">{{ 'administrative.companyGroupList.subtitle' | translate }}</p>
+        <gls-title-budge
+          [label]="'administrative.companyEdit.lastModified' | translate"
+          value="{{ lastUpdatedGroup() | date: 'dd/MM/yyyy - HH:mm' }}"
+          class="col-auto me-3 mb-3" />
+      </div>
+    </ng-container>
+    <ng-container rightContainer>
+      <div
+        [ngClass]="{ 'w-100 mb-3': isSmallMobile() }"
+        class="dropdown"
+        *ngIf="hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any) && companyType() === ''">
+        <button
+          [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'ms-2 my-3': !isSmallMobile() }"
+          aria-expanded="false"
+          class="btn btn-primary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          type="button">
+          {{ 'administrative.menuButton.createNew' | translate }}
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <button (click)="corporateGroup()" class="dropdown-item" type="button">
+              {{ 'administrative.menuButton.corporateGroup' | translate }}
+            </button>
+          </li>
+          <li>
+            <button (click)="society()" class="dropdown-item" type="button">{{ 'administrative.menuButton.society' | translate }}</button>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+  </app-content-header>
+  <hr />
+  @if (messageStatusService.messageState$ | async) {
+    <gls-messages></gls-messages>
+  }
+
+  @if (
+    totalDraftItem > 0 &&
+    viewButtonConstants.SOCIETY &&
+    hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCompany, PERMISSION.write) &&
+    companyType() === ''
+  ) {
+    <section class="pt-4">
+      <div class="d-flex flex-column">
+        <h2 class="subtitle fw-bold">{{ 'structureList.draftTitle' | translate: { numberItems: totalDraftItem } }}</h2>
+        <app-carousel (clickEvent)="goToSocietyEdit($event)" [listCarousel]="draftSociety">
+          <ng-template let-slide>
+            <div class="d-flex justify-content-start align-items-start card-img me-2">
+              <img [alt]="slide | draftCardData: 'BuildingName'" [src]="getDraftCardIcon(slide)" />
+            </div>
+            <div class="card-content w-100 d-flex flex-column justify-content-start align-items-start">
+              <p class="card-code p-0 m-0 pb-1" ngbTooltip="{{ 'administrative.companyList.Society' | translate }}" container="body">
+                {{ 'administrative.companyList.Society' | translate }}
+              </p>
+              <h3 class="visually-hidden">h3</h3>
+              <h4 class="visually-hidden">h4</h4>
+              <h5 class="card-title mb-0 p-0 m-0 pb-1" ngbTooltip="{{ slide.name }}" container="body">
+                {{ slide.name }}
+              </h5>
+              <p [ngbTooltip]="slide | structureInfo" class="card-info p-0 m-0 pb-1" style="font-size: 12px; word-wrap: break-word">
+                {{ slide.lastUpdated | date: 'dd/MM/yyyy HH:mm' }}
+              </p>
+            </div>
+          </ng-template>
+        </app-carousel>
+      </div>
+    </section>
+  }
+  @if (
+    tableEnabled === viewButtonConstants.GROUP_SOCIETY &&
+    hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.networkAdministrativeCompany, PERMISSION.any)
+  ) {
+    <app-company-group-list-table
+      [isSmallMobile]="isSmallMobile()"
+      [isTablet]="isTablet()"
+      [corporateGroupList]="corporateGroupList()"
+      (enabled)="getEnabledValue($event)" />
+  } @else {
+    <app-company-list-table
+      (pageChange)="pageChange($event)"
+      (sort)="onSort($event)"
+      [columns]="columns()"
+      [currentPage]="currentPage()"
+      [isSmallMobile]="isSmallMobile()"
+      [pageSize]="pageSize()"
+      [showRotateCard]="showRotateCard"
+      [sortSelected]="sortSelected"
+      [totalItems]="totalItems()"
+      [totalPages]="totalPages()"
+      [administrativeCompanyList]="administrativeCompanyList()"
+      [showFiltersApplied]="showFiltersApplied()"
+      (filterApplied)="filterByText()"
+      (resetFilter)="resetFilter($event)"
+      (resetFilters)="resetFilters()"
+      [societyFilterFg]="societyFilterFg"
+      (enabled)="getEnabledValue($event)"
+      [companyType]="companyType()"
+      [groupId]="groupId" />
+  }
+</div>

@@ -1,0 +1,176 @@
+<section class="container-fluid p-0">
+  <ul #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs nav-tabs-top pt-5 justify-content-start gap-2" ngbNav [destroyOnHide]="false">
+    <li ngbNavItem="tab1">
+      <button ngbNavLink>
+        @if (isSectionInvalid('generalData')) {
+          <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+        } @else if (warningOrError()) {
+          <img src="assets/img/administrative/bell.svg" alt="bell" />
+        }
+        {{ 'administrative.generalData.generalData' | translate }}
+      </button>
+      <ng-template ngbNavContent>
+        <app-general-data
+          [formGeneralData]="formParent()"
+          [isWriting]="isWrite()"
+          [subjectData]="viewData()"
+          [isDraft]="isDraft()"
+          [nationList]="nationList()"
+          [nationDefault]="nationDefault()"
+          [(warningOrError)]="warningOrError" />
+        <hr />
+        <app-contact-information [formContactDetail]="formParent()?.get('contactDetail')" [isWriting]="isWrite()" [isDraft]="isDraft()" />
+        <hr />
+        <div class="row">
+          <div class="col-md-6">
+            <h2 class="fw-bold">{{ 'administrative.subjectEdit.dateAdded' | translate }}</h2>
+          </div>
+          <div class="col-md-6 mb-3">
+            @if (isWrite()) {
+              <gls-input
+                [id]="''"
+                [formGroup]="formParent()"
+                [controlName]="'dateAdded'"
+                [label]="'administrative.subjectEdit.dateAdded'"
+                [placeholder]="'administrative.subjectEdit.dateAdded' | translate"
+                [type]="'text'"
+                [class]="'form-control'"
+                [showError]="!formParent().valid"
+                [showStatus]="true">
+              </gls-input>
+            } @else {
+              <div class="row mb-2">
+                <div class="col-6 fw-bold text-break">
+                  {{ 'administrative.subjectEdit.dateAdded' | translate }}
+                </div>
+                <div class="col-6 text-break">{{ getDateAdded() | date: 'dd/MM/yyyy' }}</div>
+              </div>
+            }
+          </div>
+        </div>
+      </ng-template>
+    </li>
+    <li ngbNavItem="tab2">
+      <button ngbNavLink>
+        @if (isSectionInvalid('fiscalData')) {
+          <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+        }
+        {{ 'administrative.subjectEdit.subjectFiscalDate.titleTab' | translate }}
+      </button>
+      <ng-template ngbNavContent>
+        @if (isWrite()) {
+          <div class="row">
+            <div class="col-md-4">
+              <h2 class="fw-bold">
+                {{ 'administrative.subjectEdit.labelOtherData' | translate }}
+              </h2>
+            </div>
+
+            <div class="col-md-8">
+              <form [formGroup]="formParent()">
+                <div class="mb-2">
+                  <p class="mb-1 form-label gls-form-label">
+                    {{ 'administrative.subjectEdit.subTitleOtherData' | translate
+                    }}{{ utility.requiredFieldControl(formParent(), 'isPrivate') }}
+                  </p>
+                  <div class="d-flex flex-column justify-content-start map-3 leagal-data-checkbox">
+                    <gls-input-checkbox
+                      [id]="'labelPrivateClientPrivate'"
+                      [formGroup]="formParent()"
+                      [controlName]="'isPrivate'"
+                      [label]="'administrative.subjectEdit.labelPrivateClient'"
+                      [class]="'form-check-input feature-radio'"
+                      [type]="'radio'"
+                      [checked]="formParent().get('isPrivate')?.value === true"
+                      (valueChange)="formParent().get('isPrivate')?.setValue(true)">
+                    </gls-input-checkbox>
+                    <gls-input-checkbox
+                      [id]="'labelPrivateClientLegat'"
+                      [formGroup]="formParent()"
+                      [controlName]="'isPrivate'"
+                      [label]="'administrative.subjectEdit.labelLegalClient'"
+                      [class]="'form-check-input feature-radio'"
+                      [type]="'radio'"
+                      [checked]="formParent().get('isPrivate')?.value === false"
+                      (valueChange)="formParent().get('isPrivate')?.setValue(false)">
+                    </gls-input-checkbox>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        } @else {
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <h2 class="fw-bold">{{ 'administrative.subjectEdit.labelOtherData' | translate }}</h2>
+            </div>
+            <div class="col-md-6">
+              <div class="row mb-2">
+                <div class="col-6 fw-bold text-break">
+                  {{ 'administrative.subjectEdit.subTitleOtherData' | translate }}
+                </div>
+                <div class="col-6 text-break">
+                  {{
+                    (viewData()?.isPrivate
+                      ? ('administrative.subjectEdit.labelPrivateClient' | translate)
+                      : ('administrative.subjectEdit.labelLegalClient' | translate)) || '--'
+                  }}
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <hr />
+        <app-fiscal-data
+          [formFiscalData]="formParent()?.get('permanentEstablishmentDetail')"
+          [isWriting]="isWrite()"
+          [subjectData]="viewData()"
+          [isDraft]="isDraft()" />
+
+        <hr />
+
+        <app-data-fiscal-rapp-fisc
+          [formGeneralData]="formParent()"
+          [dataFiscalRappFiscForm]="formParent()?.get('taxRepresentativeDetail')"
+          [isWriting]="isWrite()"
+          [subjectData]="viewData()"
+          [nationDefault]="nationDefault()"
+          [isDraft]="isDraft()" />
+      </ng-template>
+    </li>
+    <li ngbNavItem="tab3">
+      <button ngbNavLink>
+        @if (isSectionInvalid('billingData')) {
+          <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+        }
+        {{ 'administrative.billingData.billingData' | translate }}
+      </button>
+      <ng-template ngbNavContent>
+        <app-billing-data
+          [formInvoiceDetail]="formParent()?.get('invoiceDetail')"
+          [isWriting]="isWrite()"
+          [allFormsDetails]="formParent()"
+          [subjectData]="viewData()"
+          [nationDefault]="nationDefault()"
+          [nationList]="nationList()"
+          [isDraft]="isDraft()" />
+      </ng-template>
+    </li>
+
+    @if (!isWrite() && showTabs()) {
+      <li ngbNavItem="tab4">
+        <button ngbNavLink>
+          @if (isSectionInvalid('commercialRelations')) {
+            <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+          }
+          {{ 'administrative.commercialRelations.commercialRelations' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          <app-commercial-relations />
+        </ng-template>
+      </li>
+    }
+  </ul>
+  <div [ngbNavOutlet]="nav"></div>
+</section>

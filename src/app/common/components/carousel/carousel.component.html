@@ -1,0 +1,57 @@
+<section class="carousel-section" aria-label="Sezione carousel">
+  <ngb-carousel #carousel="ngbCarousel" [interval]="0" [showNavigationArrows]="false" [showNavigationIndicators]="false" role="application">
+    @for (carol of listCarousel(); track i; let i = $index) {
+      <ng-template ngbSlide [id]="getSlideID(i)">
+        <div class="d-flex justify-content-center gap-4">
+          @for (slide of carol; track slide.id) {
+            <ng-container>
+              <div class="card draft-card m-0">
+                <div class="card-body w-80 d-flex align-items-md-start align-items-center justify-content-start">
+                  <ng-container *ngTemplateOutlet="slideTemplate; context: { $implicit: slide }"></ng-container>
+                  <button
+                    (click)="clickEvent.emit(slide.id)"
+                    class="btn btn-outline-primary align-self-end"
+                    style="border: none"
+                    type="button"
+                    aria-label="View-Details">
+                    <em class="bi bi-chevron-right"></em>
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+          }
+        </div>
+      </ng-template>
+    }
+  </ngb-carousel>
+</section>
+
+<div class="d-flex align-items-center justify-content-between mt-3" [ngClass]="{ 'flex-column': listCarousel().length === 1 }">
+  @if (listCarousel().length > 1) {
+    <button (click)="carousel.prev()" class="btn btn-icon-secondary mx-2" aria-label="Previous-Slide">
+      <em class="bi bi-arrow-left mx-2"></em>
+    </button>
+  }
+
+  @defer {
+    @if (isDesktop) {
+      <div class="carousel-indicators-container">
+        @for (car of listCarousel(); track car; let i = $index) {
+          <button
+            (click)="goToSlide(i)"
+            [class.active]="getActivePointer(carousel.activeId, i)"
+            class="carousel-indicator"
+            aria-label="Move">
+            <span class="dot"></span>
+          </button>
+        }
+      </div>
+    }
+  }
+
+  @if (listCarousel().length > 1) {
+    <button (click)="carousel.next()" class="btn btn-icon-secondary mx-2" aria-label="Next-Slide">
+      <em class="bi bi-arrow-right mx-2"></em>
+    </button>
+  }
+</div>

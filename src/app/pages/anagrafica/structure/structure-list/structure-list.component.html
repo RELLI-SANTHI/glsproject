@@ -1,0 +1,311 @@
+<div aria-label="Structure List Content" class="container-fluid p-0">
+  <app-content-header
+    (btnCreateEvent)="createStructure()"
+    (btnExportEvent)="openExportModal()"
+    [image]="'assets/img/transparent/PNG-City Depot_SVG_RGB_Blue.png'"
+    [isSmallMobile]="isSmallMobile()"
+    [isTablet]="isTablet()"
+    [labelBtnCreate]="'structureList.create'"
+    [showBtnCreate]="showCrateBtn()"
+    [showBtnExport]="showButtonExport"
+    [subTitle]="'structureList.description'"
+    [title]="'structureList.title'" />
+
+  @if (messageStatusService.messageState$ | async) {
+    <gls-messages></gls-messages>
+  }
+
+  @if (showWarning()) {
+    <div class="alert alert-warning alert-dismissible fade show mt-3 d-flex" role="alert">
+      <div><em class="bi bi-exclamation-circle-fill me-2 warning-icon"></em></div>
+      <div>
+        <span class="warning-message-title">{{ 'structureList.warningTitle' | translate }}</span>
+        <p class="mb-0 warning-message-body">{{ 'structureList.warningMessage' | translate }}</p>
+      </div>
+      <button
+        (click)="showWarning.set(false)"
+        (keyup.enter)="showWarning.set(false)"
+        aria-label="Close"
+        class="btn-close warning-close-icon"
+        type="button"></button>
+    </div>
+  }
+
+  <section *ngIf="totalDraftItem > 0 && showCrateBtn()" aria-label="Draft Structures" class="pt-4 pb-5">
+    <div class="d-flex flex-column">
+      <h2 class="subtitle">{{ 'structureList.draftTitle' | translate: { numberItems: totalDraftItem } }}</h2>
+      <app-carousel (clickEvent)="goToStructureEdit($event)" [listCarousel]="draftStructures">
+        <ng-template let-slide>
+          <div class="d-flex justify-content-start align-items-start card-img me-2">
+            <img [alt]="slide | draftCardData: 'BuildingName'" [src]="getDraftCardIcon(slide)" />
+          </div>
+          <div class="card-content w-100 d-flex flex-column justify-content-start align-items-start">
+            <p class="card-code p-0 m-0 pb-1">
+              {{ slide | draftCardData: 'BuildingAcronym' }}
+            </p>
+
+            <h3 class="visually-hidden">h3</h3>
+            <h4 class="card-title mb-0 p-0 m-0 pb-1">
+              {{ slide | draftCardData: ['BuildingName', 'BuildingAcronym'] }}
+            </h4>
+
+            <p [ngbTooltip]="slide | structureInfo" class="card-info p-0 m-0 pb-1">
+              {{ slide | structureInfo }}
+            </p>
+          </div>
+        </ng-template>
+      </app-carousel>
+    </div>
+  </section>
+
+  <app-structure-list-table
+    (filterByAcronym)="filterByText()"
+    (openColumnEditor)="openColumnEditor()"
+    (pageChange)="pageChange($event)"
+    (resetFilter)="resetFilter($event)"
+    (resetFilters)="resetFilters()"
+    (sort)="onSort($event)"
+    [(isOpenedFilter)]="isOpenedFilter"
+    [columns]="columns()"
+    [currentPage]="currentPage()"
+    [isSmallMobile]="isSmallMobile()"
+    [numColFrozen]="numColFrozen()"
+    [pageSize]="pageSize()"
+    [showButtonFilter]="showButtonFilter"
+    [showFiltersApplied]="showFiltersApplied()"
+    [showRotateCard]="showRotateCard()"
+    [showWarning]="showWarning()"
+    [sortSelected]="sortSelected"
+    [structureFilterFg]="structureFilterFg"
+    [structuresList]="structuresList()"
+    [totalItems]="totalItems()"
+    [totalPages]="totalPages()" />
+</div>
+
+<div *ngIf="columnModalIsOpen" class="modal-container">
+  <div class="modal-row d-flex flex-column justify-content-between p-4">
+    <div class="d-flex flex-column">
+      <h3 class="secondary subtitle pb-5">{{ 'structureList.columnEditor' | translate }}</h3>
+      <form [formGroup]="columnsFG">
+        <ng-container *ngFor="let col of getColumsNotBlocked()">
+          <div class="d-flex flex-row justify-content-between align-items-center py-2">
+            <label [for]="col.field" class="form-check-label">{{ col.label | translate }}</label>
+            <div class="form-check form-switch">
+              <input
+                [formControlName]="col.field"
+                [id]="col.field"
+                aria-checked="false"
+                class="form-check-input"
+                role="switch"
+                type="checkbox" />
+            </div>
+          </div>
+        </ng-container>
+      </form>
+    </div>
+    <div class="d-flex align-items-center justify-content-center py-4">
+      <button (click)="filterColumns()" (keyup.enter)="filterColumns()" aria-label="Filter columns" class="btn btn-warning w-100 btn-round">
+        {{ 'structureList.view' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isOpenedFilter()" class="modal-container">
+  <div class="modal-row d-flex flex-column justify-content-between p-0">
+    <div class="d-flex flex-column">
+      <div *ngFor="let step of filterStepper" [ngClass]="{ 'm-4': step.step === currenFilterStep }">
+        <ng-container *ngIf="step.step === currenFilterStep">
+          <div class="d-flex align-items-center mb-3">
+            <button
+              (click)="back()"
+              (keyup.enter)="back()"
+              *ngIf="step.step !== 'start'"
+              aria-label="Close filter"
+              class="btn btn-round btn-link"
+              type="button">
+              <i class="bi bi-chevron-left yellow me-2"></i>
+            </button>
+            <h3 class="white subtitle">{{ getColumnTranslationCode(step.step) | translate }}</h3>
+            <button
+              (click)="filterClose()"
+              (keyup.enter)="filterClose()"
+              aria-label="Close filter"
+              class="btn btn-round btn-link ms-auto"
+              type="button">
+              <em class="bi bi-x-lg yellow"></em>
+            </button>
+          </div>
+          <div class="overflow-y-auto custom-filter-height">
+            <div *ngFor="let field of step.fields" class="my-3">
+              <button
+                (click)="selectStep(field.name)"
+                (keyup.enter)="selectStep(field.name)"
+                aria-label="Click on select step"
+                class="btn px-0 btn-link nowrap w-100 d-flex align-items-center justify-content-between"
+                type="button">
+                <p *ngIf="step.step === 'start'" class="p-0 m-0 white underline">
+                  {{ getColumnTranslationCode(field.name) | translate }}
+                </p>
+                <p *ngIf="step.step !== 'start'" class="p-0 m-0 white underline text-start text-break">
+                  {{ getStatusTranslationCode(field.name) | translate }}
+                </p>
+                <div *ngIf="step.step === 'start'" class="d-flex ms-2">
+                  <button
+                    [ngClass]="{ 'btn-warning': field.value !== undefined, 'btn-light': field.value === undefined }"
+                    class="btn btn-sm w-20 me-2 primary">
+                    {{ field.value ? (getStatusTranslationCode(field!.value) | translate) : ('structureList.columnList.all' | translate) }}
+                  </button>
+                  <i class="bi bi-chevron-right white my-auto"></i>
+                </div>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-center m-4">
+      <button
+        (click)="applyFilter()"
+        (keyup.enter)="applyFilter()"
+        aria-label="Apply filters"
+        class="btn btn-warning w-100 btn-round"
+        type="button">
+        {{ 'structureList.applyFilter' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="openExportDataModal" class="modal-backdrop custom-backdrop"></div>
+
+<div [class.show]="openExportDataModal" [style.display]="openExportDataModal ? 'block' : 'none'" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fw-bold">{{ 'structureList.exportData' | translate }}</h2>
+        <button
+          (click)="closeExportDataModal()"
+          (keyup.enter)="closeExportDataModal()"
+          aria-label="Close modal export"
+          class="close border-0 bg-transparent ms-auto close-button"
+          type="button">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ 'structureList.exportSelectData' | translate }}</p>
+        <div>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: '', subSection: '' }"></ng-container>
+        </div>
+        <!-- anagrafica section -->
+        <div>
+          <h3 class="visually-hidden">h3</h3>
+          <h4 class="fw-bold section-title pb-3">{{ 'anagrafica.structure.sectionTitle.anagrafica' | translate }}</h4>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: 'anagrafica', subSection: 'general' }"></ng-container>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: 'anagrafica', subSection: 'address' }"></ng-container>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: 'anagrafica', subSection: 'other' }"></ng-container>
+        </div>
+        <hr />
+        <!-- recapiti section -->
+        <div>
+          <h3 class="visually-hidden">h3</h3>
+          <h4 class="fw-bold section-title pb-3">{{ 'anagrafica.structure.sectionTitle.recapiti' | translate }}</h4>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: 'recapiti', subSection: 'general' }"></ng-container>
+        </div>
+        <hr />
+        <!-- Gestione Operativa section -->
+        <div>
+          <h3 class="visually-hidden">h3</h3>
+          <h4 class="fw-bold section-title pb-3">{{ 'anagrafica.structure.sectionTitle.gestioneOperativa' | translate }}</h4>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: 'gestioneOperativa', subSection: 'general' }"></ng-container>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: 'gestioneOperativa', subSection: 'services' }"></ng-container>
+        </div>
+        <hr />
+        <!-- Support section -->
+        <div>
+          <h3 class="visually-hidden">h3</h3>
+          <h4 class="fw-bold section-title pb-3">{{ 'anagrafica.structure.sectionTitle.support' | translate }}</h4>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: 'support', subSection: 'general' }"></ng-container>
+        </div>
+        <hr />
+        <!-- Dati Strutturali section -->
+        <div>
+          <h3 class="visually-hidden">h3</h3>
+          <h4 class="fw-bold section-title pb-3">{{ 'anagrafica.structure.sectionTitle.datiStrutturali' | translate }}</h4>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: 'datiStrutturali', subSection: 'general' }"></ng-container>
+        </div>
+        <hr />
+        <!-- performance section -->
+        <div>
+          <h3 class="visually-hidden">h3</h3>
+          <h4 class="fw-bold section-title pb-3">{{ 'anagrafica.structure.sectionTitle.performance' | translate }}</h4>
+          <ng-container *ngTemplateOutlet="formSection; context: { section: 'performance', subSection: 'general' }"></ng-container>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-end">
+        <button
+          (click)="closeExportDataModal()"
+          (keyup.enter)="closeExportDataModal()"
+          aria-label="Close export modal"
+          class="btn btn-outline-secondary annulla-color">
+          {{ 'generic.cancel' | translate }}
+        </button>
+        <button (click)="exportData()" (keyup.enter)="exportData()" aria-label="Export data" class="btn btn-primary">
+          <i class="bi bi-download"></i> {{ 'structureList.export' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #formSection let-section="section" let-subSection="subSection">
+  <ng-container>
+    <div class="subsection-container">
+      <ng-container id="template-header">
+        <div class="subsection-title pb-3">
+          <ng-container *ngIf="section !== '' && subSection !== ''">
+            <strong class="fw-bold">{{ 'anagrafica.structure.subsection.' + subSection | translate }}</strong>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container id="template-section">
+        <div class="">
+          <ng-container>
+            <form [formGroup]="exportDataFG">
+              <div class="row d-flex">
+                <ng-container *ngIf="section === '' && subSection === ''">
+                  <gls-input-checkbox
+                    [class]="'form-check-input check-input-lg me-2'"
+                    [controlName]="'all'"
+                    [formGroup]="exportDataFG"
+                    [id]="'all'"
+                    [label]="'anagrafica.structure.field.' + 'all'"
+                    [showError]="true"
+                    [type]="'checkbox'">
+                  </gls-input-checkbox>
+                </ng-container>
+                <ng-container *ngFor="let field of exportFieldsData">
+                  <ng-container *ngIf="field.section === section && field.subSection === subSection">
+                    <div class="col-6 pb-2">
+                      <gls-input-checkbox
+                        (valueChange)="onGetExportHeader()"
+                        [class]="'form-check-input check-input-lg me-2'"
+                        [controlName]="field.fieldName"
+                        [formGroup]="exportDataFG"
+                        [id]="field.fieldName"
+                        [label]="'anagrafica.structure.field.' + field.fieldName"
+                        [showError]="true"
+                        [type]="'checkbox'">
+                      </gls-input-checkbox>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </form>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-template>

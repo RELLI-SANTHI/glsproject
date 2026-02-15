@@ -1,0 +1,15 @@
+<div class="multilingual-container d-flex flex-row align-items-center">
+  @if (genericService.viewMode()) {
+    <button class="btn btn-link" (click)="openModal()">
+      <span class="spacer gls-bold-blue">{{ 'generic.langMobile' | translate }}</span>
+      <i class="bi mt-1 bi-chevron-right chevron-small"></i>
+    </button>
+  } @else {
+    <i class="bi bi-translate"></i>
+    <span class="spacer ms-1 me-1">{{ 'generic.lang' | translate }}</span>
+    <button class="btn btn-link" (click)="openModal()">
+      <span class="spacer gls-bold-blue">{{ 'generic.change' | translate }}</span>
+      <i class="bi mt-1 bi-chevron-right chevron-small"></i>
+    </button>
+  }
+</div>

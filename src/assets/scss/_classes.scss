@@ -1,0 +1,330 @@
+@import 'variables';
+
+/* start NG-DATATABLE */
+.table-card {
+  background-color: white;
+  box-shadow: 0 2px 3px #b7b7b7;
+  padding: 0.5rem;
+  max-width: calc(100vw - 2em);
+  border-collapse: collapse;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: random($limit: 1);
+  scrollbar-color: #061ab1 #ffffff;
+  -webkit-scrollbar-thumb: 1;
+
+  .ngx-datatable.material {
+    box-shadow: none !important;
+  }
+
+  .ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+    background-color: $soft-sky-blue !important;
+    font-size: 0.875rem !important;
+    font-weight: 900 !important;
+    color: #3c3c3c !important;
+
+    :hover {
+      color: black;
+    }
+  }
+
+  .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell,
+  .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-group-cell {
+    display: flex;
+    align-items: center;
+  }
+
+  .ngx-datatable.material .datatable-header .datatable-row-left,
+  .ngx-datatable.material .datatable-body .datatable-row-odd .datatable-row-left {
+    background-color: inherit !important;
+  }
+
+  .ngx-datatable.material .datatable-body .datatable-body-row {
+    border-bottom: none !important;
+  }
+
+  .ngx-datatable .datatable-header .datatable-header-cell .sort-btn {
+    color: $gls-blue !important;
+  }
+
+  .ngx-datatable.material .datatable-header .datatable-row-left .datatable-header-cell:last-child {
+    background-color: $white;
+    background-position: 100% 0;
+    background-repeat: repeat-y;
+    background-image: inherit !important;
+  }
+
+  .ngx-datatable .datatable-body .datatable-row-wrapper .datatable-body-cell .datatable-body-cell-label .datatable-tree-button:disabled {
+    visibility: hidden;
+    margin-left: -2rem;
+  }
+
+  .ngx-datatable .datatable-body .datatable-row-wrapper .datatable-body-cell .datatable-body-cell-label .datatable-tree-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &.collapsed .icon {
+      &::before {
+        content: '\25B6'; // ►
+        font-size: 1.5em;
+        display: inline-block;
+        transform: rotate(0deg);
+      }
+    }
+
+    &.expanded .icon {
+      &::before {
+        content: '\25BC'; // ▼
+        font-size: 1.5em;
+        display: inline-block;
+        transform: rotate(0deg);
+      }
+    }
+  }
+}
+
+/* end NG-DATATABLE */
+
+// bottom bar stepper
+.stepper-nav {
+  position: fixed;
+  bottom: 0;
+  width: calc(100%);
+  background: $white;
+  padding: 15px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-right: 20px;
+  transition:
+    left 0.3s ease,
+    width 0.3s ease;
+}
+
+.stepper-bottom-bar-space {
+  margin-top: 5rem;
+}
+
+/* background */
+.bg-sky-blue {
+  background-color: $sky-blue;
+}
+
+.bg-gls-yellow {
+  background-color: $gls-yellow;
+}
+
+.bg-bright-orange {
+  background-color: $bright-orange;
+}
+
+.bg-white {
+  background-color: $white;
+}
+
+// Fields
+.gls-field-icon-ok {
+  color: #28a745;
+}
+
+.gls-field-icon-ko {
+  color: #dc3545;
+}
+
+.gls-field-icon-ko-info {
+  color: $primary;
+}
+
+.gls-field-icon-info {
+  color: #000000;
+}
+
+.selected-icon {
+  background-color: $gls-blue;
+  color: $white;
+
+  .icon-image {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(180deg) brightness(100%) contrast(100%);
+  }
+}
+
+.gls-navlink {
+  .active {
+    border-right: 4px solid $secondary;
+  }
+}
+
+.color-icon-blue {
+  .gls-field-icon-ko {
+    em {
+      color: $gls-blue;
+    }
+  }
+}
+
+.arrow-icon {
+  color: $gls-blue;
+}
+
+.gls-color-primary {
+  color: $primary;
+}
+
+/*START CAROUSEL*/
+@media screen and (max-width: 780px) {
+  .card-img {
+    height: 45px !important;
+
+    img {
+      margin-top: 0;
+    }
+  }
+}
+
+.card-img {
+  width: auto;
+  aspect-ratio: 1/1;
+
+  img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/*END CAROUSEL*/
+
+/* START vertical sidebar*/
+.sidebar-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .nav-tabs {
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+
+    .info-box {
+      background: #fff;
+      border: 2px solid #061ab1;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      margin: 8px 0;
+
+      .info-title {
+        font-weight: bold;
+        font-size: 16px;
+        border: none;
+        color: #061ab1;
+        text-align: left;
+        margin-top: 5px;
+
+        .info-count {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          background: #fff;
+          color: #061ab1;
+          font-size: 12px;
+          font-weight: bold;
+          padding: 2px 8px;
+          border-radius: 8px;
+          border: 1px solid #061ab1;
+        }
+      }
+
+      &.active .info-title {
+        font-weight: bold;
+        font-size: 16px;
+        color: #ffffff;
+        background-color: #061ab1;
+
+        .info-count {
+          background: #061ab1;
+          border: 1px solid #fff;
+          color: #fff;
+        }
+      }
+    }
+
+    .info-box.active {
+      background: #061ab1;
+      color: #fff;
+    }
+  }
+}
+
+/* END sidebar vertical */
+
+/* START Utility classes for status colors  */
+
+.status-warning {
+  color: #fd7e14;
+  padding-right: 5px;
+}
+
+.status-danger {
+  color: $danger;
+  padding-right: 5px;
+}
+
+.status-disabled {
+  color: #6c757d;
+  padding-right: 5px;
+}
+
+/* END Utility classes for status colors  */
+
+/* START alert message styles */
+.warning-icon {
+  color: #ffc107;
+  font-size: 24px;
+}
+
+.warning-message-title {
+  color: #000;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.warning-message-body {
+  color: #000;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.warning-close-icon {
+  font-size: 15px;
+  color: #061ab1;
+}
+
+.success-icon {
+  color: #0a3622;
+  font-size: 24px;
+}
+
+.success-message-title {
+  color: #0a3622;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.success-message-body {
+  color: #0a3622;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.success-close-icon {
+  font-size: 15px;
+  color: #0a3622;
+}
+
+/* END alert message styles */

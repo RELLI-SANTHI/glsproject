@@ -1,0 +1,265 @@
+<section class="w-100 mb-5 mt-5 role-tree-table">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 order-2 order-md-1 p-0">
+        <section aria-label="role-list-title">
+          <h2 class="fw-bold">
+            {{ 'userProfile.roleList.role' | translate }} <span class="container-header">({{ roleCount() }})</span>
+          </h2>
+        </section>
+
+        <div [ngClass]="{ 'd-flex': !isSmallMobile(), 'filter-tablet-ratio': isTablet() }">
+          <section aria-label="dropdown-options-region">
+            <form (submit)="searchByFilterEmit()" [formGroup]="roleFilterFg()" class="input-group">
+              <div class="input-group">
+                <div
+                  [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100' : 'input-group-prepend align-items-center gap-3'"
+                  class="d-flex">
+                  <gls-input-dropdown
+                    [controlName]="'filterType'"
+                    [formGroup]="roleFilterFg()"
+                    [id]="'filterTyle'"
+                    [keyDecsName]="'value'"
+                    [keyValue]="'id'"
+                    [options]="filterTypeList"
+                    [required]="false"
+                    [showError]="false"
+                    [showStatus]="false" />
+
+                  <gls-input
+                    [class]="'form-control'"
+                    [controlName]="'filterValue'"
+                    [formGroup]="roleFilterFg()"
+                    [placeholder]="'userProfile.userList.code' | translate"
+                    [showError]="false"
+                    [type]="'text'" />
+                  <button
+                    (click)="searchByFilterEmit()"
+                    [disabled]="roleFilterFg().invalid"
+                    [ngClass]="{ 'ms-2': !isSmallMobile(), 'align-self-start': isSmallMobile() }"
+                    aria-pressed="true"
+                    class="ms-2 btn btn-primary"
+                    type="button">
+                    {{ 'userProfile.userList.search' | translate }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="py-2 d-flex justify-content-start align-items-center flex-wrap">
+    @if (showFiltersApplied()?.length !== 0) {
+      <span class="pe-2"> {{ 'userProfile.roleList.appliedFilter' | translate }}: </span>
+    }
+
+    @for (filter of showFiltersApplied(); track filter) {
+      @if (filter.value !== undefined) {
+        <span class="badge rounded-pill white text-bg-primary my-2 ps-3 py-1 me-2 d-flex align-items-center justify-content-between">
+          {{
+            filter.name
+              ? ('userProfile.roleList.filterDropdown.' + filter.name | translate)
+              : ('userProfile.roleList.filterDropdown.all' | translate)
+          }}:
+          <b class="px-2 white">{{ filter.value | translate }}</b>
+          <button
+            (click)="resetFilter.emit(filter)"
+            class="btn btn-light p-0 btn-round d-flex align-items-center justify-content-center"
+            style="width: 20px; height: 20px"
+            type="button">
+            <i class="bi primary bi-x p-0 m-0" style="font-size: 15px"></i>
+          </button>
+        </span>
+      }
+    }
+
+    @if (showFiltersApplied()?.length !== 0) {
+      <button (click)="resetFilters.emit()" class="ms-2 btn btn-link" type="reset">
+        <b>{{ 'generic.reset' | translate }}</b>
+        <em class="bi bi-arrow-repeat ps-1"></em>
+      </button>
+    }
+  </div>
+
+  @if (showRotateCard()) {
+    <div class="my-4">
+      <app-info-mobile class="my-4" [label]="'generic.mobile.table-view'" />
+    </div>
+  }
+
+  <div #datatableWrapper aria-label="Role List Table" class="table-card">
+    <ngx-datatable
+      #myTable
+      [columnMode]="'force'"
+      [footerHeight]="false"
+      [headerHeight]="0"
+      [limit]="pageSize()"
+      [messages]="{ emptyMessage: 'anagrafica.structure.emptyStructuresMessage' | translate }"
+      [rowHeight]="getRowHeight()"
+      [rows]="roleData()"
+      [scrollbarH]="true"
+      class="material expandable">
+      <!-- Row Detail Template -->
+
+      <!-- Expand/Collapse Column -->
+      <ngx-datatable-column [canAutoResize]="false" [sortable]="false" [width]="30">
+        <ng-template let-expanded="expanded" let-row="row" ngx-datatable-cell-template>
+          <button
+            (click)="toggleExpandRow(row)"
+            [class.bi-chevron-down]="expanded"
+            [class.bi-chevron-right]="!expanded"
+            class="btn my-3 my-3 btn-link"
+            title="Expand/Collapse Row"></button>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- Other Columns -->
+      @if (isSmallMobile()) {
+        <ngx-datatable-row-detail [rowHeight]="150" #myDetailRow (toggle)="onDetailToggle($event)" class="p-0">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <ul class="list-group rounded-0">
+              <ng-container *ngFor="let items of row?.permissions; trackBy: trackByPermissionsId">
+                <li>
+                  <div>
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                      <span>{{ getRolePermissionName(items) | translate }}</span>
+                      <app-app-special-badge [showBadge]="items.isSpecial"></app-app-special-badge>
+                      <span class="border rounded-1 border-1 border-color p-1 bg-white">{{ getpermissionValue(items) | translate }}</span>
+                    </div>
+                  </div>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-template>
+        </ngx-datatable-row-detail>
+      } @else {
+        <ngx-datatable-row-detail [rowHeight]="150" #myDetailRow (toggle)="onDetailToggle($event)" class="p-0">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <ul class="list-group rounded-0">
+              <ng-container *ngFor="let items of row?.permissions; trackBy: trackByPermissionsId">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span>{{ getRolePermissionName(items) | translate }}</span>
+                  <app-app-special-badge [showBadge]="items.isSpecial"></app-app-special-badge>
+                  <span class="border rounded-1 border-1 border-color p-1 bg-white">{{ getpermissionValue(items) | translate }}</span>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-template>
+        </ngx-datatable-row-detail>
+      }
+
+      @if (isSmallMobile()) {
+        <!-- mobile -->
+        <ngx-datatable-column name="Name" prop="name">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div>
+              <div>
+                <span class="fw-bold">{{ row.name }}</span>
+              </div>
+              <div>
+                <span class="text-muted"> {{ row.permissions.length || 0 }} {{ 'userProfile.roleList.activeFeatures' | translate }} </span>
+              </div>
+              <div>
+                <app-app-special-badge [showBadge]="checkIsSpecial(row)"> ></app-app-special-badge>
+              </div>
+              <div class="align-items-center d-flex justify-content-start">
+                <button
+                  *ngIf="hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any)"
+                  (click)="goToPermissionEdit(row.id)"
+                  class="btn btn-link">
+                  <em class="bi bi-pencil-square"></em>
+                  <span class="px-2"> {{ 'userProfile.roleList.modifyFunctionality' | translate }} </span>
+                </button>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      } @else if (isTablet()) {
+        <!-- tablet -->
+        <ngx-datatable-column name="Name" prop="name">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div>
+              <div>
+                <span class="fw-bold">{{ row.name }}</span>
+              </div>
+              <div>
+                <span class="text-muted"> {{ row.permissions.length || 0 }} {{ 'userProfile.roleList.activeFeatures' | translate }} </span>
+              </div>
+              <div>
+                <app-app-special-badge [showBadge]="checkIsSpecial(row)"> ></app-app-special-badge>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Description" prop="description" hidden>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="align-items-center d-flex justify-content-start">
+              <button
+                *ngIf="hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any)"
+                (click)="goToPermissionEdit(row.id)"
+                class="btn btn-link">
+                <em class="bi bi-pencil-square"></em>
+                <span class="px-2"> {{ 'userProfile.roleList.modifyFunctionality' | translate }} </span>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      } @else {
+        <!-- desktop -->
+        <ngx-datatable-column name="Name" prop="name" [width]="448">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="d-flex align-items-center custom-width">
+              <div class="d-flex justify-content-start align-items-center gap-2">
+                <span class="fw-bold">{{ row.name }}</span>
+                <div class="vr"></div>
+                <span> {{ row.permissions.length || 0 }} {{ 'userProfile.roleList.activeFeatures' | translate }} </span>
+              </div>
+              <div class="ms-auto">
+                <app-app-special-badge [showBadge]="checkIsSpecial(row)"> ></app-app-special-badge>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Description" prop="description" hidden>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="align-items-center d-flex justify-content-start">
+              <button
+                *ngIf="hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.any, PERMISSION.any)"
+                (click)="goToPermissionEdit(row.id)"
+                class="btn btn-link">
+                <em class="bi bi-pencil-square"></em>
+                <span class="px-2"> {{ 'userProfile.roleList.modifyFunctionality' | translate }} </span>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      }
+    </ngx-datatable>
+  </div>
+  @if ((roleData() ?? []).length > 0) {
+    <div class="d-flex justify-content-end align-items-center mt-3 flex-wrap" style="width: 100%" aria-label="results-summary-region">
+      <b class="pb-3 pe-2 result">
+        {{
+          'userProfile.userList.table.results'
+            | translate
+              : {
+                  firstResult: getFirstResult(),
+                  lastResult: getLastResult(),
+                  listLength: totalItems()
+                }
+        }}
+      </b>
+      <gls-paginator
+        (pageChange)="pageChange.emit($event)"
+        [pageSize]="pageSize()"
+        [page]="currentPage()"
+        [totalItems]="totalItems()"
+        [totalPages]="totalPages()">
+      </gls-paginator>
+    </div>
+  }
+</section>

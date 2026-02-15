@@ -1,0 +1,196 @@
+<section class="w-100 mb-5" aria-label="Structure List Table">
+  <h2 class="subtitle fw-bold">{{ 'structureList.tableTitle' | translate }}</h2>
+  <div class="container-fluid">
+    <div class="row">
+      <div [ngClass]="{ 'd-flex': !isSmallMobile() }" class="col-12 col-md-6 order-2 order-md-1 p-0">
+        <!-- Contenuto della prima colonna -->
+        <button (click)="isOpenedFilter.set(true)" [disabled]="!showButtonFilter()" class="btn btn-link pe-4 fw-bold">
+          <em class="bi bi-filter pe-1"></em>{{ 'structureList.filter' | translate }}
+        </button>
+        <div [ngClass]="{ 'd-flex': !isSmallMobile() }">
+          <form [formGroup]="structureFilterFg()" (submit)="filterByAcronymEmit()" class="input-group">
+            <div class="input-group">
+              <div [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100' : 'input-group-prepend align-items-center gap-3'" class="d-flex">
+                <gls-input-dropdown
+                  [controlName]="'filterType'"
+                  [formGroup]="structureFilterFg()"
+                  [id]="'filterTyle'"
+                  [keyDecsName]="'value'"
+                  [keyValue]="'id'"
+                  [options]="filterTypeList"
+                  [required]="false"
+                  [showError]="false"
+                  [showStatus]="false" />
+
+                <gls-input
+                  [class]="'form-control'"
+                  [controlName]="'filterValue'"
+                  [formGroup]="structureFilterFg()"
+                  [placeholder]="'structureList.code' | translate"
+                  [showError]="false"
+                  [type]="'text'" />
+
+                <button
+                  (click)="filterByAcronymEmit()"
+                  [disabled]="structureFilterFg().invalid"
+                  aria-pressed="true"
+                  class="ms-2 btn btn-primary"
+                  type="button">
+                  {{ 'structureList.search' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 order-1 order-md-2 p-0 text-end">
+        <!-- Contenuto della seconda colonna -->
+        <button
+          (click)="openColumnEditor.emit()"
+          [ngClass]="{ 'w-100': isSmallMobile() }"
+          class="btn btn-outline-primary m-2 btn-round"
+          type="button">
+          <em class="bi bi-layout-three-columns pe-1"></em>{{ 'structureList.columnEditor' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="py-2 d-flex justify-content-start align-items-center flex-wrap">
+    @if (showFiltersApplied()?.length !== 0) {
+      <span class="pe-2"> {{ 'generic.appliedFilter' | translate }}: </span>
+    }
+
+    @for (filter of showFiltersApplied(); track filter) {
+      @if (filter.value !== undefined) {
+        <span class="badge rounded-pill white text-bg-primary my-2 ps-3 py-1 me-2 d-flex align-items-center justify-content-between">
+          {{ (filter.name ? 'structureList.columnList.' + filter.name : 'structureList.columnList.all') | translate }}:
+          <b class="px-2 white">{{ getStatusTranslationCode(filter.value) | translate }}</b>
+          <button
+            (click)="resetFilter.emit(filter)"
+            class="btn btn-light p-0 btn-round d-flex align-items-center justify-content-center"
+            style="width: 20px; height: 20px"
+            type="button">
+            <i class="bi primary bi-x p-0 m-0" style="font-size: 15px"></i>
+          </button>
+        </span>
+      }
+    }
+
+    @if (showFiltersApplied()?.length !== 0) {
+      <button (click)="resetFilters.emit()" class="ms-2 btn btn-link" type="reset">
+        <b>{{ 'generic.reset' | translate }}</b>
+        <em class="bi bi-arrow-repeat ps-1"></em>
+      </button>
+    }
+  </div>
+
+  @if (showRotateCard()) {
+    <div class="my-4">
+      <app-info-mobile class="my-4" [label]="'generic.mobile.table-view'" />
+    </div>
+  }
+
+  <div #datatableWrapper class="table-card">
+    <ngx-datatable
+      #table
+      (sort)="sort.emit($event)"
+      [columnMode]="'force'"
+      [footerHeight]="false"
+      [headerHeight]="50"
+      [limit]="pageSize()"
+      [messages]="{ emptyMessage: 'anagrafica.structure.emptyStructuresMessage' | translate }"
+      [rowHeight]="83"
+      [rows]="structuresList()"
+      [scrollbarH]="true"
+      class="material striped">
+      <!-- Creiamo dinamicamente le colonne in base all'array -->
+      @for (col of columns(); track col; let i = $index) {
+        @if (col.columnVisible) {
+          <ngx-datatable-column
+            [frozenLeft]="i < numColFrozen()"
+            [name]="getTranslatedLabel(col.label)"
+            [prop]="col.field"
+            [sortable]="col.sortable"
+            [width]="col.width">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <!-- WARNING -->
+              @if (showWarning() && col.field === 'Warning') {
+                <section [ngClass]="{ selected: sortSelected()?.field === 'Warning' }">
+                  @if (isWarningStructure(row)) {
+                    <i
+                      class="bi fs-5"
+                      [ngClass]="'bi-exclamation-circle status-danger'"
+                      [ngbTooltip]="'structureList.tooltipStatus.warning' | translate"
+                      [tooltipClass]="'custom-tooltip'"></i>
+                  }
+                </section>
+              }
+
+              <!-- STATUS -->
+              @if (showRowType(col.field) === 'status') {
+                <section [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  @if (getStatusIcon(row)) {
+                    <em class="bi fs-5 pe-2" [class]="getStatusClass(row)" [ngClass]="'bi bi-stop-circle'"></em>
+                    <span>{{ getStatusLabel(row) | translate }}</span>
+                  }
+                </section>
+              }
+
+              <!-- SIGLA -->
+              @if (showColumn(col.field) && showRowType(col.field) === 'string') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <div class="fw-normal fs-6" [ngClass]="{ 'fw-bold': col.field === 'BuildingAcronym' }">
+                    {{ getFieldValue(row, col.field) }}
+                  </div>
+                </section>
+              }
+
+              <!-- DENOMINAZIONE -->
+              @if (showColumn(col.field) && showRowType(col.field) === 'link') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <button (click)="goToStructureDetail(row.id)" class="btn btn-link">
+                    {{ getFieldValue(row, col.field) | slice: 0 : 30 }}
+                  </button>
+                </section>
+              }
+
+              <!-- DATA -->
+              @if (showColumn(col.field) && showRowType(col.field) === 'date') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <div class="fw-normal fs-6">
+                    {{ getFieldDate(row, col.field) | date: 'dd/MM/yyyy' }}
+                  </div>
+                </section>
+              }
+            </ng-template>
+          </ngx-datatable-column>
+        }
+      }
+    </ngx-datatable>
+  </div>
+
+  @if (structuresList().length > 0) {
+    <div class="d-flex justify-content-end align-items-center mt-3 flex-wrap" style="width: 100%">
+      <b class="pb-3 pe-2 result">
+        {{
+          'structureList.table.results'
+            | translate
+              : {
+                  firstResult: getFirstResult(),
+                  lastResult: getLastResult(),
+                  listLength: totalItems()
+                }
+        }}
+      </b>
+      <gls-paginator
+        (pageChange)="pageChange.emit($event)"
+        [pageSize]="pageSize()"
+        [page]="currentPage()"
+        [totalItems]="totalItems()"
+        [totalPages]="totalPages()">
+      </gls-paginator>
+    </div>
+  }
+</section>

@@ -1,0 +1,134 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ title | translate }}</h5>
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn-close" type="button"></button>
+</div>
+<div class="modal-body">
+  <h6 class="modal-title mb-2">{{ selection | translate }}</h6>
+  <div class="row">
+    <div class="form-group mb-3">
+      <gls-input-dropdown
+        [controlName]="'administrativeId'"
+        [formGroup]="companyForm"
+        [id]="'administrativeId'"
+        [keyDecsName]="'name'"
+        [keyValue]="'id'"
+        [options]="listCompany"
+        [required]="false"
+        [showError]="false"
+        [showStatus]="false">
+      </gls-input-dropdown>
+    </div>
+  </div>
+
+  @if (companyForm.get('administrativeId')?.value) {
+    <hr />
+    <h6 class="modal-title mb-2 mt-3">{{ selectBankToRep | translate }}</h6>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group mb-3">
+          <gls-input
+            [class]="'form-control'"
+            [controlName]="'abi'"
+            [formGroup]="oldBankForm"
+            [id]="'abi'"
+            [label]="abi | translate"
+            [placeholder]="abi | translate"
+            [showError]="oldBankForm.get('abi')?.invalid && (oldBankForm.get('abi')?.dirty || oldBankForm.get('abi')?.touched)"
+            [showStatus]="false"
+            [type]="'text'">
+          </gls-input>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group mb-3">
+          <gls-input
+            [class]="'form-control'"
+            [controlName]="'cab'"
+            [formGroup]="oldBankForm"
+            [id]="'cab'"
+            [label]="cab | translate"
+            [placeholder]="cab | translate"
+            [showError]="oldBankForm.get('cab')?.invalid && (oldBankForm.get('cab')?.dirty || oldBankForm.get('cab')?.touched)"
+            [showStatus]="false"
+            [type]="'text'">
+          </gls-input>
+        </div>
+      </div>
+      <div class="col-md-4 mt-4">
+        <button (click)="searchBank(true)" [disabled]="searchOldDisable()" class="btn btn-primary">
+          <span>
+            {{ 'generic.search' | translate }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    @if (isOldBankTableVisible) {
+      <div class="mt-3">
+        <app-replace-bank-table (rowSelected)="oldBank.set($event)" [bankList]="oldBankList()" [tableId]="'oldBank'" />
+      </div>
+    }
+
+    <hr />
+    <h6 class="modal-title mb-2">{{ selectBankNew | translate }}</h6>
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <div class="form-group mb-3">
+          <gls-input
+            [class]="'form-control'"
+            [controlName]="'abi'"
+            [formGroup]="newBankForm"
+            [id]="'abi'"
+            [label]="abi | translate"
+            [placeholder]="abi | translate"
+            [showError]="newBankForm.get('abi')?.invalid && (newBankForm.get('abi')?.dirty || newBankForm.get('abi')?.touched)"
+            [showStatus]="false"
+            [type]="'text'">
+          </gls-input>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group mb-3">
+          <gls-input
+            [class]="'form-control'"
+            [controlName]="'cab'"
+            [formGroup]="newBankForm"
+            [id]="'cab'"
+            [label]="cab | translate"
+            [placeholder]="cab | translate"
+            [showError]="newBankForm.get('cab')?.invalid && (newBankForm.get('cab')?.dirty || newBankForm.get('cab')?.touched)"
+            [showStatus]="false"
+            [type]="'text'">
+          </gls-input>
+        </div>
+      </div>
+      <div class="col-md-4 mt-4">
+        <button (click)="searchBank()" [disabled]="searchNewDisable()" class="btn btn-primary">
+          <span>
+            {{ 'generic.search' | translate }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    @if (isNewBankTableVisible) {
+      <div class="mt-3">
+        <app-replace-bank-table (rowSelected)="newBank.set($event)" [bankList]="newBankList()" [tableId]="'newBank'" />
+      </div>
+    }
+  }
+</div>
+<div class="modal-footer">
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn btn-outline-primary" type="button">
+    {{ cancel | translate }}
+  </button>
+  <button
+    (click)="replace()"
+    (keyup.enter)="replace()"
+    [disabled]="!enableBtnChange()"
+    aria-label="Ok"
+    class="btn btn-primary"
+    type="button">
+    {{ confirm | translate }}
+  </button>
+</div>

@@ -1,0 +1,71 @@
+@import 'typography';
+
+// Main Colours
+$white: #ffffff; // The colour White is mainly used as a background colour or copy colour when on a GLS Blue background
+$black: #000000; // Main copy colour for all elements with White, or any of the regular, backgrounds. Also used as color for some title and body text (view typography for more information)
+$gls-blue: #061ab1; // We use GLS Blue as a background colour for main elements, for icons, and buttons (when background around button is one of the regular ones below). Also used for buttons, H1 page titles and for the hover text of text links that appear on light backgrounds
+$gls-yellow: #ffd100; // We use GLS Yellow as the colour of the primary buttons and as dots throughout the brand. It is also used for bulletpoints on dark backgrounds. We never use it as a background colour or as copy colour to avoid issues with legibility
+$gls-blue-rgb: 6, 26, 177;
+// Backgrounds
+$soft-sky-blue: #c8e7f2; // We use Soft Sky Blue only as a background colour, and never as text. We combine it with Black text for optimal legibility. Used for secondary backgrounds on the website e.g. content blocks like navigation cards. It should not be used for icons.
+$soft-pink: #f3c8d4; // We use Soft Pink only as a background colour, and never as text. We combine it with Black text for optimal legibility. It is also used as a background color for danger messages.
+$soft-green: #c0e2ad; // We use Soft Green only as a background colour, and never as text. We combine it with Black text for optimal legibility. We always use this colour as a background for sections that address sustainability topics.
+$light-grey: #f3f3f3; // Light Grey is an exceptional background colour and should only be used when the soft colours don't work.
+$soft-yellow: #fff8d8; // Soft Yellow is an exceptional background colour and should only be used as a background color for warning messages.
+$soft-ice-blue: #f5f7fb; // new ui color
+// Dots
+$electric-blue: #1601ff; // We use Electric Blue only as a decorative brand element (dots) throughout the website. Do NOT use electric blue for any background, text or icons.
+$sky-blue: #00c2f0; // We use Sky Blue as dots throughout the website. The colour is also used as a hover-state of links that appear on dark backgrounds.
+$bright-orange: #ff860d; // We use Bright Orange only as dots throughout the website. Never use Bright Orange as text or as a background.
+$gls-yellow-dot: $gls-yellow; // GLS Yellow is sometimes used as an alternative color for dots in modules with dark blue background where the Electric Blue dot would not work well
+
+// Variations
+$gls-blue-dark: #00108c;
+$gls-yellow-dark: #e8be00; // Used as the background for hovering over primary buttons (check buttons section)
+$grey: #b7b7b7; // Used as the color for certain secondary information in modules such as dates in news headlines.
+
+//disabled-colors
+$btn-disabled: #8b8c8c;
+$btn-text-disabled: #595959;
+
+//input
+$input-border: #b7b7b7;
+$input-placeholder-color: #8b8c8d;
+$input-disabled: #eaeaea;
+$input-text-disabled: #595959;
+
+//colors
+$primary: $gls-blue;
+$secondary: $gls-yellow;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: $soft-ice-blue;
+$dark: $gls-blue;
+$soft-sky-blue: #c8e7f2;
+
+// shadows
+$box-shadow-sm: 0 1px 4px 0px rgba(0, 0, 0, 0.1); // small
+$box-shadow: 0 4px 10px 0px rgba(0, 0, 0, 0.12); // regular
+$box-shadow-lg: 0 8px 35px 0px rgba(0, 0, 0, 0.16); // large
+
+//general border
+$border-color: $input-border;
+$modal-border-color: $light-grey;
+
+$border-color: $input-border;
+
+// progress
+$progress-border-radius: 0.75rem;
+$progress-bg: $white;
+$progress-bar-bg: $electric-blue;
+
+//scrollbar
+$overflow-scrolling: touch !important;
+$scrollbar-width: random(
+        $limit: 1
+);
+$scrollbar-color: $gls-blue $white;
+$scrollbar-dark-color: $gls-yellow $white;
+$scrollbar-thumb: 1 10px;

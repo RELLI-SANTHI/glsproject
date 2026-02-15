@@ -1,0 +1,28 @@
+<div class="py-2 d-flex justify-content-start align-items-center flex-wrap">
+    @if (showFiltersApplied().length !== 0) {
+      <span class="pe-2"> {{ 'userProfile.userList.appliedFilter' | translate }}: </span>
+    }
+
+    @for (filter of showFiltersApplied(); track filter) {
+      @if (filter.value !== undefined) {
+        <span class="badge rounded-pill white text-bg-primary my-2 ps-3 py-1 me-2 d-flex align-items-center justify-content-between">
+          {{ getColumnTranslationCode(filter.name) | translate }}:
+          <b class="px-2 white">{{ getStatusTranslationCode(filter.value) | translate }}</b>
+          <button
+            (click)="resetFilter.emit(filter)"
+            class="btn btn-light p-0 btn-round d-flex align-items-center justify-content-center"
+            style="width: 20px; height: 20px"
+            type="button">
+            <i class="bi primary bi-x p-0 m-0" style="font-size: 15px"></i>
+          </button>
+        </span>
+      }
+    }
+
+    @if (showFiltersApplied().length !== 0) {
+      <button (click)="resetFilters.emit()" class="ms-2 btn btn-link" type="reset">
+        <b>{{ 'generic.reset' | translate }}</b>
+        <em class="bi bi-arrow-repeat ps-1"></em>
+      </button>
+    }
+  </div>

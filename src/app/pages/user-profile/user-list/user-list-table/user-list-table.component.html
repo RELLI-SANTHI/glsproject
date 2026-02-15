@@ -1,0 +1,225 @@
+<section class="w-100 mb-5 mt-5 user-list-table">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 order-2 order-md-1 p-0" [ngClass]="{ 'd-flex': !isSmallMobile() }">
+        <!-- Contenuto della prima colonna -->
+        <section aria-label="filter-button-region">
+          <button (click)="isOpenedFilter.set(true)" [disabled]="!showButtonFilter()" class="btn btn-link pe-4">
+            <b><em class="bi bi-filter pe-1"></em>{{ 'userProfile.userList.filter' | translate }}</b>
+          </button>
+        </section>
+
+        <div [ngClass]="{ 'd-flex': !isSmallMobile(), 'filter-tablet-ratio': isTablet() }">
+          <section aria-label="dropdown-options-region">
+            <form [formGroup]="userFilterFg()" (submit)="filterByAcronymEmit()" class="input-group">
+              <div class="input-group">
+                <div
+                  class="d-flex"
+                  [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100' : 'input-group-prepend align-items-center gap-3'">
+                  <gls-input-dropdown
+                    [controlName]="'filterType'"
+                    [formGroup]="userFilterFg()"
+                    [id]="'filterTyle'"
+                    [keyDecsName]="'value'"
+                    [keyValue]="'id'"
+                    [options]="filterTypeList"
+                    [required]="false"
+                    [showError]="false"
+                    [showStatus]="false" />
+
+                  <gls-input
+                    [class]="'form-control'"
+                    [controlName]="'filterValue'"
+                    [formGroup]="userFilterFg()"
+                    [placeholder]="'userProfile.userList.code' | translate"
+                    [showError]="false"
+                    [type]="'text'" />
+                  <button
+                    (click)="filterByAcronymEmit()"
+                    [disabled]="userFilterFg().invalid"
+                    aria-pressed="true"
+                    class="btn btn-primary flex-shrink-0"
+                    [ngClass]="{ 'ms-2': !isSmallMobile(), 'align-self-start': isSmallMobile() }"
+                    type="button">
+                    {{ 'userProfile.userList.search' | translate }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="py-2 d-flex justify-content-start align-items-center flex-wrap">
+    @if (showFiltersApplied()?.length !== 0) {
+      <span class="pe-2"> {{ 'userProfile.userList.appliedFilter' | translate }}: </span>
+    }
+
+    @for (filter of showFiltersApplied(); track filter) {
+      @if (filter.value !== undefined) {
+        <span class="badge rounded-pill white text-bg-primary my-2 ps-3 py-1 me-2 d-flex align-items-center justify-content-between">
+          {{ getColumnTranslationCode(filter.name) | translate }}:
+          <b class="px-2 white capitalize-text">{{ getStatusTranslationCode(filter.value) | translate }}</b>
+          <button
+            (click)="resetFilter.emit(filter)"
+            class="btn btn-light p-0 btn-round d-flex align-items-center justify-content-center"
+            style="width: 20px; height: 20px"
+            type="button">
+            <i class="bi primary bi-x p-0 m-0" style="font-size: 15px"></i>
+          </button>
+        </span>
+      }
+    }
+
+    @if (showFiltersApplied()?.length !== 0) {
+      <button (click)="resetFilters.emit()" class="ms-2 btn btn-link" type="reset">
+        <b>{{ 'generic.reset' | translate }}</b>
+        <em class="bi bi-arrow-repeat ps-1"></em>
+      </button>
+    }
+  </div>
+
+  @if (showRotateCard()) {
+    <div class="my-4">
+      <app-info-mobile class="my-4" [label]="'generic.mobile.table-view'" />
+    </div>
+  }
+
+  <div #datatableWrapper class="table-card" aria-label="User List Table">
+    <ngx-datatable
+      #table
+      (sort)="sort.emit($event)"
+      [columnMode]="'force'"
+      [footerHeight]="false"
+      [headerHeight]="50"
+      [limit]="pageSize()"
+      [messages]="{ emptyMessage: 'anagrafica.structure.emptyStructuresMessage' | translate }"
+      [rowHeight]="83"
+      [rows]="userList()"
+      [scrollbarH]="true"
+      class="material striped">
+      <!-- Creiamo dinamicamente le colonne in base all'array -->
+      @for (col of columns(); track col; let i = $index) {
+        @if (col.columnVisible) {
+          <ngx-datatable-column [name]="getTranslatedLabel(col.label)" [prop]="col.field" [sortable]="col.sortable" [width]="col.width">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <!-- PROFILE -->
+              @if (col.field === 'Profile') {
+                <section [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  @if (isUserProfile(row)) {
+                    <div class="rounded-3 table-border-color border p-2 fw-bold">
+                      <span
+                        class="p-1 rounded-circle mr-1 d-inline-block"
+                        [ngClass]="{
+                          'profile-user-color': getProfileValue(row) === profileList.EVA_USER,
+                          'profile-field-color': getProfileValue(row) === profileList.EVA_FIELD,
+                          'profile-admin-color': getProfileValue(row) === profileList.EVA_ADMIN
+                        }"></span>
+                      {{ isUserProfile(row) }}
+                    </div>
+                  }
+                </section>
+              }
+
+              <!-- STATE -->
+              @if (showRowType(col.field) === 'State') {
+                <section [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <img
+                    class="rounded-circle me-2"
+                    [ngClass]="getStateClass(row)"
+                    [src]="getStatusIcon(row)"
+                    [alt]="getStatesLabel(row) | translate" />
+                  <span>{{ getStatesLabel(row) | translate }}</span>
+                </section>
+              }
+
+              <!-- CORPORATE GROUP -->
+              @if (showColumn(col.field) && showRowType(col.field) === 'CorporateGroup') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <div class="fw-normal fs-6">
+                    {{ getCorporateGroup(row) }}
+                  </div>
+                </section>
+              }
+              <!-- CORPORATE GROUP AD -->
+              @if (showColumn(col.field) && showRowType(col.field) === 'CorporateGroupAD') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <div class="fw-normal fs-6">
+                    {{ getCorporateGroupAD(row) }}
+                  </div>
+                </section>
+              }
+
+              <!-- NameSurname -->
+              @if (showColumn(col.field) && showRowType(col.field) === 'link') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <button (click)="goToUserDetail(row.id)" class="btn btn-link">
+                    {{ getLinkValue(row) | slice: 0 : 30 }}
+                  </button>
+                </section>
+              }
+
+              <!-- EMAIL -->
+              @if (showColumn(col.field) && showRowType(col.field) === 'Email') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <div class="fw-normal fs-6" [ngClass]="{ 'fw-bold': col.field === 'BuildingAcronym' }">
+                    {{ getEmailValue(row) }}
+                  </div>
+                </section>
+              }
+              <!-- ACTION -->
+              @if (showColumn(col.field) && showRowType(col.field) === 'Action') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  @if (getActionIcon(row) && isUserProfile(row) !== 'Admin') {
+                    @if (getActionLabel(row) !== '-') {
+                      <button (click)="goToUserEdit(row.id)" class="btn btn-link">
+                        <span class="px-2">{{ getActionLabel(row) | translate }}</span>
+                        @if (row.status === 'WIP') {
+                          <em class="bi fs-5 pe-2" [ngClass]="getActionIcon(row)"></em>
+                        }
+                      </button>
+                    } @else {
+                      <button class="btn btn-link" disabled>
+                        <span class="px-4">{{ getActionLabel(row) | translate }}</span>
+                        @if (row.status === 'WIP') {
+                          <em class="bi fs-5 pe-2" [ngClass]="getActionIcon(row)"></em>
+                        }
+                      </button>
+                    }
+                  } @else {
+                    <span class="px-4">-</span>
+                  }
+                </section>
+              }
+            </ng-template>
+          </ngx-datatable-column>
+        }
+      }
+    </ngx-datatable>
+  </div>
+
+  @if (userList().length > 0) {
+    <div class="d-flex justify-content-end align-items-center mt-3 flex-wrap" style="width: 100%" aria-label="results-summary-region">
+      <b class="pb-3 pe-2 result">
+        {{
+          'userProfile.userList.table.results'
+            | translate
+              : {
+                  firstResult: getFirstResult(),
+                  lastResult: getLastResult(),
+                  listLength: totalItems()
+                }
+        }}
+      </b>
+      <gls-paginator
+        (pageChange)="pageChange.emit($event)"
+        [pageSize]="pageSize()"
+        [page]="currentPage()"
+        [totalItems]="totalItems()"
+        [totalPages]="totalPages()">
+      </gls-paginator>
+    </div>
+  }
+</section>

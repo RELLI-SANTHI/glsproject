@@ -1,0 +1,363 @@
+@if (!!isWriting()) {
+  <form [formGroup]="filscalDataForm()">
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <h2 class="fw-bold text-break">
+          {{ 'administrative.relationshipEdit.RelationshipFiscalData.title' | translate }}
+        </h2>
+      </div>
+
+      <div class="col-md-8">
+        <div class="mb-2">
+          <span class="mb-1 form-label gls-form-label">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.labelRadio' | translate
+            }}{{ utility.requiredFieldControl(filscalDataForm(), 'vatSubjection') }}
+          </span>
+        </div>
+
+        <div class="p-0 align-items-center">
+          <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+            <gls-input-checkbox
+              (valueChange)="filscalDataForm().get('vatSubjection')!.setValue('I'); changeVatSubjection()"
+              [checked]="filscalDataForm().get('vatSubjection')?.value === 'I'"
+              [controlName]="'vatSubjection'"
+              [class]="'form-check-input feature-radio'"
+              [formGroup]="filscalDataForm()"
+              [id]="'vatSubjectionTaxable'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.taxableLabel'"
+              [type]="'radio'">
+            </gls-input-checkbox>
+            <gls-input-checkbox
+              (valueChange)="filscalDataForm().get('vatSubjection')!.setValue('E'); changeVatSubjection()"
+              [checked]="filscalDataForm().get('vatSubjection')?.value === 'E'"
+              [class]="'form-check-input feature-radio'"
+              [controlName]="'vatSubjection'"
+              [formGroup]="filscalDataForm()"
+              [id]="'vatSubjectionExempt'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.exemptLabel'"
+              [showError]="true"
+              [type]="'radio'">
+            </gls-input-checkbox>
+
+            <gls-input-status-section
+              class="align-content-center ms-2"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'vatSubjection'"
+              [showError]="true"></gls-input-status-section>
+          </div>
+        </div>
+
+        @if (filscalDataForm().get('vatSubjection')?.value === 'E') {
+          <div class="form-group my-3">
+            <p class="form-label gls-form-label mb-1">
+              {{ 'administrative.relationshipEdit.RelationshipFiscalData.ivaCode' | translate }}*
+            </p>
+
+            <div class="d-flex align-items-center">
+              <span *ngIf="selectedRow" class="me-3 fw-bold fade-in">
+                {{ selectedRow.code }}
+              </span>
+
+              <button
+                aria-pressed="true"
+                (click)="selectIvaCode()"
+                (keyup.enter)="selectIvaCode()"
+                type="button"
+                class="btn btn-secondary transition-button">
+                {{ getIvaBtnLabel() | translate }}
+              </button>
+
+              <gls-input-status-section
+                class="align-content-center ms-5"
+                [formGroup]="filscalDataForm()"
+                [controlName]="'vatExemptionId'"
+                [showError]="true"></gls-input-status-section>
+            </div>
+          </div>
+        }
+
+        @if (filscalDataForm().get('vatSubjection')?.value === 'I') {
+          <div class="form-group mb-3">
+            <gls-input-dropdown
+              [id]="'vatRateValue'"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'vatRateValue'"
+              [options]="vatRateOptions"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.codiceIva' | translate"
+              [keyValue]="'id'"
+              [keyDecsName]="'value'"
+              [placeholder]="'administrative.relationshipEdit.RelationshipFiscalData.codiceIva' | translate"
+              [showError]="true"
+              [showStatus]="true"
+              (change)="onVatRateChange()">
+            </gls-input-dropdown>
+          </div>
+          <div class="form-group mb-3">
+            <p class="mb-1 form-label gls-form-label">
+              {{ 'administrative.relationshipEdit.RelationshipFiscalData.invoiceRate' | translate }}
+            </p>
+            <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+              <gls-input-checkbox
+                [id]="'invoiceVatRateToggleYes'"
+                [formGroup]="filscalDataForm()"
+                [controlName]="'invoiceVatRateToggle'"
+                [label]="'administrative.generalData.radioValues.yes'"
+                [class]="'form-check-input feature-radio'"
+                [type]="'radio'"
+                [checked]="filscalDataForm().get('invoiceVatRateToggle')?.value === true"
+                (valueChange)="filscalDataForm().get('invoiceVatRateToggle')?.setValue(true)"
+                (change)="invoiceRateToggle()">
+              </gls-input-checkbox>
+              <gls-input-checkbox
+                [id]="'invoiceVatRateToggleNo'"
+                [formGroup]="filscalDataForm()"
+                [controlName]="'invoiceVatRateToggle'"
+                [label]="'administrative.generalData.radioValues.no'"
+                [class]="'form-check-input feature-radio'"
+                [type]="'radio'"
+                [checked]="filscalDataForm().get('invoiceVatRateToggle')?.value === false"
+                (valueChange)="filscalDataForm().get('invoiceVatRateToggle')?.setValue(false)"
+                (change)="invoiceRateToggle()">
+              </gls-input-checkbox>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <p class="mb-1 form-label gls-form-label">
+              {{ 'administrative.relationshipEdit.RelationshipFiscalData.invoiceRateDescription' | translate }}
+            </p>
+          </div>
+        }
+
+        @if (showForm && filscalDataForm().get('vatSubjection')?.value === 'E') {
+          <div class="form-group mb-3">
+            <gls-input
+              [id]="'description'"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'description'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.exemptionDescription' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+
+          <div class="form-group mb-3">
+            <gls-input
+              [id]="'exemptionReference'"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'exemptionReference'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.exemptionReference' | translate"
+              [placeholder]="'administrative.relationshipEdit.RelationshipFiscalData.placeholderExemptionReference' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+
+          <div class="form-group mb-3">
+            <gls-input
+              [id]="'exemptionReferenceSecondLine'"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'exemptionReferenceSecondLine'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.exemptionReferenceSecondLine' | translate"
+              [placeholder]="'administrative.relationshipEdit.RelationshipFiscalData.placeholderExemptionReferenceSecondLine' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+
+          <div class="form-group mb-3">
+            <gls-input
+              [id]="'vatExemptionId'"
+              [id]="'vatXmlNewCode'"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'vatXmlNewCode'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.vatExemption' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+
+          <!-- <div class="form-group mb-3">
+            <gls-input
+              [id]="'invoiceVatRateId'"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'invoiceVatRate'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.invoiceRate' | translate"
+              [placeholder]="'administrative.relationshipEdit.RelationshipFiscalData.placeholderInsert' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div> -->
+
+          <p class="fw-semibold text-break pt-3">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.subTitle' | translate }}
+          </p>
+
+          <div class="form-group mb-3">
+            <gls-input
+              [id]="'declarationOfIntentProtocolId'"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'declarationOfIntentProtocol'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.declarationProtocol' | translate"
+              [placeholder]="'administrative.relationshipEdit.RelationshipFiscalData.placeholderInsert' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+
+          <div class="form-group mb-3">
+            <gls-input
+              [id]="'declarationOfIntentProtocolProgressiveID'"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'declarationOfIntentProtocolProgressive'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.progressiveProtcol' | translate"
+              [placeholder]="'administrative.relationshipEdit.RelationshipFiscalData.placeholderInsert' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+
+          <div class="form-group mb-3">
+            <gls-input-date
+              [id]="'declarationOfIntentDateId'"
+              [formGroup]="filscalDataForm()"
+              [controlName]="'declarationOfIntentDate'"
+              [label]="'administrative.relationshipEdit.RelationshipFiscalData.declarationDate' | translate"
+              [placeholder]="'administrative.relationshipEdit.RelationshipFiscalData.placeholderInsert' | translate"
+              [type]="'date'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input-date>
+          </div>
+        }
+      </div>
+    </div>
+  </form>
+} @else {
+  <div class="row mb-3 mt-3">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.relationshipEdit.RelationshipFiscalData.title' | translate }}</h2>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.RelationshipFiscalData.labelRadio' | translate }}</div>
+          <div class="col-6 text-break">
+            {{
+              filscalDataForm().get('vatSubjection')?.value === 'I'
+                ? ('administrative.relationshipEdit.RelationshipFiscalData.taxableLabel' | translate)
+                : filscalDataForm().get('vatSubjection')?.value === 'E'
+                  ? ('administrative.relationshipEdit.RelationshipFiscalData.exemptLabel' | translate)
+                  : '--'
+            }}
+          </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'E'">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.RelationshipFiscalData.ivaCode' | translate }}</div>
+          <div class="col-6 text-break">{{ selectedRow?.code }} {{ filscalDataForm().get('vatExemptionCode')?.value || '--' }}</div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'I'">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.RelationshipFiscalData.codiceIva' | translate }}</div>
+          <div class="col-6 text-break">
+            {{ filscalDataForm().get('vatRateValue')?.value || '--' }}
+          </div>
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.invoiceRate' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ filscalDataForm().get('invoiceVatRate')?.value || '--' }}
+          </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'E'">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.exemptionDescription' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ filscalDataForm().get('description')?.value || '--' }}
+          </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'E'">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.exemptionReference' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ filscalDataForm().get('exemptionReference')?.value || '--' }}
+          </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'E'">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.exemptionReferenceSecondLine' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ filscalDataForm().get('exemptionReferenceSecondLine')?.value || '--' }}
+          </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'E'">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.vatExemption' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ filscalDataForm().get('vatXmlNewCode')?.value || '--' }}
+          </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'E'">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.invoiceRate' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ filscalDataForm().get('invoiceVatRate')?.value || '--' }}
+          </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'E'">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.declarationProtocol' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ filscalDataForm().get('declarationOfIntentProtocol')?.value || '--' }}
+          </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'E'">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.progressiveProtcol' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ filscalDataForm().get('declarationOfIntentProtocolProgressive')?.value || '--' }}
+          </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="filscalDataForm().get('vatSubjection')?.value === 'E'">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.RelationshipFiscalData.declarationDate' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ convertFromGenericDataToString(filscalDataForm().get('declarationOfIntentDate')?.value) || '--' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

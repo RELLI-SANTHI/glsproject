@@ -1,0 +1,3573 @@
+openapi: 3.0.1
+info:
+  title: GLS Users API Services
+  version: '1.0'
+servers:
+  - url: https://apim-glsit-eva-dev-germanywestcentral-001.azure-api.net/users
+paths:
+  /private/v1/corporate-groups:
+    get:
+      tags:
+        - CorporateGroup
+      summary: Retrieves all Corporate Groups.
+      description: Retrieves all Corporate Groups.
+      operationId: get-api-corporategroup-v1
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CorporateGroupWithAdministrativeModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CorporateGroupWithAdministrativeModel'
+              example:
+                - id: 0
+                  corporateName: string
+                  administratives:
+                    - id: 0
+                      name: string
+                  lastUpdated: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CorporateGroupWithAdministrativeModel'
+              example:
+                - id: 0
+                  corporateName: string
+                  administratives:
+                    - id: 0
+                      name: string
+                  lastUpdated: string
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+        - CorporateGroup
+      summary: Creates a new Corporate Group.
+      description: Creates a new Corporate Group.
+      operationId: post-api-corporategroup-v1
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorporateGroupInputModel'
+            example:
+              corporateName: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CorporateGroupInputModel'
+            example:
+              corporateName: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CorporateGroupInputModel'
+            example:
+              corporateName: string
+      responses:
+        '201':
+          description: Created
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CorporateGroupModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporateGroupModel'
+              example:
+                id: 0
+                corporateName: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CorporateGroupModel'
+              example:
+                id: 0
+                corporateName: string
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+        '500':
+          description: Internal Server Error
+  '/private/v1/corporate-groups/{id}':
+    put:
+      tags:
+        - CorporateGroup
+      summary: Updates an existing Corporate Group.
+      description: Updates an existing Corporate Group.
+      operationId: put-api-corporategroup-v1-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorporateGroupInputModel'
+            example:
+              corporateName: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CorporateGroupInputModel'
+            example:
+              corporateName: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CorporateGroupInputModel'
+            example:
+              corporateName: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CorporateGroupModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporateGroupModel'
+              example:
+                id: 0
+                corporateName: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CorporateGroupModel'
+              example:
+                id: 0
+                corporateName: string
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - CorporateGroup
+      summary: Deletes a Corporate Group by marking it as logically deleted.
+      description: Deletes a Corporate Group by marking it as logically deleted.
+      operationId: delete-api-corporategroup-v1-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+        '409':
+          description: Conflict
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+        '500':
+          description: Internal Server Error
+    get:
+      tags:
+        - CorporateGroup
+      summary: Retrieves a Corporate Group by ID.
+      description: Retrieves a Corporate Group by ID.
+      operationId: get-api-corporategroup-v1-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CorporateGroupModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporateGroupModel'
+              example:
+                id: 0
+                corporateName: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CorporateGroupModel'
+              example:
+                id: 0
+                corporateName: string
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+        '500':
+          description: Internal Server Error
+  /private/v1/users/export:
+    post:
+      tags:
+        - Export
+      summary: Export users data via csv
+      description: Export users data via csv
+      operationId: post-api-export-v1-export
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestCsvModel'
+            example:
+              userName: string
+              profile: EVA_ADMIN
+              roleId: 0
+              roleName: string
+              email: string
+              status: string
+              corporateId: 0
+              corporateName: string
+              name: string
+              surname: string
+              buildingAcronym: string
+              buildingName: string
+              buildingType: 0
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Id
+                direction: string
+              languageTranslate: EN
+              exportFields:
+                - field: Id
+                  label: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestCsvModel'
+            example:
+              userName: string
+              profile: EVA_ADMIN
+              roleId: 0
+              roleName: string
+              email: string
+              status: string
+              corporateId: 0
+              corporateName: string
+              name: string
+              surname: string
+              buildingAcronym: string
+              buildingName: string
+              buildingType: 0
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Id
+                direction: string
+              languageTranslate: EN
+              exportFields:
+                - field: Id
+                  label: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserRequestCsvModel'
+            example:
+              userName: string
+              profile: EVA_ADMIN
+              roleId: 0
+              roleName: string
+              email: string
+              status: string
+              corporateId: 0
+              corporateName: string
+              name: string
+              surname: string
+              buildingAcronym: string
+              buildingName: string
+              buildingType: 0
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Id
+                direction: string
+              languageTranslate: EN
+              exportFields:
+                - field: Id
+                  label: string
+      responses:
+        '200':
+          description: OK
+  /health:
+    get:
+      tags:
+        - Health
+      summary: /health - GET
+      description: /health - GET
+      operationId: get-health
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /private/v1/roles/create:
+    post:
+      tags:
+        - Role
+      summary: Creates a new role with its permissions.
+      description: Creates a new role with its permissions.
+      operationId: post-api-role-v1
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleInputModel'
+            example:
+              name: string
+              description: string
+              permissions:
+                - id: 0
+                  name: string
+                  description: string
+                  isSpecial: true
+                  accessType: Read
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoleInputModel'
+            example:
+              name: string
+              description: string
+              permissions:
+                - id: 0
+                  name: string
+                  description: string
+                  isSpecial: true
+                  accessType: Read
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoleInputModel'
+            example:
+              name: string
+              description: string
+              permissions:
+                - id: 0
+                  name: string
+                  description: string
+                  isSpecial: true
+                  accessType: Read
+      responses:
+        '201':
+          description: Created
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RoleModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleModel'
+              example:
+                id: 0
+                name: string
+                description: string
+                permissions:
+                  - id: 0
+                    name: string
+                    description: string
+                    isSpecial: true
+                    accessType: Read
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RoleModel'
+              example:
+                id: 0
+                name: string
+                description: string
+                permissions:
+                  - id: 0
+                    name: string
+                    description: string
+                    isSpecial: true
+                    accessType: Read
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  /private/v1/permissions:
+    get:
+      tags:
+        - Role
+      summary: Retrieves all available permissions.
+      description: Retrieves all available permissions.
+      operationId: get-api-role-v1-permissions
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionModel'
+              example:
+                - id: 0
+                  name: string
+                  description: string
+                  isSpecial: true
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionModel'
+              example:
+                - id: 0
+                  name: string
+                  description: string
+                  isSpecial: true
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  '/private/v1/roles/{id}':
+    put:
+      tags:
+        - Role
+      summary: Updates a role and its permissions.
+      description: Updates a role and its permissions.
+      operationId: put-api-role-v1-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleInputModel'
+            example:
+              name: string
+              description: string
+              permissions:
+                - id: 0
+                  name: string
+                  description: string
+                  isSpecial: true
+                  accessType: Read
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoleInputModel'
+            example:
+              name: string
+              description: string
+              permissions:
+                - id: 0
+                  name: string
+                  description: string
+                  isSpecial: true
+                  accessType: Read
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoleInputModel'
+            example:
+              name: string
+              description: string
+              permissions:
+                - id: 0
+                  name: string
+                  description: string
+                  isSpecial: true
+                  accessType: Read
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RoleModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleModel'
+              example:
+                id: 0
+                name: string
+                description: string
+                permissions:
+                  - id: 0
+                    name: string
+                    description: string
+                    isSpecial: true
+                    accessType: Read
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RoleModel'
+              example:
+                id: 0
+                name: string
+                description: string
+                permissions:
+                  - id: 0
+                    name: string
+                    description: string
+                    isSpecial: true
+                    accessType: Read
+        '404':
+          description: Not Found
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Conflict
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Role
+      summary: Deletes a role by ID.
+      description: Deletes a role by ID.
+      operationId: delete-api-role-v1-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '500':
+          description: Internal Server Error
+    get:
+      tags:
+        - Role
+      summary: Retrieves a role by ID.
+      description: Retrieves a role by ID.
+      operationId: get-api-role-v1-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RoleModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleModel'
+              example:
+                id: 0
+                name: string
+                description: string
+                permissions:
+                  - id: 0
+                    name: string
+                    description: string
+                    isSpecial: true
+                    accessType: Read
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RoleModel'
+              example:
+                id: 0
+                name: string
+                description: string
+                permissions:
+                  - id: 0
+                    name: string
+                    description: string
+                    isSpecial: true
+                    accessType: Read
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/users/{id}/status':
+    patch:
+      tags:
+        - Users
+      summary: Patch API to change status of the user in WIP or ACTIVE
+      description: Patch API to change status of the user in WIP or ACTIVE
+      operationId: patch-api-users-v1-id-status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserStatusUpdateModel'
+            example:
+              status: WIP
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserStatusUpdateModel'
+            example:
+              status: WIP
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserStatusUpdateModel'
+            example:
+              status: WIP
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '500':
+          description: Internal Server Error
+  '/private/v1/users/{id}':
+    get:
+      tags:
+        - Users
+      summary: Get user details by internal ID
+      description: Get user details by internal ID
+      operationId: get-api-users-v1-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/users/entra/{entraId}':
+    get:
+      tags:
+        - Users
+      summary: Get user details by EntraId (GUID)
+      description: Get user details by EntraId (GUID)
+      operationId: get-api-users-v1-entra-entraid
+      parameters:
+        - name: entraId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /private/v1/users/jwt:
+    get:
+      tags:
+        - Users
+      summary: Get user details by jwt
+      description: Get user details by jwt
+      operationId: get-api-users-v1-jwt
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/users/{id}/associations':
+    patch:
+      tags:
+        - Users
+      summary: Update User associaton
+      description: Update User associaton
+      operationId: patch-api-users-v1-id-associations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAssociationUpdateModel'
+            example:
+              roles:
+                - id: 0
+                  name: string
+                  description: string
+                  permissions:
+                    - id: 0
+                      name: string
+                      description: string
+                      isSpecial: true
+                      accessType: Read
+              administratives:
+                - administrativeId: 0
+                  associateAllStructures: true
+                  structureIds:
+                    - 0
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserAssociationUpdateModel'
+            example:
+              roles:
+                - id: 0
+                  name: string
+                  description: string
+                  permissions:
+                    - id: 0
+                      name: string
+                      description: string
+                      isSpecial: true
+                      accessType: Read
+              administratives:
+                - administrativeId: 0
+                  associateAllStructures: true
+                  structureIds:
+                    - 0
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserAssociationUpdateModel'
+            example:
+              roles:
+                - id: 0
+                  name: string
+                  description: string
+                  permissions:
+                    - id: 0
+                      name: string
+                      description: string
+                      isSpecial: true
+                      accessType: Read
+              administratives:
+                - administrativeId: 0
+                  associateAllStructures: true
+                  structureIds:
+                    - 0
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  /private/v1/users:
+    post:
+      tags:
+        - Users
+      summary: Get Users list
+      description: Get Users list
+      operationId: post-api-users-v1
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestModel'
+            example:
+              userName: string
+              profile: EVA_ADMIN
+              roleId: 0
+              roleName: string
+              email: string
+              status: string
+              corporateId: 0
+              corporateName: string
+              name: string
+              surname: string
+              buildingAcronym: string
+              buildingName: string
+              buildingType: 0
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Id
+                direction: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestModel'
+            example:
+              userName: string
+              profile: EVA_ADMIN
+              roleId: 0
+              roleName: string
+              email: string
+              status: string
+              corporateId: 0
+              corporateName: string
+              name: string
+              surname: string
+              buildingAcronym: string
+              buildingName: string
+              buildingType: 0
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Id
+                direction: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserRequestModel'
+            example:
+              userName: string
+              profile: EVA_ADMIN
+              roleId: 0
+              roleName: string
+              email: string
+              status: string
+              corporateId: 0
+              corporateName: string
+              name: string
+              surname: string
+              buildingAcronym: string
+              buildingName: string
+              buildingType: 0
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Id
+                direction: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PagedUserSearchResponse'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedUserSearchResponse'
+              example:
+                currentPage: 0
+                pageSize: 0
+                totalItems: 0
+                totalPages: 0
+                users:
+                  - id: 0
+                    userName: string
+                    status: string
+                    name: string
+                    surname: string
+                    organizationCompanyName: string
+                    email: string
+                    lastLoginDateTime: string
+                    phoneNumber: string
+                    jobTitle: string
+                    profile: EVA_ADMIN
+                    incomingCorporateGroup: string
+                    corporateGroupName: string
+                    roleName: string
+                    structures: string
+                    companies: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PagedUserSearchResponse'
+              example:
+                currentPage: 0
+                pageSize: 0
+                totalItems: 0
+                totalPages: 0
+                users:
+                  - id: 0
+                    userName: string
+                    status: string
+                    name: string
+                    surname: string
+                    organizationCompanyName: string
+                    email: string
+                    lastLoginDateTime: string
+                    phoneNumber: string
+                    jobTitle: string
+                    profile: EVA_ADMIN
+                    incomingCorporateGroup: string
+                    corporateGroupName: string
+                    roleName: string
+                    structures: string
+                    companies: string
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+        '500':
+          description: Internal Server Error
+        '204':
+          description: No Content
+  /private/v1/roles/export:
+    post:
+      tags:
+        - Export
+      summary: Export roles data via csv
+      description: Export roles data via csv
+      operationId: post-api-export-v1-roles
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RolesRequestCsvModel'
+            example:
+              roleFilter:
+                name: string
+                description: string
+              permissionFilter:
+                name: string
+                description: string
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Name
+                direction: string
+              languageTranslate: EN
+              exportFields:
+                - field: RoleName
+                  label: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RolesRequestCsvModel'
+            example:
+              roleFilter:
+                name: string
+                description: string
+              permissionFilter:
+                name: string
+                description: string
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Name
+                direction: string
+              languageTranslate: EN
+              exportFields:
+                - field: RoleName
+                  label: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RolesRequestCsvModel'
+            example:
+              roleFilter:
+                name: string
+                description: string
+              permissionFilter:
+                name: string
+                description: string
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Name
+                direction: string
+              languageTranslate: EN
+              exportFields:
+                - field: RoleName
+                  label: string
+      responses:
+        '200':
+          description: OK
+  '/private/v1/users/{targetUserId}/impersonate':
+    post:
+      tags:
+        - Users
+      summary: Initiates the impersonation process for a target user.
+      description: Initiates the impersonation process for a target user.
+      operationId: post-api-users-v1-impersonate-targetuserid
+      parameters:
+        - name: targetUserId
+          in: path
+          description: ID of the user to impersonate
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ImpersonationResult'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImpersonationResult'
+              example:
+                isSuccess: true
+                user:
+                  id: 0
+                  userGuid: string
+                  entraId: string
+                  userName: string
+                  accountLoginName: string
+                  name: string
+                  surname: string
+                  email: string
+                  status: string
+                  organizationCompanyName: string
+                  lastLoginDateTime: string
+                  phoneNumber: string
+                  jobTitle: string
+                  department: string
+                  profile: EVA_ADMIN
+                  createdAt: string
+                  updatedAt: string
+                  createdBy: string
+                  updatedBy: string
+                  corporateGroup:
+                    id: 0
+                    corporateName: string
+                  roles:
+                    - id: 0
+                      name: string
+                      description: string
+                      permissions:
+                        - id: 0
+                          name: string
+                          description: string
+                          isSpecial: true
+                          accessType: Read
+                  administratives:
+                    - id: 0
+                      name: string
+                      associateAllStructures: true
+                      structures:
+                        - id: 0
+                          buildingAcronym: string
+                          buildingName: string
+                          buildingTypeName: string
+                          icon: string
+                  customName: string
+                  imageProfile: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ImpersonationResult'
+              example:
+                isSuccess: true
+                user:
+                  id: 0
+                  userGuid: string
+                  entraId: string
+                  userName: string
+                  accountLoginName: string
+                  name: string
+                  surname: string
+                  email: string
+                  status: string
+                  organizationCompanyName: string
+                  lastLoginDateTime: string
+                  phoneNumber: string
+                  jobTitle: string
+                  department: string
+                  profile: EVA_ADMIN
+                  createdAt: string
+                  updatedAt: string
+                  createdBy: string
+                  updatedBy: string
+                  corporateGroup:
+                    id: 0
+                    corporateName: string
+                  roles:
+                    - id: 0
+                      name: string
+                      description: string
+                      permissions:
+                        - id: 0
+                          name: string
+                          description: string
+                          isSpecial: true
+                          accessType: Read
+                  administratives:
+                    - id: 0
+                      name: string
+                      associateAllStructures: true
+                      structures:
+                        - id: 0
+                          buildingAcronym: string
+                          buildingName: string
+                          buildingTypeName: string
+                          icon: string
+                  customName: string
+                  imageProfile: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  /private/v1/roles:
+    post:
+      tags:
+        - Role
+      summary: Retrieves all roles.
+      description: Retrieves all roles.
+      operationId: post-api-role-v1-search
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestModel'
+            example:
+              roleFilter:
+                name: string
+                description: string
+              permissionFilter:
+                name: string
+                description: string
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Name
+                direction: string
+              languageTranslate: EN
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestModel'
+            example:
+              roleFilter:
+                name: string
+                description: string
+              permissionFilter:
+                name: string
+                description: string
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Name
+                direction: string
+              languageTranslate: EN
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestModel'
+            example:
+              roleFilter:
+                name: string
+                description: string
+              permissionFilter:
+                name: string
+                description: string
+              pageSize: 0
+              currentPage: 0
+              orderBy:
+                field: Name
+                direction: string
+              languageTranslate: EN
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PagedRoleSearchResponse'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedRoleSearchResponse'
+              example:
+                currentPage: 0
+                pageSize: 0
+                totalItems: 0
+                totalPages: 0
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - accessType: Read
+                        id: 0
+                        name: string
+                        description: string
+                        descriptionItaliano: string
+                        isSpecial: true
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PagedRoleSearchResponse'
+              example:
+                currentPage: 0
+                pageSize: 0
+                totalItems: 0
+                totalPages: 0
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - accessType: Read
+                        id: 0
+                        name: string
+                        description: string
+                        descriptionItaliano: string
+                        isSpecial: true
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  '/private/v1/roles/{id}/lock':
+    post:
+      tags:
+        - Role
+      summary: Lock user by internal ID
+      description: Lock user by internal ID
+      operationId: post-api-role-v1-id-lock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/roles/{id}/unlock':
+    post:
+      tags:
+        - Role
+      summary: Unlock user by internal ID
+      description: Unlock user by internal ID
+      operationId: post-api-role-v1-id-unlock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/users/{id}/lock':
+    post:
+      tags:
+        - Users
+      summary: Lock user by internal ID
+      description: Lock user by internal ID
+      operationId: post-api-users-v1-id-lock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/users/{id}/unlock':
+    post:
+      tags:
+        - Users
+      summary: Unlock user by internal ID
+      description: Unlock user by internal ID
+      operationId: post-api-users-v1-id-unlock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/users-cache/{targetUserId}':
+    post:
+      tags:
+        - UserCache
+      summary: Refresh user cache by id
+      description: Refresh user cache by id
+      operationId: post-api-usercache-v1-targetuserid
+      parameters:
+        - name: targetUserId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  /private/v1/users-cache:
+    post:
+      tags:
+        - UserCache
+      summary: Refresh all users cache
+      description: Refresh all users cache
+      operationId: post-api-usercache-v1
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  '/private/v1/users/{userId}/right-to-be-forgotten':
+    post:
+      tags:
+        - Users
+      summary: right to be forgotten
+      description: right to be forgotten
+      operationId: post-api-users-userid-righttobeforgotten
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                enum:
+                  - Success
+                  - UserNotFound
+                  - UserNotDisabled
+                  - AlreadyAnonymized
+                  - MissingEventHubNamespace
+                  - EventHubClientNotInitialized
+                  - Failure
+                type: string
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                enum:
+                  - Success
+                  - UserNotFound
+                  - UserNotDisabled
+                  - AlreadyAnonymized
+                  - MissingEventHubNamespace
+                  - EventHubClientNotInitialized
+                  - Failure
+                type: string
+              example: Success
+            text/json:
+              schema:
+                enum:
+                  - Success
+                  - UserNotFound
+                  - UserNotDisabled
+                  - AlreadyAnonymized
+                  - MissingEventHubNamespace
+                  - EventHubClientNotInitialized
+                  - Failure
+                type: string
+              example: Success
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /private/v1/corporate-groups/export:
+    post:
+      tags:
+        - Export
+      summary: Export corporateGroups data via csv
+      description: Export corporateGroups data via csv
+      operationId: post-api-export-v1-export-corporates
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorporateGroupRequestCsvModel'
+            example:
+              exportFields:
+                - field: CorporateName
+                  label: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CorporateGroupRequestCsvModel'
+            example:
+              exportFields:
+                - field: CorporateName
+                  label: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CorporateGroupRequestCsvModel'
+            example:
+              exportFields:
+                - field: CorporateName
+                  label: string
+      responses:
+        '200':
+          description: OK
+  /private/v1/users/profile-image:
+    post:
+      tags:
+        - Users
+      summary: Uploads a new profile image for the current user.
+      description: "Accepts a multipart/form-data payload containing the profile image file. \r\nValidates file extension and dimensions, replaces any existing image, \r\nand stores the new image in the configured storage. \r\nThe image URL is saved in the user's profile."
+      operationId: post-api-users-v1-profile-image
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                File:
+                  type: string
+                  description: The profile image file to be uploaded.
+                  format: binary
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '415':
+          description: Unsupported Media Type
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Users
+      summary: Delete profile image for the current user.
+      description: "Check if the user exist, \r\nCheck if the user has a profile image, \r\nThe image URL is removed in the user's profile and image also removed from storage."
+      operationId: delete-api-users-v1-profile-image
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/users/{id}/update-profile':
+    patch:
+      tags:
+        - Users
+      summary: Update new user properties
+      description: Update new user properties
+      operationId: patch-api-users-v1-id-update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchUserRequestModel'
+            example:
+              customName:
+                isModified: true
+                value: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PatchUserRequestModel'
+            example:
+              customName:
+                isModified: true
+                value: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PatchUserRequestModel'
+            example:
+              customName:
+                isModified: true
+                value: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsModel'
+              example:
+                id: 0
+                userGuid: string
+                entraId: string
+                userName: string
+                accountLoginName: string
+                name: string
+                surname: string
+                email: string
+                status: string
+                organizationCompanyName: string
+                lastLoginDateTime: string
+                phoneNumber: string
+                jobTitle: string
+                department: string
+                profile: EVA_ADMIN
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                corporateGroup:
+                  id: 0
+                  corporateName: string
+                roles:
+                  - id: 0
+                    name: string
+                    description: string
+                    permissions:
+                      - id: 0
+                        name: string
+                        description: string
+                        isSpecial: true
+                        accessType: Read
+                administratives:
+                  - id: 0
+                    name: string
+                    associateAllStructures: true
+                    structures:
+                      - id: 0
+                        buildingAcronym: string
+                        buildingName: string
+                        buildingTypeName: string
+                        icon: string
+                customName: string
+                imageProfile: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: string
+                title: string
+                status: 0
+                detail: string
+                instance: string
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    CorporateGroupAdministrative:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of the company associated to the corporate group
+          format: int64
+        name:
+          type: string
+          description: Name of the company associated to the corporate group
+          nullable: true
+      additionalProperties: false
+      description: Represents a record of GLS.EVA.Cloud.Core.Users.Models.CorporateGroupAdministrative that is used to interact with GLS.EVA.Cloud.Core.Users.Abstractions.ICorporateGroupService in PUT/POST
+    CorporateGroupInputModel:
+      required:
+        - corporateName
+      type: object
+      properties:
+        corporateName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name of the CorporateGroup
+      additionalProperties: false
+      description: Represents a record of GLS.EVA.Cloud.Core.Users.Models.CorporateGroupModel that is used to interact with GLS.EVA.Cloud.Core.Users.Abstractions.ICorporateGroupService in PUT/POST
+    CorporateGroupModel:
+      required:
+        - corporateName
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of the CorporateGroup
+          format: int64
+        corporateName:
+          minLength: 1
+          type: string
+          description: Name of the CorporateGroup
+      additionalProperties: false
+      description: Represents a record of GLS.EVA.Cloud.Core.Users.Models.CorporateGroupModel that is used to interact with GLS.EVA.Cloud.Core.Users.Abstractions.ICorporateGroupService
+    CorporateGroupRequestCsvModel:
+      type: object
+      properties:
+        exportFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportCorporateFieldDefinition'
+          description: List of fields to be exported in csv file
+          nullable: true
+      additionalProperties: false
+      description: "Represents the payload for export corporategroups via csv.\r\nSupports optional filters and pagination parameters."
+    CorporateGroupSummaryModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the corporate group.
+          format: int64
+        corporateName:
+          type: string
+          description: Name of the corporate group.
+          nullable: true
+      additionalProperties: false
+      description: Represents a simplified model of a corporate group.
+    CorporateGroupWithAdministrativeModel:
+      required:
+        - administratives
+        - corporateName
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of the CorporateGroup
+          format: int64
+        corporateName:
+          minLength: 1
+          type: string
+          description: Name of the CorporateGroup
+        administratives:
+          type: array
+          items:
+            $ref: '#/components/schemas/CorporateGroupAdministrative'
+        lastUpdated:
+          type: string
+          description: Last update date of the CorporateGroup
+          format: date-time
+      additionalProperties: false
+      description: Represents a record of GLS.EVA.Cloud.Core.Users.Models.CorporateGroupWithAdministrativeModel that is used to interact with GLS.EVA.Cloud.Core.Users.Abstractions.ICorporateGroupService
+    ExportCorporateFieldDefinition:
+      type: object
+      properties:
+        field:
+          enum:
+            - CorporateName
+          type: string
+          description: 'Name of the field to be exported (es. "CorporateName", ecc.)'
+        label:
+          type: string
+          description: label in CSV
+          nullable: true
+      additionalProperties: false
+    ExportFieldDefinition:
+      type: object
+      properties:
+        field:
+          enum:
+            - Id
+            - UserName
+            - Status
+            - Name
+            - Surname
+            - Email
+            - PhoneNumber
+            - JobTitle
+            - Profile
+            - CorporateGroupName
+            - IncomingCorporateGroup
+            - OrganizationCompanyName
+            - LastLoginDateTime
+            - RoleName
+            - Structures
+            - Companies
+          type: string
+          description: 'Nome del campo da esportare (es. "UserName", "Email", ecc.)'
+        label:
+          type: string
+          description: Etichetta da usare come intestazione nel CSV
+          nullable: true
+      additionalProperties: false
+    ExportFieldRoleDefinition:
+      type: object
+      properties:
+        field:
+          enum:
+            - RoleName
+            - RoleDescription
+            - PermissionName
+            - PermissionDescription
+            - PermissionAccessType
+          type: string
+          description: Name of the fields to be exported
+        label:
+          type: string
+          description: Label field in csv
+          nullable: true
+      additionalProperties: false
+    ImpersonationResult:
+      type: object
+      properties:
+        isSuccess:
+          type: boolean
+          description: Indicates whether the impersonation was successful.
+        user:
+          $ref: '#/components/schemas/UserDetailsModel'
+      additionalProperties: false
+      description: Represents the result of an impersonation attempt.
+    OrderBy:
+      required:
+        - direction
+        - field
+      type: object
+      properties:
+        field:
+          enum:
+            - Id
+            - UserName
+            - Name
+            - Surname
+            - JobTitle
+            - Profile
+            - CorporateGroupName
+            - IncomingCorporateGroup
+            - OrganizationCompanyName
+            - LastLoginDateTime
+            - Status
+          type: string
+          description: The field to sort by.
+        direction:
+          minLength: 1
+          type: string
+          description: The sorting direction (ASC/DESC).
+      additionalProperties: false
+    PagedRoleSearchResponse:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          description: The current page number being returned (starts from 1).
+          format: int32
+        pageSize:
+          type: integer
+          description: The number of items (roles) returned per page.
+          format: int32
+        totalItems:
+          type: integer
+          description: The total number of roles matching the search/filter criteria.
+          format: int32
+        totalPages:
+          type: integer
+          description: The total number of pages based on the total items and page size.
+          format: int32
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleModelResponse'
+          description: The list of roles returned for the current page.
+          nullable: true
+      additionalProperties: false
+      description: "Represents a paginated response for a role search operation.\r\nIncludes pagination metadata and the list of roles."
+    PagedUserSearchResponse:
+      required:
+        - totalItems
+        - totalPages
+        - users
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          description: The current page number being returned.
+          format: int32
+        pageSize:
+          type: integer
+          description: The number of items per page in the result set.
+          format: int32
+        totalItems:
+          type: integer
+          description: The total number of items matching the search criteria.
+          format: int32
+        totalPages:
+          type: integer
+          description: The total number of pages available based on PageSize and TotalItems.
+          format: int32
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserSearchResponseModel'
+          description: The list of users returned in the current page.
+      additionalProperties: false
+      description: Represents a paginated response for user search results.
+    PatchUserRequestModel:
+      type: object
+      properties:
+        customName:
+          $ref: '#/components/schemas/StringPatchField'
+      additionalProperties: false
+    PermissionAssignmentModel:
+      required:
+        - accessType
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique Permission Id
+          format: int64
+        name:
+          minLength: 1
+          type: string
+          description: Unique Permission Name
+        description:
+          type: string
+          description: Description of the permission (optional)
+          nullable: true
+        isSpecial:
+          type: boolean
+          description: Special Permission
+          nullable: true
+        accessType:
+          enum:
+            - Read
+            - Write
+          type: string
+          description: Access type associated to a specific role/permission association
+      additionalProperties: false
+      description: Represents a record of GLS.EVA.Cloud.Core.Users.Models.PermissionAssignmentModel that is used to interact with GLS.EVA.Cloud.Core.Users.Abstractions.IRoleService
+    PermissionAssignmentResponseModel:
+      required:
+        - accessType
+        - id
+        - name
+      type: object
+      properties:
+        accessType:
+          enum:
+            - Read
+            - Write
+          type: string
+          description: Access type associated to a specific role/permission association
+        id:
+          type: integer
+          description: Unique Permission Id
+          format: int64
+        name:
+          minLength: 1
+          type: string
+          description: Unique Permission Name
+        description:
+          type: string
+          description: Description of the permission (optional)
+          nullable: true
+        descriptionItaliano:
+          type: string
+          description: Description in italian of the permission (optional)
+          nullable: true
+        isSpecial:
+          type: boolean
+          description: Special Permission
+          nullable: true
+      additionalProperties: false
+    PermissionFilterModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional filter by permission name (partial or full match).
+          nullable: true
+        description:
+          type: string
+          description: Optional filter by permission description (partial or full match).
+          nullable: true
+      additionalProperties: false
+    PermissionModel:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique Permission Id
+          format: int64
+        name:
+          minLength: 1
+          type: string
+          description: Unique Permission Name
+        description:
+          type: string
+          description: Description of the permission (optional)
+          nullable: true
+        isSpecial:
+          type: boolean
+          description: Special Permission
+          nullable: true
+      additionalProperties: false
+      description: Represents a record of GLS.EVA.Cloud.Core.Users.Models.PermissionModel that is used to interact with GLS.EVA.Cloud.Core.Users.Abstractions.IRoleService
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: { }
+    RoleFilterModel:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Optional filter by role name (partial or full match).
+          nullable: true
+        description:
+          type: string
+          description: Optional filter by role description (partial or full match).
+          nullable: true
+      additionalProperties: false
+    RoleInputModel:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+          description: Unique Role Name
+        description:
+          type: string
+          description: Role's description
+          nullable: true
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionAssignmentModel'
+          description: List of role's associated permissions
+          nullable: true
+      additionalProperties: false
+    RoleModel:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique Role Id
+          format: int64
+        name:
+          minLength: 1
+          type: string
+          description: Unique Role Name
+        description:
+          type: string
+          description: Role's description
+          nullable: true
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionAssignmentModel'
+          description: List of role's associated permissions
+          nullable: true
+      additionalProperties: false
+      description: Represents a record of GLS.EVA.Cloud.Core.Users.Models.RoleModel that is used to interact with GLS.EVA.Cloud.Core.Users.Abstractions.IRoleService
+    RoleModelResponse:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique Role Id
+          format: int64
+        name:
+          minLength: 1
+          type: string
+          description: Unique Role Name
+        description:
+          type: string
+          description: Role's description
+          nullable: true
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionAssignmentResponseModel'
+          description: List of role's associated permissions
+          nullable: true
+      additionalProperties: false
+      description: Represents a record of GLS.EVA.Cloud.Core.Users.Models.RoleModel that is used to interact with GLS.EVA.Cloud.Core.Users.Abstractions.IRoleService
+    RoleOrderBy:
+      required:
+        - direction
+        - field
+      type: object
+      properties:
+        field:
+          enum:
+            - Name
+            - Description
+          type: string
+          description: 'The field by which to sort (e.g., Name or Description).'
+        direction:
+          minLength: 1
+          type: string
+          description: 'Sorting direction: "ASC" for ascending or "DESC" for descending.'
+      additionalProperties: false
+      description: Represents sorting configuration for role search.
+    RoleRequestModel:
+      type: object
+      properties:
+        roleFilter:
+          $ref: '#/components/schemas/RoleFilterModel'
+        permissionFilter:
+          $ref: '#/components/schemas/PermissionFilterModel'
+        pageSize:
+          type: integer
+          description: 'Number of roles to return per page. If null, all results are returned.'
+          format: int32
+          nullable: true
+        currentPage:
+          type: integer
+          description: The current page number (starting from 1). Used for pagination.
+          format: int32
+          nullable: true
+        orderBy:
+          $ref: '#/components/schemas/RoleOrderBy'
+        languageTranslate:
+          enum:
+            - EN
+            - IT
+          type: string
+          description: 'Represent the language of the permission name, description and type. Default language is English. For italian language, value is: "IT". For english language, value is "EN"'
+          nullable: true
+      additionalProperties: false
+      description: "Represents the payload for filtering, ordering, and paginating roles.\r\nThis model is used in role search API endpoints."
+    RolesRequestCsvModel:
+      type: object
+      properties:
+        roleFilter:
+          $ref: '#/components/schemas/RoleFilterModel'
+        permissionFilter:
+          $ref: '#/components/schemas/PermissionFilterModel'
+        pageSize:
+          type: integer
+          description: 'Number of roles to return per page. If null, all results are returned.'
+          format: int32
+          nullable: true
+        currentPage:
+          type: integer
+          description: The current page number (starting from 1). Used for pagination.
+          format: int32
+          nullable: true
+        orderBy:
+          $ref: '#/components/schemas/RoleOrderBy'
+        languageTranslate:
+          enum:
+            - EN
+            - IT
+          type: string
+          description: 'Represent the language of the permission name, description and type. Default language is English. For italian language, value is: "IT". For english language, value is "EN"'
+          nullable: true
+        exportFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportFieldRoleDefinition'
+          description: List of fields to be exported in csv file
+          nullable: true
+      additionalProperties: false
+      description: "Represents the payload for filtering and searching roles.\r\nSupports optional filters and pagination parameters."
+    StringPatchField:
+      type: object
+      properties:
+        isModified:
+          type: boolean
+        value:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UserAdministrativeAssignmentModel:
+      required:
+        - administrativeId
+      type: object
+      properties:
+        administrativeId:
+          minimum: 1.0
+          type: integer
+          description: Administrative ID
+          format: int64
+        associateAllStructures:
+          type: boolean
+          description: Flag to associate all structures with this administrative.
+        structureIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: List of structure IDs associated with this administrative
+          nullable: true
+      additionalProperties: false
+    UserAdministrativeModel:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Administrative ID
+          format: int64
+        name:
+          minLength: 1
+          type: string
+          description: Administrative name (identifier)
+        associateAllStructures:
+          type: boolean
+          description: Indicates if all structures should be associated to the user
+        structures:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserStructureModel'
+          description: List of associated structures
+          nullable: true
+      additionalProperties: false
+      description: Represents an administrative entity associated to a user.
+    UserAssociationUpdateModel:
+      type: object
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleModel'
+          description: The ID of the role to assign (nullable to allow clearing).
+          nullable: true
+        administratives:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserAdministrativeAssignmentModel'
+          description: List of administratives with nested structures (nullable/empty = clear all).
+          nullable: true
+      additionalProperties: false
+      description: 'DTO to update user''s associations (role, administratives, structures).'
+    UserDetailsModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the user (internal DB ID).
+          format: int64
+        userGuid:
+          type: string
+          description: Unique GUID of the user.
+          format: uuid
+        entraId:
+          type: string
+          description: Azure Entra ID of the user.
+          format: uuid
+        userName:
+          type: string
+          description: Display name or username of the user.
+          nullable: true
+        accountLoginName:
+          type: string
+          description: UPN or SAMAccountName used for login.
+          nullable: true
+        name:
+          type: string
+          description: First name of the user.
+          nullable: true
+        surname:
+          type: string
+          description: Last name of the user.
+          nullable: true
+        email:
+          type: string
+          description: Email address of the user.
+          nullable: true
+        status:
+          type: string
+          description: 'Current status of the user (e.g., ACTIVE, WIP).'
+          nullable: true
+        organizationCompanyName:
+          type: string
+          description: Company name or business unit associated with the user.
+          nullable: true
+        lastLoginDateTime:
+          type: string
+          description: Last login timestamp.
+          format: date-time
+          nullable: true
+        phoneNumber:
+          type: string
+          description: Phone number of the user.
+          nullable: true
+        jobTitle:
+          type: string
+          description: Job title of the user.
+          nullable: true
+        department:
+          type: string
+          description: Department name where the user works.
+          nullable: true
+        profile:
+          enum:
+            - EVA_ADMIN
+            - EVA_FIELD
+            - EVA_USER
+          type: string
+          description: 'Profile type of the user (Admin, Field, or User).'
+        createdAt:
+          type: string
+          description: Timestamp when the user was created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: Timestamp when the user was last updated.
+          format: date-time
+        createdBy:
+          type: string
+          description: Username of the user who created the record.
+          nullable: true
+        updatedBy:
+          type: string
+          description: Username of the user who last updated the record.
+          nullable: true
+        corporateGroup:
+          $ref: '#/components/schemas/CorporateGroupSummaryModel'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleModel'
+          description: Role associated with the user.
+          nullable: true
+        administratives:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserAdministrativeModel'
+          description: 'List of administratives associated with the user, each including its related structures.'
+          nullable: true
+        customName:
+          type: string
+          description: Custom name for the user.
+          nullable: true
+        imageProfile:
+          type: string
+          description: Image profile URL or base64 string.
+          nullable: true
+      additionalProperties: false
+      description: 'Represents the detailed information of a user including role, corporate group, administratives, and structures.'
+    UserRequestCsvModel:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: The username (UPN or account name) to filter by.
+          nullable: true
+        profile:
+          enum:
+            - EVA_ADMIN
+            - EVA_FIELD
+            - EVA_USER
+          type: string
+          description: 'The user''s profile type (e.g., EVA_USER, EVA_ADMIN, etc.).'
+          nullable: true
+        roleId:
+          type: integer
+          description: The ID of the role assigned to the user.
+          format: int64
+          nullable: true
+        roleName:
+          type: string
+          description: The name of the role assigned to the user.
+          nullable: true
+        email:
+          type: string
+          description: The email address to filter by.
+          nullable: true
+        status:
+          type: string
+          description: 'The user''s status (e.g., ACTIVE, WIP, etc.).'
+          nullable: true
+        corporateId:
+          type: integer
+          description: The corporate group ID to filter users by their organization.
+          format: int64
+          nullable: true
+        corporateName:
+          type: string
+          description: Corporate group name to filter users by their organization.
+          nullable: true
+        name:
+          type: string
+          description: First name of the user to search.
+          nullable: true
+        surname:
+          type: string
+          description: Last name of the user to search.
+          nullable: true
+        buildingAcronym:
+          type: string
+          description: Building acronym associated with the user (used for structure-level filtering).
+          nullable: true
+        buildingName:
+          type: string
+          description: Building name associated with the user.
+          nullable: true
+        buildingType:
+          type: integer
+          description: Optional building type identifier used in structure filtering.
+          format: int64
+          nullable: true
+        pageSize:
+          type: integer
+          description: 'Page size for paginated results. If null, all items will be returned.'
+          format: int32
+          nullable: true
+        currentPage:
+          type: integer
+          description: Current page number for paginated results. Starts from 1.
+          format: int32
+          nullable: true
+        orderBy:
+          $ref: '#/components/schemas/OrderBy'
+        languageTranslate:
+          enum:
+            - EN
+            - IT
+          type: string
+          description: 'Represent the language of the user status. Default language is English. For italian language, value is: "IT". For english language, value is "EN"'
+          nullable: true
+        exportFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportFieldDefinition'
+          description: List of fields to be exported in csv file
+          nullable: true
+      additionalProperties: false
+      description: "Represents the payload for filtering and searching users.\r\nSupports optional filters and pagination parameters."
+    UserRequestModel:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: The username (UPN or account name) to filter by.
+          nullable: true
+        profile:
+          enum:
+            - EVA_ADMIN
+            - EVA_FIELD
+            - EVA_USER
+          type: string
+          description: 'The user''s profile type (e.g., EVA_USER, EVA_ADMIN, etc.).'
+          nullable: true
+        roleId:
+          type: integer
+          description: The ID of the role assigned to the user.
+          format: int64
+          nullable: true
+        roleName:
+          type: string
+          description: The name of the role assigned to the user.
+          nullable: true
+        email:
+          type: string
+          description: The email address to filter by.
+          nullable: true
+        status:
+          type: string
+          description: 'The user''s status (e.g., ACTIVE, WIP, etc.).'
+          nullable: true
+        corporateId:
+          type: integer
+          description: The corporate group ID to filter users by their organization.
+          format: int64
+          nullable: true
+        corporateName:
+          type: string
+          description: Corporate group name to filter users by their organization.
+          nullable: true
+        name:
+          type: string
+          description: First name of the user to search.
+          nullable: true
+        surname:
+          type: string
+          description: Last name of the user to search.
+          nullable: true
+        buildingAcronym:
+          type: string
+          description: Building acronym associated with the user (used for structure-level filtering).
+          nullable: true
+        buildingName:
+          type: string
+          description: Building name associated with the user.
+          nullable: true
+        buildingType:
+          type: integer
+          description: Optional building type identifier used in structure filtering.
+          format: int64
+          nullable: true
+        pageSize:
+          type: integer
+          description: 'Page size for paginated results. If null, all items will be returned.'
+          format: int32
+          nullable: true
+        currentPage:
+          type: integer
+          description: Current page number for paginated results. Starts from 1.
+          format: int32
+          nullable: true
+        orderBy:
+          $ref: '#/components/schemas/OrderBy'
+      additionalProperties: false
+      description: "Represents the payload for filtering and searching users.\r\nSupports optional filters and pagination parameters."
+    UserSearchResponseModel:
+      required:
+        - id
+        - profile
+        - status
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the user.
+          format: int64
+        userName:
+          type: string
+          description: 'Username or login name (e.g., UPN or SAMAccountName).'
+          nullable: true
+        status:
+          minLength: 1
+          type: string
+          description: 'Current status of the user (e.g., ACTIVE, WIP).'
+        name:
+          type: string
+          description: First name of the user.
+          nullable: true
+        surname:
+          type: string
+          description: Last name (surname) of the user.
+          nullable: true
+        organizationCompanyName:
+          type: string
+          description: Company or organization name associated with the user.
+          nullable: true
+        email:
+          type: string
+          description: Email address of the user.
+          nullable: true
+        lastLoginDateTime:
+          type: string
+          description: The last time the user logged into the system.
+          format: date-time
+          nullable: true
+        phoneNumber:
+          type: string
+          description: Phone number of the user.
+          nullable: true
+        jobTitle:
+          type: string
+          description: Job title or position held by the user.
+          nullable: true
+        profile:
+          enum:
+            - EVA_ADMIN
+            - EVA_FIELD
+            - EVA_USER
+          type: string
+          description: 'Profile type of the user (e.g., EVA_ADMIN, EVA_USER, etc.).'
+        incomingCorporateGroup:
+          type: string
+          nullable: true
+        corporateGroupName:
+          type: string
+          description: Name of the corporate group the user belongs to.
+          nullable: true
+        roleName:
+          type: string
+          description: List of rolename of the user
+          nullable: true
+        structures:
+          type: string
+          description: List of Structures related
+          nullable: true
+        companies:
+          type: string
+          description: List of Companies/Administrative realted
+          nullable: true
+      additionalProperties: false
+      description: "Represents the structure of a single user result in a search response.\r\nIncludes key user information and metadata for display."
+    UserStatusUpdateModel:
+      required:
+        - status
+      type: object
+      properties:
+        status:
+          enum:
+            - WIP
+            - ACTIVE
+            - DISABLED
+          type: string
+          description: 'New status to assign to the user, WIP or ACTIVE (DISABLED only assigned by Entra ID)'
+      additionalProperties: false
+      description: Represents the payload for updating the status of a user.
+    UserStructureModel:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Structure ID
+          format: int64
+        buildingAcronym:
+          type: string
+          description: Acronym of the building
+          nullable: true
+        buildingName:
+          type: string
+          description: Name of the building
+          nullable: true
+        buildingTypeName:
+          type: string
+          nullable: true
+        icon:
+          type: string
+          nullable: true
+      additionalProperties: false
+      description: Represents a structure associated to a user (and administrative).
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
+tags:
+  - name: Export
+    description: API controller for managing exporting users data.
+  - name: Health
+    description: Controller used for health checks to verify if the API is responsive.
+  - name: CorporateGroup
+    description: API controller for managing Corporate Groups.
+  - name: Role
+    description: API controller for managing roles and their associated permissions.

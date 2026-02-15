@@ -1,0 +1,533 @@
+<section class="container-fluid p-0">
+  @if (isWriting()) {
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.generalData.subjectData' | translate }}</h2>
+      </div>
+      <div class="col-md-6">
+        <form [formGroup]="formGeneralData()">
+          <div class="d-flex flex-column map-3 mb-2">
+            <p class="mb-1 form-label gls-form-label">
+              {{ 'administrative.generalData.subjectType' | translate
+              }}{{ Utility.requiredFieldControl(formGeneralData(), 'isPhysicalPerson') }}:
+            </p>
+            <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+              <gls-input-checkbox
+                [id]="'isPhysicalPersonNatural'"
+                [formGroup]="formGeneralData()"
+                [controlName]="'isPhysicalPerson'"
+                [class]="'form-check-input feature-radio'"
+                [label]="naturalPersonValue"
+                [type]="'radio'"
+                [checked]="formGeneralData().get('isPhysicalPerson')?.value === true"
+                (valueChange)="formGeneralData().get('isPhysicalPerson')!.setValue(true)">
+              </gls-input-checkbox>
+              <gls-input-checkbox
+                [id]="'isPhysicalPersonLegal'"
+                [formGroup]="formGeneralData()"
+                [controlName]="'isPhysicalPerson'"
+                [class]="'form-check-input feature-radio'"
+                [label]="legalPersonValue"
+                [type]="'radio'"
+                [checked]="formGeneralData().get('isPhysicalPerson')?.value === false"
+                (valueChange)="formGeneralData().get('isPhysicalPerson')!.setValue(false)">
+              </gls-input-checkbox>
+            </div>
+            <div class="mt-2 mb-3">
+              <gls-input-dropdown
+                [id]="'7'"
+                [formGroup]="formGeneralData()"
+                [controlName]="'corporateGroupId'"
+                [options]="corporateGroupList"
+                [label]="'administrative.generalData.corporateGroup'"
+                [keyValue]="'id'"
+                [keyDecsName]="'value'"
+                [showError]="!isDraft()"
+                (valueChanged)="onValueChange($event, 'corporateGroupId')"
+                [showStatus]="true"
+                [required]="true">
+              </gls-input-dropdown>
+            </div>
+          </div>
+          <!-- @if (formGeneralData().get('isPhysicalPerson')?.value === true) { -->
+          <div class="mb-3">
+            <gls-input
+              [id]="'2'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'surname'"
+              [label]="'administrative.generalData.lastNameNaturalPerson'"
+              [placeholder]="'administrative.generalData.lastNameNaturalPerson' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mb-3">
+            <gls-input
+              [id]="'3'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'name'"
+              [label]="'administrative.generalData.firstNameNaturalPerson'"
+              [placeholder]="'administrative.generalData.firstNameNaturalPerson' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <!-- } @else if (formGeneralData().get('isPhysicalPerson')?.value === false) { -->
+          <div class="mb-3">
+            <gls-input
+              [id]="'4'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'companyName'"
+              [label]="'administrative.generalData.companyName'"
+              [placeholder]="'administrative.generalData.companyName' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mb-3">
+            <gls-input
+              [id]="'5'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'additionalCompanyName'"
+              [label]="'administrative.generalData.additionalCompanyName'"
+              [placeholder]="'administrative.generalData.additionalCompanyName' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <!-- } -->
+          <div class="d-flex flex-column map-3 mb-3">
+            <p class="mb-1 form-label gls-form-label">{{ 'administrative.generalData.vatGroup' | translate }}</p>
+            <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+              <gls-input-checkbox
+                [id]="'ivaYes'"
+                [formGroup]="formGeneralData()"
+                [controlName]="'vatGroup'"
+                [label]="'administrative.generalData.radioValues.yes'"
+                [class]="'form-check-input feature-radio'"
+                [type]="'radio'"
+                [checked]="formGeneralData().get('vatGroup')?.value === true"
+                (valueChange)="formGeneralData().get('vatGroup')!.setValue(true)">
+              </gls-input-checkbox>
+              <gls-input-checkbox
+                [id]="'ivaNo'"
+                [formGroup]="formGeneralData()"
+                [controlName]="'vatGroup'"
+                [label]="'administrative.generalData.radioValues.no'"
+                [class]="'form-check-input feature-radio'"
+                [type]="'radio'"
+                [checked]="formGeneralData().get('vatGroup')?.value === false"
+                (valueChange)="formGeneralData().get('vatGroup')!.setValue(false)">
+              </gls-input-checkbox>
+            </div>
+          </div>
+
+          @if (!formGeneralData().get('isPhysicalPerson')?.value) {
+            <div class="d-flex flex-column map-3 mb-3">
+              <p class="mb-1 form-label gls-form-label">{{ 'administrative.generalData.nonProfitAssosation' | translate }}</p>
+              <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+                <gls-input-checkbox
+                  [id]="'profitYes'"
+                  [formGroup]="formGeneralData()"
+                  [controlName]="'nonProfitAssociation'"
+                  [label]="'administrative.generalData.radioValues.yes'"
+                  [class]="'form-check-input feature-radio'"
+                  [type]="'radio'"
+                  [checked]="formGeneralData().get('nonProfitAssociation')?.value === true"
+                  (valueChange)="formGeneralData().get('nonProfitAssociation')!.setValue(true)">
+                </gls-input-checkbox>
+                <gls-input-checkbox
+                  [id]="'profitNo'"
+                  [formGroup]="formGeneralData()"
+                  [controlName]="'nonProfitAssociation'"
+                  [label]="'administrative.generalData.radioValues.no'"
+                  [class]="'form-check-input feature-radio'"
+                  [type]="'radio'"
+                  [checked]="formGeneralData().get('nonProfitAssociation')?.value === false"
+                  (valueChange)="formGeneralData().get('nonProfitAssociation')!.setValue(false)">
+                </gls-input-checkbox>
+              </div>
+            </div>
+          }
+
+          <div class="mb-3">
+            <gls-input
+              [id]="'15'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'vatNumber'"
+              [label]="'administrative.generalData.vatNumber'"
+              [placeholder]="'administrative.generalData.vatNumber' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mb-3">
+            <gls-input
+              [id]="'16'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'taxCode'"
+              [label]="'administrative.generalData.taxCode'"
+              [placeholder]="'administrative.generalData.taxCode' | translate"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+        </form>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.generalData.RegisteredOfficeAddress' | translate }}</h2>
+      </div>
+      <div class="col-md-6">
+        <form [formGroup]="formGeneralData()">
+          <div class="mt-2 mb-3">
+            <gls-input-dropdown
+              [id]="'7'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'nationId'"
+              [options]="nationList() ?? []"
+              [label]="'administrative.generalData.registeredOfficeCountry'"
+              [keyValue]="'id'"
+              [keyDecsName]="'value'"
+              [showError]="!isDraft()"
+              (valueChanged)="onValueChange($event, 'nationId')"
+              [showStatus]="true"
+              [required]="true">
+            </gls-input-dropdown>
+          </div>
+          <div class="mb-3">
+            <gls-input
+              [id]="'8'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'address'"
+              [label]="'administrative.generalData.registeredOfficeAddress'"
+              [placeholder]="'administrative.generalData.registeredOfficeAddress' | translate"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mb-3">
+            <gls-input
+              [id]="'9'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'postCode'"
+              [label]="'administrative.generalData.registeredOfficePostcode'"
+              [placeholder]="'administrative.generalData.registeredOfficePostcode' | translate"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mb-3">
+            <gls-input
+              [id]="'10'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'city'"
+              [label]="'administrative.generalData.cityRegisteredOffice'"
+              [placeholder]="'administrative.generalData.cityRegisteredOffice' | translate"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mb-3">
+            <gls-input-dropdown
+              [id]="'11'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'provinceId'"
+              [options]="regOffProvList"
+              [label]="'administrative.generalData.registeredOfficeProvince'"
+              [keyValue]="'id'"
+              [keyDecsName]="'name'"
+              [showError]="!isDraft()"
+              (valueChanged)="onValueChange($event, 'provinceId')"
+              [showStatus]="true"
+              [required]="true" />
+          </div>
+
+          <div class="mb-3">
+            <gls-input-dropdown
+              [id]="'12'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'regionId'"
+              [options]="regionList"
+              [label]="'administrative.generalData.region'"
+              [keyValue]="'id'"
+              [keyDecsName]="'description'"
+              [showError]="!isDraft()"
+              (valueChanged)="onValueChange($event, 'regionId')"
+              [showStatus]="true"
+              [required]="true" />
+          </div>
+        </form>
+      </div>
+    </div>
+    <hr />
+
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.generalData.OtherData' | translate }}</h2>
+      </div>
+      <div class="col-md-6">
+        <form [formGroup]="formGeneralData()">
+          <div class="mb-3">
+            <p class="form-label gls-form-label mb-1">
+              @if (warningOrError()) {
+                <img src="assets/img/administrative/bell.svg" alt="bell" />
+              }
+              {{ 'administrative.generalData.atecoCode' | translate }}:
+            </p>
+            @if (selectedAtecoCode) {
+              <p class="fw-bold">{{ selectedAtecoCode.code + ' - ' + selectedAtecoCode.description }}</p>
+            }
+            <ng-container deleteAtecoContainer>
+              <button aria-pressed="true" (click)="openAtecoCodeModal()" (keyup.enter)="openAtecoCodeModal()" class="btn btn-secondary">
+                {{ getAtecoBtnLabel() | translate }}
+              </button>
+            </ng-container>
+            @if (selectedAtecoCode) {
+              <ng-container deleteAtecoContainer>
+                <button
+                  class="btn btn-outline-primary"
+                  (click)="removeAteco()"
+                  [attr.aria-label]="'administrative.subjectList.atecoModal.remove' | translate">
+                  {{ 'generic.delete' | translate }}
+                  <em class="bi bi-trash"></em>
+                </button>
+              </ng-container>
+            }
+          </div>
+          <div class="mb-3">
+            <gls-input-dropdown
+              [id]="'18'"
+              [formGroup]="formGeneralData()"
+              [controlName]="'languageId'"
+              [options]="languageList"
+              [label]="'administrative.generalData.language'"
+              [keyValue]="'id'"
+              [keyDecsName]="'description'"
+              [showError]="!isDraft()"
+              [showStatus]="true"
+              [required]="true">
+            </gls-input-dropdown>
+          </div>
+          <div class="mb-3">
+            <p class="form-label gls-form-label mb-1">{{ 'administrative.generalData.currency' | translate }}:</p>
+            @if (selectedCurrency) {
+              <p class="fw-bold">{{ selectedCurrency.acronym + ' - ' + selectedCurrency.name }}</p>
+            }
+            <button
+              aria-pressed="true"
+              (click)="openCurrencyModal()"
+              (keyup.enter)="openCurrencyModal()"
+              type="button"
+              class="btn btn-secondary">
+              {{ getCurrencyBtnLabel() | translate }}
+            </button>
+            @if (selectedCurrency) {
+              <ng-container deleteCurrencyContainer>
+                <button
+                  class="btn btn-outline-primary"
+                  (click)="removeCurrency()"
+                  [attr.aria-label]="'administrative.subjectList.currencyModal.remove' | translate">
+                  {{ 'generic.delete' | translate }}
+                  <em class="bi bi-trash"></em>
+                </button>
+              </ng-container>
+            }
+          </div>
+          <div class="d-flex flex-column map-3">
+            <p class="mb-2 form-label gls-form-label">{{ 'administrative.generalData.customsSubjectIct10' | translate }}</p>
+            <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+              <gls-input-checkbox
+                [id]="'Ict10Yes'"
+                [formGroup]="formGeneralData()"
+                [controlName]="'customSubjectIct10'"
+                [label]="'administrative.generalData.radioValues.yes'"
+                [class]="'form-check-input feature-radio'"
+                [type]="'radio'"
+                [checked]="formGeneralData().get('customSubjectIct10')?.value === true"
+                (valueChange)="formGeneralData().get('customSubjectIct10')!.setValue(true)">
+              </gls-input-checkbox>
+              <gls-input-checkbox
+                [id]="'Ict10No'"
+                [formGroup]="formGeneralData()"
+                [controlName]="'customSubjectIct10'"
+                [label]="'administrative.generalData.radioValues.no'"
+                [class]="'form-check-input feature-radio'"
+                [type]="'radio'"
+                [checked]="formGeneralData().get('customSubjectIct10')?.value === false"
+                (valueChange)="formGeneralData().get('customSubjectIct10')!.setValue(false)">
+              </gls-input-checkbox>
+            </div>
+            <p class="text-muted mt-2">{{ 'administrative.generalData.noRelationships' | translate }}</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  } @else {
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.generalData.subjectData' | translate }}</h2>
+      </div>
+      <div class="col-md-6">
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.subjectType' | translate }}</div>
+          <div class="col-6 text-break">
+            {{ ((!!formGeneralData().get('isPhysicalPerson')?.value ? naturalPersonValue : legalPersonValue) | translate) || '--' }}
+          </div>
+        </div>
+        <!-- @if (formGeneralData().get('isPhysicalPerson')?.value === naturalPersonValue) { -->
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.generalData.corporateGroup' | translate }}
+          </div>
+          <div class="col-6 text-break">
+            {{ subjectData()?.corporateGroupName || '--' }}
+            <!-- {{ getCorporateGroupName(formGeneralData().get('corporateGroupId')?.value) }} -->
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.generalData.lastNameNaturalPerson' | translate }}
+          </div>
+          <div class="col-6 text-break">{{ formGeneralData().get('surname')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.generalData.firstNameNaturalPerson' | translate }}
+          </div>
+          <div class="col-6 text-break">{{ formGeneralData().get('name')?.value || '--' }}</div>
+        </div>
+        <!-- } @else if (formGeneralData().get('isPhysicalPerson')?.value === legalPersonValue) { -->
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.companyName' | translate }}</div>
+          <div class="col-6 text-break">{{ formGeneralData().get('companyName')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.generalData.additionalCompanyName' | translate }}
+          </div>
+          <div class="col-6 text-break">{{ formGeneralData().get('additionalCompanyName')?.value || '--' }}</div>
+        </div>
+        <!-- } -->
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.vatGroup' | translate }}</div>
+          <div class="col-6 text-break">
+            {{
+              ((subjectData()?.vatGroup ? 'administrative.generalData.radioValues.yes' : 'administrative.generalData.radioValues.no')
+                | translate) || '--'
+            }}
+          </div>
+        </div>
+        @if (!formGeneralData().get('isPhysicalPerson')?.value) {
+          <div class="row mb-2">
+            <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.nonProfitAssosation' | translate }}</div>
+            <div class="col-6 text-break">
+              {{
+                ((subjectData()?.nonProfitAssociation
+                  ? 'administrative.generalData.radioValues.yes'
+                  : 'administrative.generalData.radioValues.no'
+                ) | translate) || '--'
+              }}
+            </div>
+          </div>
+        }
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.vatNumber' | translate }}</div>
+          <div class="col-6 text-break">{{ formGeneralData().get('vatNumber')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.taxCode' | translate }}</div>
+          <div class="col-6 text-break">{{ formGeneralData().get('taxCode')?.value || '--' }}</div>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.generalData.RegisteredOfficeAddress' | translate }}</h2>
+      </div>
+      <div class="col-md-6">
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.registeredOfficeCountry' | translate }}</div>
+          <div class="col-6 text-break">{{ subjectData()?.nationName || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.registeredOfficeAddress' | translate }}</div>
+          <div class="col-6 text-break">{{ formGeneralData().get('address')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.registeredOfficePostcode' | translate }}</div>
+          <div class="col-6 text-break">{{ formGeneralData().get('postCode')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.generalData.cityRegisteredOffice' | translate }}
+          </div>
+          <div class="col-6 text-break">{{ formGeneralData().get('city')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.registeredOfficeProvince' | translate }}</div>
+          <div class="col-6 text-break">{{ subjectData()?.provinceName || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.region' | translate }}</div>
+          <div class="col-6 text-break">{{ subjectData()?.regionName || '--' }}</div>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.generalData.OtherData' | translate }}</h2>
+      </div>
+      <div class="col-md-6">
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">
+            @if (warningOrError()) {
+              <app-warning-status
+                [row]="{ warning: true }"
+                [label]="'administrative.generalData.atecoCode' | translate"></app-warning-status>
+            }
+            {{ 'administrative.generalData.atecoCode' | translate }}
+          </div>
+          <div class="col-6 text-break">{{ subjectData()?.atecoCodeName || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.language' | translate }}</div>
+          <div class="col-6 text-break">{{ subjectData()?.languageName || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.currency' | translate }}</div>
+          <div class="col-6 text-break">{{ subjectData()?.currencyName || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.generalData.customsSubjectIct10' | translate }}</div>
+          <div class="col-6 text-break">
+            {{
+              ((subjectData()?.customSubjectIct10
+                ? 'administrative.generalData.radioValues.yes'
+                : 'administrative.generalData.radioValues.no'
+              ) | translate) || '--'
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</section>

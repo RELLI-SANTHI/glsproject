@@ -1,0 +1,10 @@
+export const NATIONS_LABELS = {
+  ISOCODE_IT: 'IT',
+  ISOCODE_DEFAULT: 'IT'
+};
+
+export const STATUS = {
+  COMPLETED: 'COMPLETED',
+  DRAFT: 'DRAFT',
+  DISABLED: 'DISABLED'
+};

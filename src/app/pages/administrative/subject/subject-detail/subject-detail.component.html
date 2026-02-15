@@ -1,0 +1,57 @@
+<div class="container-box mt-4">
+  <app-content-header [image]="''" [isSmallMobile]="isSmallMobile()" [isTablet]="isTablet()" [subTitle]="subtitle" [title]="title">
+    <ng-container rightContainer>
+      @if (hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeSubject, PERMISSION.write)) {
+        <button
+          (click)="editSubject()"
+          [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile() }"
+          class="btn btn-outline-secondary my-3">
+          {{ 'administrative.subjectEdit.manageSubject' | translate }}
+        </button>
+      }
+
+      @if (
+        (hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCustomer, PERMISSION.write) ||
+          hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCustomerLAC, PERMISSION.write) ||
+          hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeAgent, PERMISSION.write)) &&
+        !subjectViewData?.customSubjectIct10
+      ) {
+        <button
+          (click)="addRelation()"
+          [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile() }"
+          class="btn btn-primary my-3">
+          <em class="bi bi-plus-circle-fill pe-2"></em>{{ 'administrative.subjectEdit.addRelation' | translate }}
+        </button>
+      }
+    </ng-container>
+  </app-content-header>
+
+  <div class="d-flex flex-wrap mt-3">
+    <gls-title-budge
+      [label]="'administrative.subjectEdit.lastUpdate'"
+      [value]="lastUpdate | date: 'dd/MM/yyyy - HH:mm'"
+      class="col-auto me-3 mb-3" />
+
+    <app-badge-link (linkClick)="onClickGetHistoricalInfo()" [label]="'administrative.subjectEdit.historicalChanges'" [value]="''">
+      <img alt="Icona" class="me-2 ms-1 img-fluid icon-clock" src="assets/img/icons/clock-history.svg" />
+    </app-badge-link>
+  </div>
+
+  <hr />
+
+  @if (messageStatusService.messageState$ | async) {
+    <gls-messages></gls-messages>
+  }
+
+  @if (subjectForm) {
+    <app-subject-edit-body
+      [formParent]="subjectForm"
+      [isWrite]="false"
+      [showTabs]="true"
+      [viewData]="subjectViewData"
+      [isDraft]="false"
+      [nationDefault]="nationDefault()"
+      [nationList]="nationList()"
+      [(warningOrError)]="warningOrError" />
+  }
+</div>

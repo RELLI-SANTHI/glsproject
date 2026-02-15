@@ -1,0 +1,137 @@
+<section class="container-fluid p-0">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.companyCreate.officeAddress.legalAddress' | translate }}</h2>
+    </div>
+
+    <div class="col-md-6">
+      @if (isWriting()) {
+        <div class="mt-2 mb-3">
+          <gls-input-dropdown
+            [id]="'1'"
+            [formGroup]="officeAddressFg()"
+            [controlName]="'legalAddressCountry'"
+            [multipleDecNameShow]="'multiple'"
+            [customOptions]="regCountryList"
+            [keyValue]="'id'"
+            [keyCode]="'isoCode'"
+            [keyDecsName]="'description'"
+            [label]="'administrative.companyCreate.officeAddress.legalAddressCountry'"
+            [showError]="!isDraft()"
+            [showStatus]="true"
+            [required]="true">
+          </gls-input-dropdown>
+        </div>
+        <div class="mb-3">
+          <gls-input
+            [id]="'2'"
+            [formGroup]="officeAddressFg()"
+            [controlName]="'legalAddress'"
+            [label]="'administrative.companyCreate.officeAddress.legalAddress'"
+            [placeholder]="'administrative.companyCreate.officeAddress.legalAddressPlaceholder' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+        <div class="mb-3">
+          <gls-input
+            [id]="'3'"
+            [formGroup]="officeAddressFg()"
+            [controlName]="'postalCode'"
+            [label]="'administrative.companyCreate.officeAddress.postalCode'"
+            [placeholder]="'administrative.companyCreate.officeAddress.postalCodePlaceholder' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+        <div class="mb-3">
+          <gls-input
+            [id]="'4'"
+            [formGroup]="officeAddressFg()"
+            [controlName]="'city'"
+            [label]="'administrative.companyCreate.officeAddress.city'"
+            [placeholder]="'administrative.companyCreate.officeAddress.cityPlaceholder' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+        <div class="mt-2 mb-3">
+          <!-- company 'Indirizzo sede legale' section on General Data-->
+          <gls-input-dropdown
+            [id]="'5'"
+            [formGroup]="officeAddressFg()"
+            [controlName]="'province'"
+            [options]="provOptions"
+            [label]="'administrative.companyCreate.officeAddress.province'"
+            [keyValue]="'id'"
+            [keyDecsName]="'name'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input-dropdown>
+        </div>
+        <div class="mt-2 mb-3">
+          <gls-input-dropdown
+            [id]="'6'"
+            [formGroup]="officeAddressFg()"
+            [controlName]="'regione'"
+            [options]="regionList"
+            [label]="'administrative.companyCreate.officeAddress.regione'"
+            [keyValue]="'id'"
+            [keyDecsName]="'description'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input-dropdown>
+        </div>
+      } @else {
+        <div class="row pb-3">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.officeAddress.legalAddressCountry' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.nationName || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.officeAddress.legalAddress' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.officeAddress || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.officeAddress.postalCode' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.officePostCode || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.officeAddress.city' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.officeCity || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.officeAddress.province' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.provinceName || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.officeAddress.regione' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.regionName || '--' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

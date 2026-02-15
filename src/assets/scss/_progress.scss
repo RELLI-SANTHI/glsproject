@@ -1,0 +1,10 @@
+@import "variables";
+
+.progress {
+  box-shadow: #{$box-shadow-sm};
+}
+
+.progress-bar {
+  border-radius: 1rem !important;
+  font-weight: 700 !important;
+}

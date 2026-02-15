@@ -1,0 +1,59 @@
+<div #datatableWrapper class="table-card">
+  <ngx-datatable
+    #table
+    [columnMode]="'force'"
+    [footerHeight]="0"
+    [headerHeight]="50"
+    [limit]="10"
+    [messages]="{ emptyMessage: 'administrative.subjectList.subjectListTableColum.emptyTableMessage' | translate }"
+    [rowHeight]="'auto'"
+    [rows]="filteredData"
+    [externalSorting]="true"
+    (sort)="onSort($event)"
+    [scrollbarH]="true"
+    class="material striped">
+    <!-- radio button -->
+    <ngx-datatable-column sortable="false" [name]="'generic.action' | translate">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <input
+          (change)="selectRow(row)"
+          [class]="'form-check-input feature-radio'"
+          [checked]="row === rowSelected"
+          name="selected"
+          type="radio" />
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- dinamic colums -->
+    <ngx-datatable-column *ngFor="let col of columns" [name]="translateLabelCol(col['name'])" [prop]="col['prop']" [width]="200">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <div class="text-break" style="white-space: normal">
+          {{ value }}
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>
+
+@if (totalItems > 0) {
+  <div class="d-flex justify-content-end align-items-center mt-3 flex-wrap">
+    <b class="pb-3 pe-2 result">
+      {{
+        'generic.results'
+          | translate
+            : {
+                firstResult: getFirstResult(),
+                lastResult: getLastResult(),
+                listLength: totalItems
+              }
+      }}
+    </b>
+    <gls-paginator
+      (pageChange)="onPageChange($event)"
+      [pageSize]="pageSize()"
+      [page]="currentPage"
+      [totalItems]="totalItems"
+      [totalPages]="totalPages">
+    </gls-paginator>
+  </div>
+}

@@ -1,0 +1,43 @@
+<div class="col-md-12 pt-4">
+  <h2 class="fw-bold">{{ 'anagrafica.template.texts.groupsOfFieldsToFillIn' | translate }}</h2>
+  <div class="row mt-3 mx-2 compilat-data">
+    <div class="col-md-3">
+      <div class="sidebar mt-2">
+        <ul #nav="ngbNav" [(activeId)]="active" class="nav-tabs" ngbNav>
+          @for (section of uniqueSections(); track section; let even = $even) {
+            <li [ngClass]="{ active: active === section }" [ngbNavItem]="section" class="info-box">
+              <button class="w-85 info-title d-flex flex-column align-items-start" ngbNavLink>
+                {{ 'anagrafica.structure.sectionTitle.' + section | translate }}
+                <div class="info-count">{{ getSelectedFieldsInSection(section) }}/{{ getTotalFieldsInSection(section) }}</div>
+                <div class="info-subtext">
+                  {{ getMandatoryFieldsInSection(section) }}
+                  @if (getMandatoryFieldsInSection(section) === 1) {
+                    {{ 'anagrafica.template.texts.obligatory' | translate }}
+                  } @else {
+                    {{ 'anagrafica.template.texts.obligatoryPlural' | translate }}
+                  }
+                </div>
+              </button>
+              <ng-template ngbNavContent>
+                @if (readonly()) {
+                  <gls-view-details-read
+                    [fieldsListInput]="getFieldsInSection(section)"
+                    [buildingAcronymMin]="getBuildingAcronymMin()"
+                    [buildingAcronymMax]="getBuildingAcronymMax()" />
+                } @else {
+                  <app-view-details-write [fieldsListInput]="getFieldsInSection(section)" [formGroupInput]="formGroupInput()" />
+                }
+              </ng-template>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div class="card mt-2">
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+.sidebar-container {
+  height: 80vh;
+  overflow-y: auto;
+  
+  scrollbar-width: thin;
+  scrollbar-color: #ffc107 transparent;
+
+  /* Per WebKit (Chrome, Edge, Safari) */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ffc107;
+    border-radius: 10px;
+  }
+}

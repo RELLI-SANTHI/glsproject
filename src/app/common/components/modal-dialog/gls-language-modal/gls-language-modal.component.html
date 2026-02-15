@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ 'modal.multiLanguage.title' | translate }}</h5>
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn-close" type="button"></button>
+</div>
+<div class="modal-body">
+  <ng-container *ngFor="let lang of langList">
+    <span
+      (click)="onSelectChange(lang.code)"
+      (keyup.enter)="onSelectChange(lang.code)"
+      (keydown.space)="onSelectChange(lang.code)"
+      [attr.aria-hidden]="true"
+      [ngClass]="{ active: selectLang === lang.code }"
+      class="lan-content-text">
+      {{ lang.name }}
+    </span>
+  </ng-container>
+</div>
+<div class="modal-footer">
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn btn-outline-primary" type="button">
+    {{ 'modal.cancelText' | translate }}
+  </button>
+  <button (click)="save()" (keyup.enter)="save()" aria-label="Ok" class="btn btn-primary" type="button">
+    {{ 'modal.save' | translate }}
+  </button>
+</div>

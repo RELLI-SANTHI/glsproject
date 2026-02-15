@@ -1,0 +1,29 @@
+// Rimuove lo stile nativo dei button e ripristina la grafica del div
+button.step {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  width: auto;
+  min-width: 0;
+  text-align: inherit;
+  color: inherit;
+}
+
+button.step:disabled,
+button.step.disabled {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+// Mantieni la compatibilità con le classi esistenti
+.step {
+  // ...eventuali regole aggiuntive già presenti in stepper.scss...
+}

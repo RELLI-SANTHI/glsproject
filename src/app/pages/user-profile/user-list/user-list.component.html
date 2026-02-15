@@ -1,0 +1,113 @@
+<div class="container-fluid p-0">
+  <app-content-header
+    (btnExportEvent)="exportData()"
+    [image]="'assets/img/transparent/PNG-Employee - Team_blue.png'"
+    [showBtnCreate]="false"
+    [isSmallMobile]="isSmallMobile()"
+    [isTablet]="isTablet()"
+    [showBtnExport]="showButtonExport"
+    [subTitle]="'userProfile.userList.subtitle'"
+    [title]="'userProfile.userList.title'" />
+
+  <hr />
+
+  @if (messageStatusService.messageState$ | async) {
+    <gls-messages></gls-messages>
+  }
+  <app-user-list-table
+    (filterByAcronym)="filterByText()"
+    (pageChange)="pageChange($event)"
+    (resetFilter)="resetFilter($event)"
+    (resetFilters)="resetFilters()"
+    (sort)="onSort($event)"
+    [(isOpenedFilter)]="isOpenedFilter"
+    [columns]="columns()"
+    [currentPage]="currentPage()"
+    [isSmallMobile]="isSmallMobile()"
+    [isTablet]="isTablet()"
+    [numColFrozen]="numColFrozen()"
+    [pageSize]="pageSize()"
+    [showButtonFilter]="showButtonFilter"
+    [showFiltersApplied]="showFiltersApplied()"
+    [showRotateCard]="showRotateCard()"
+    [sortSelected]="sortSelected"
+    [totalItems]="totalItems()"
+    [totalPages]="totalPages()"
+    [userFilterFg]="userFilterFg"
+    [userList]="userList()" />
+</div>
+
+<div *ngIf="isOpenedFilter()" class="modal-container">
+  <div class="modal-row d-flex flex-column justify-content-between p-0">
+    <div class="d-flex flex-column">
+      <div *ngFor="let step of filterStepper" [ngClass]="{ 'm-4': step.step === currentFilterStep }">
+        <ng-container *ngIf="step.step === currentFilterStep">
+          <div class="d-flex align-items-center mb-3">
+            <button
+              (click)="back()"
+              (keyup.enter)="back()"
+              *ngIf="step.step !== 'start'"
+              aria-label="Close filter"
+              class="btn btn-round btn-link"
+              type="button">
+              <em class="bi bi-chevron-left yellow me-2"></em>
+            </button>
+            <h2 class="visually-hidden">h2</h2>
+            <h3 class="secondary subtitle">{{ getColumnTranslationCode(step.step) | translate }}</h3>
+            <button
+              (click)="closeFilter()"
+              (keyup.enter)="closeFilter()"
+              aria-label="Close filter"
+              class="btn btn-round btn-link ms-auto"
+              type="button">
+              <em class="bi bi-x-lg yellow"></em>
+            </button>
+          </div>
+          <div class="overflow-y-auto custom-filter-height">
+            <div *ngFor="let field of step.fields" class="my-3">
+              <button
+                (click)="selectStep(field.name)"
+                (keyup.enter)="selectStep(field.name)"
+                aria-label="Click on select step"
+                class="btn px-0 btn-link nowrap w-100 d-flex align-items-center justify-content-between"
+                type="button">
+                <p *ngIf="step.step === 'start'" class="p-0 m-0 white underline">
+                  {{ getColumnTranslationCode(field.name) | translate }}
+                </p>
+                <p *ngIf="step.step !== 'start'" class="p-0 m-0 white underline text-start text-break">
+                  {{
+                    field.value === 'field' || field.value === 'user' || field.value === 'admin'
+                      ? (getTranslationForProfile(field.name) | translate)
+                      : (getStatusTranslationCode(field.name) | translate)
+                  }}
+                </p>
+                <div *ngIf="step.step === 'start'" class="d-flex ms-2">
+                  <button
+                    [ngClass]="{ 'btn-warning': field.value !== undefined, 'btn-light': field.value === undefined }"
+                    class="btn btn-sm w-20 me-2 primary capitalize-text">
+                    {{
+                      field.value
+                        ? (getStatusTranslationCode(field.value) | translate)
+                        : ('userProfile.userList.columnList.all' | translate)
+                    }}
+                  </button>
+                  <i class="bi bi-chevron-right white my-auto"></i>
+                </div>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-center m-4">
+      <button
+        (click)="applyFilter()"
+        (keyup.enter)="applyFilter()"
+        aria-label="Apply filters"
+        class="btn btn-warning w-100 btn-round"
+        type="button">
+        {{ 'userProfile.userList.applyFilter' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

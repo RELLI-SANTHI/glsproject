@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    {{ 'modal.' + data.title | translate }}
+    @if (data.userName) {
+      <div style="font-weight: bold; color: #061ab1">{{ data.userName }}</div>
+    }
+  </h5>
+  @if (data.showCancel) {
+    <button (click)="closeModal()" aria-label="Close" class="btn-close" type="button"></button>
+  }
+</div>
+<div class="modal-body">
+  <span [innerHtml]="'modal.' + (data.content || 'genericError') | translate: additionalData"></span>
+  @if (data.userName) {
+    <span
+      ><strong>{{ data.userName }}</strong
+      ><span>.</span></span
+    >
+    <div>
+      {{ 'modal.' + data.content2 | translate }}
+    </div>
+  }
+</div>
+<div class="modal-footer">
+  @if (data.showCancel) {
+    <button (click)="closeModal()" aria-label="Close" class="btn btn-outline-secondary" type="button">
+      {{ data.cancelText || 'generic.cancel' | translate }}
+    </button>
+  }
+  <button (click)="onConfirm()" aria-label="confirm" class="btn btn-primary" type="button">
+    {{ data.confirmText | translate }}
+  </button>
+</div>

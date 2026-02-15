@@ -1,0 +1,23 @@
+<div class="d-flex">
+  <div class="bg-light border-right vh-100 d-flex flex-column p-3 sidebar">
+    <header role="banner" aria-label="Sidebar Header">
+      <div class="sidebar-header d-flex justify-content-between align-items-center pb-3">
+        <h1 class="visually-hidden">h1</h1>
+        <h2 class="visually-hidden">h2</h2>
+        <h3 class="visually-hidden">h3</h3>
+        <h4 class="visually-hidden">h4</h4>
+        <h5 class="mb-0">
+          <img alt="GLS Logo" class="me-2" src="assets/img/logo/Desktop_basic_WhiteYellow.svg" width="75" />
+          <span class="visually-hidden">GLS Logo</span>
+        </h5>
+        <button (click)="toggleSidebarValue()" aria-label="Collapse Sidebar" class="btn btn-icon-primary" id="sidebarCollapse">
+          <i class="bi {{ isSmallMobile ? 'bi-x-lg' : 'bi-arrow-bar-left' }}"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="flex-grow-1">
+      <ng-content />
+    </div>
+  </div>
+</div>

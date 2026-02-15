@@ -1,0 +1,178 @@
+<div class="container-box mt-4">
+  <app-content-header [image]="''" [subTitle]="''" [title]="headerTitle" [isSmallMobile]="isSmallMobile()" [isTablet]="isTablet()">
+    @if (showBtnEdit()) {
+      <ng-container rightContainer>
+        <button
+          (click)="editRelationship()"
+          [attr.aria-label]="'anagrafica.template.list.button.new' | translate"
+          [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile() }"
+          class="btn btn-primary"
+          type="button">
+          <em class="bi bi-pencil-square"></em>
+          {{ 'administrative.relationshipDetail.editRelationship' | translate }}
+        </button>
+      </ng-container>
+    }
+  </app-content-header>
+
+  <div class="d-flex flex-wrap">
+    <gls-title-budge [label]="'administrative.relationshipEdit.subject'" [value]="subjectName || '---'" class="col-auto me-3 mb-3" />
+    <gls-title-budge
+      [label]="'administrative.relationshipEdit.relationshipStatus'"
+      [value]="'administrative.relationshipEdit.' + status.toLowerCase() | translate"
+      class="col-auto me-3 mb-3" />
+    <gls-title-budge
+      [label]="'administrative.relationshipEdit.lastUpdate'"
+      [value]="lastUpdate | date: 'dd/MM/yyyy - HH:mm'"
+      class="col-auto me-3 mb-3" />
+    <app-badge-link (linkClick)="onClickGetHistoricalInfo()" [label]="'administrative.subjectEdit.historicalChanges'" [value]="''">
+      <img src="assets/img/icons/clock-history.svg" alt="Icona" class="me-2 ms-1 img-fluid icon-clock" />
+    </app-badge-link>
+  </div>
+
+  <hr />
+
+  <gls-messages />
+
+  @if (relationshipForm) {
+    <ul #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-tabs-top pt-5 justify-content-start gap-2" ngbNav>
+      <li [ngbNavItem]="1">
+        <button ngbNavLink>{{ 'administrative.relationshipEdit.relationshipData.title' | translate }}</button>
+        <ng-template ngbNavContent>
+          <app-relationship-data
+            [isEnabledDate]="false"
+            [isFromAgent]="isFromAgent()"
+            [isFromSubject]="false"
+            [isWriting]="false"
+            [relationshipDataForm]="relationshipForm"
+            [isDraft]="false" />
+        </ng-template>
+      </li>
+      @if (isFromAgent()) {
+        <li [ngbNavItem]="2">
+          <button ngbNavLink>
+            @if (isSectionInvalid('generalData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.generalData.generalData' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-general-data-agent
+              [isWriting]="false"
+              [relationshipGeneralDataAgentForm]="relationshipForm"
+              [isDraft]="false" />
+          </ng-template>
+        </li>
+      } @else {
+        <li [ngbNavItem]="2">
+          <button ngbNavLink>
+            @if (isSectionInvalid('generalData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.generalData.generalData' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-general-data [isWriting]="false" [relationshipGeneralDataForm]="relationshipForm" [isDraft]="false" />
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <button ngbNavLink>
+            @if (isSectionInvalid('fiscalData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.relationshipEdit.relationshipFiscalData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-fiscal-data
+              [filscalDataForm]="getFinancialDetail()"
+              [isWriting]="false"
+              [formParent]="relationshipForm"
+              [isDraft]="false"></app-relationship-fiscal-data>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="4">
+          <button ngbNavLink>
+            @if (isSectionInvalid('billingData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.relationshipEdit.relationshipBillingData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-billing-data
+              [isFromSubject]="isFromSubject()"
+              [isWriting]="false"
+              [relationshipBillingDataForm]="getBillingDataForm()"
+              [isDraft]="false" />
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="5">
+          <button ngbNavLink>
+            @if (error() || warning()) {
+              <app-warning-status [row]="{ error: isSectionInvalid('bankingData') || error(), warning: warning() }"></app-warning-status>
+            }
+            {{ 'administrative.relationshipEdit.relationshipBankingData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-banking-data
+              [error]="isBankError()"
+              [warning]="isBankWarning()"
+              [isFromSubject]="isFromSubject()"
+              [isItalianRelationship]="isItalianSubject()"
+              [isWriting]="false"
+              [relationshipBankingDataForm]="getBankingDataForm()"
+              [titleLabel]="'administrative.relationshipEdit.relationshipBankingData.titleBank'"
+              [titleLabelCard]="'administrative.relationshipEdit.relationshipBankingData.selectBank'"
+              [isDraft]="false" />
+
+            <hr />
+            <app-relationship-banking-data
+              #bankRemittance
+              [error]="isRemittanceBankError()"
+              [warning]="isRemittanceBankWarning()"
+              [isFromSubject]="isFromSubject()"
+              [isItalianRelationship]="isItalianSubject()"
+              [isRemittance]="true"
+              [isWriting]="false"
+              [relationshipBankingDataForm]="getBankingDataForm()"
+              [titleLabel]="'administrative.relationshipEdit.relationshipBankingData.titleRemittance'"
+              [titleLabelCard]="'administrative.relationshipEdit.relationshipBankingData.selectRemittanceBank'"
+              [isDraft]="false" />
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="6">
+          <button ngbNavLink>
+            @if (isSectionInvalid('commercialData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.relationshipEdit.relationshipCommercialData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-commercial-data
+              [isFromSubject]="isFromSubject()"
+              [isWriting]="false"
+              [relationshipCommercialDataForm]="relationshipForm"
+              [isDraft]="false"
+              [customer]="responseCustomer"
+              [relationshipForm]="relationshipForm" />
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="7">
+          <button ngbNavLink>
+            @if (isSectionInvalid('otherData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.relationshipEdit.relationshipOtherData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-other-data
+              [isFromSubject]="isFromSubject()"
+              [isWriting]="false"
+              [relationshipOtherDataForm]="relationshipForm"
+              [isDraft]="false" />
+          </ng-template>
+        </li>
+      }
+    </ul>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+  }
+</div>

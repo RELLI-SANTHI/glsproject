@@ -1,0 +1,97 @@
+<div class="table-responsive">
+  <table class="table">
+    <!-- Table Header -->
+    <thead class="table-header">
+      <tr>
+        <!-- Column for Information Group -->
+        <th style="max-width: 250px">{{ 'anagrafica.template.texts.informationGroup' | translate }}</th>
+        <!-- Column for Field to Include -->
+        <th style="min-width: 350px">{{ 'anagrafica.template.texts.fieldToInclude' | translate }}</th>
+        <!-- Column for Obligatory Field -->
+        <th style="min-width: 100px">{{ 'anagrafica.template.texts.obligatory' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Loop through the fieldsListInput array -->
+      @for (field of fieldsListInput(); track field; let i = $index) {
+        <tr [ngClass]="getSubSectionClass(field.subSection)" class="group-row">
+          <!-- Display subsection name only for the first field in the subsection -->
+          @if (i === 0 || fieldsListInput()[i - 1].subSection !== field.subSection) {
+            <td>
+              <!-- Translate and display the subsection name -->
+              <strong> {{ 'anagrafica.structure.subsection.' + field.subSection | translate }} </strong>
+            </td>
+          } @else {
+            <!-- Empty cell for subsequent fields in the same subsection -->
+            <td></td>
+          }
+
+          <!-- Column for Field to Include -->
+          <td>
+            <!-- Checkbox for including the field -->
+            <gls-input-checkbox
+              (change)="onFieldChange($event)"
+              [class]="'form-check-input check-input-lg me-2'"
+              [controlName]="field.fieldName"
+              [formGroup]="formGroupInput()"
+              [id]="field.fieldName"
+              [label]="'anagrafica.structure.field.' + field.fieldName"
+              [type]="'checkbox'">
+            </gls-input-checkbox>
+            <!-- Additional input for Building Acronym Minimum Characters -->
+            @if (field.fieldName === 'BuildingAcronym') {
+              <div class="row">
+                <div class="col-6" style="max-width: 180px">
+                  <gls-input
+                    [class]="'form-control'"
+                    [controlName]="'buildingAcronymMin'"
+                    [formGroup]="formGroupInput()"
+                    [label]="'anagrafica.template.texts.minimumCharacters'"
+                    [placeholder]="'anagrafica.template.texts.enterMinimumCharacters'"
+                    [showError]="true"
+                    [type]="'number'"
+                    id="additionalInput1">
+                  </gls-input>
+                </div>
+                <div class="col-6" style="max-width: 180px">
+                  <gls-input
+                    [class]="'form-control'"
+                    [controlName]="'buildingAcronymMax'"
+                    [formGroup]="formGroupInput()"
+                    [label]="'anagrafica.template.texts.MaximumCharacters'"
+                    [placeholder]="'anagrafica.template.texts.enterMaximumCharacters'"
+                    [showError]="true"
+                    [type]="'number'"
+                    id="additionalInput2">
+                  </gls-input>
+                </div>
+              </div>
+            }
+          </td>
+          <!-- Column for Obligatory Field -->
+          <td>
+            <!-- Default label for non-obligatory fields -->
+            <div class="d-flex align-items-center">
+              <!-- Default label for non-obligatory fields -->
+              <div class="form-check form-switch me-2 ps-2">
+                <span class="form-label gls-form-label fw-bold">No</span>
+              </div>
+              <!-- Toggle switch for marking the field as obligatory -->
+              <div class="form-check form-switch me-2 ps-3">
+                <gls-input-checkbox
+                  (change)="onFieldChangeToggle($event)"
+                  [class]="'form-check-input switch-medium'"
+                  [controlName]="field.fieldName + '_toggle'"
+                  [formGroup]="formGroupInput()"
+                  [id]="field.fieldName + '-toggle'"
+                  [type]="'checkbox'">
+                </gls-input-checkbox>
+              </div>
+              <span class="form-label gls-form-label fw-bold">{{ 'generic.yes' | translate }}</span>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

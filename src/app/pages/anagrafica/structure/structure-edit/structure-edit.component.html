@@ -1,0 +1,579 @@
+<div
+  class="container-box mt-4"
+  [ngClass]="{ 'color-icon-blue': structureDetailResponse?.status === 'DRAFT' }"
+  aria-label="Structure Edit Content">
+  <section class="d-flex justify-content-between w-100 flex-wrap" aria-label="Structure Edit">
+    <div class="col-12 col-md-6">
+      <div>
+        <h1 class="w-100 container-header">
+          @if (structureDetailResponse) {
+            <img [src]="getTemplateIcon(structureDetailResponse.icon)" alt="Icon" height="50" class="me-3" />
+          }
+          {{
+            getFieldDescription('BuildingName') ||
+              getFieldDescription('BuildingAcronym') ||
+              ('anagrafica.structure.newStructure' | translate)
+          }}
+        </h1>
+      </div>
+      @if (structureDetailResponse) {
+        <div>
+          <span class="container-subtitle mt-3">
+            {{ 'generic.lastModificationDate' | translate }} {{ structureDetailResponse.updatedAt | date: 'dd/MM/yyyy' }}
+          </span>
+        </div>
+      }
+      <ng-container id="budges">
+        <div class="row mt-3">
+          @if (structureDetailResponse) {
+            <gls-title-budge
+              class="col-auto"
+              [label]="'anagrafica.structure.structureType' | translate"
+              [value]="structureDetailResponse.buildingType">
+            </gls-title-budge>
+            <gls-title-budge
+              class="col-auto"
+              [label]="'anagrafica.structure.acronym' | translate"
+              [value]="structureDetailResponse.buildingAcronym">
+            </gls-title-budge>
+          }
+          <gls-title-budge
+            class="col-auto"
+            [label]="'anagrafica.structure.labelStatus' | translate"
+            [value]="
+              'anagrafica.structure.status.' + (structureDetailResponse ? structureDetailResponse.status.toLowerCase() : 'draft')
+                | translate
+            ">
+          </gls-title-budge>
+        </div>
+      </ng-container>
+    </div>
+  </section>
+
+  <ng-container id="header-stepper">
+    <gls-stepper
+      #stepper
+      [steps]="steps"
+      [currentStep]="currentStep"
+      [isPrevioursEnable]="isPrevioursValue"
+      (stepChangeEvent)="getStepperValue($event)"
+      [isEditMode]="type">
+      <button class="btn btn-link" (click)="goToExit()">
+        <em class="bi bi-arrow-left"></em>{{ 'anagrafica.structure.footerButtons.exit' | translate }}
+      </button>
+      <div class="ms-auto"></div>
+      @if (currentStep === 0) {
+        <button class="btn btn-primary" (click)="saveCompilationData()" [disabled]="!structureCreateFgControl.valid">
+          {{ 'anagrafica.structure.footerButtons.saveAndGoToDataCompilation' | translate }}
+          <em class="bi bi-arrow-right"></em>
+        </button>
+      }
+      @if (currentStep === 1) {
+        @if (type === 'create' || structureDetailResponse?.status === 'DRAFT') {
+          <button class="btn btn-outline-primary" (click)="onSaveDraft()">
+            <em class="bi bi-pencil-square"></em>
+            <span>{{ 'anagrafica.structure.footerButtons.saveDraft' | translate }}</span>
+          </button>
+        }
+
+        <button
+          *ngIf="type === 'create' || (type === 'edit' && !stuctureButtonType)"
+          class="btn btn-primary"
+          [disabled]="!structureFg.valid"
+          (click)="save()">
+          {{
+            type === 'create'
+              ? ('anagrafica.structure.footerButtons.confirm' | translate)
+              : ('anagrafica.structure.footerButtons.saveModifications' | translate)
+          }}
+          &rarr;
+        </button>
+        <button *ngIf="type === 'edit' && stuctureButtonType" class="btn btn-primary" (click)="deactivate()">
+          {{ 'anagrafica.structure.footerButtons.proceedWithDeactivation' | translate }}
+        </button>
+      }
+    </gls-stepper>
+  </ng-container>
+  <ng-template #step1>
+    <div class="row pt-4">
+      <div class="col-md-4">
+        <h2 class="fw-bold">{{ 'anagrafica.structure.TemplateChoice' | translate }}</h2>
+      </div>
+      <div class="col-md-8">
+        <div class="row structure-card" *ngIf="templateResponseList">
+          <div class="col-md-6" *ngFor="let template of templateResponseList">
+            <button
+              class="w-100 card mb-4"
+              (click)="selectTemplate(template)"
+              [ngClass]="{ 'card-active': this.selectTemplateName === template.templateName }">
+              <div class="card-body">
+                <h3 class="visually-hidden">h3</h3>
+                <h4 class="visually-hidden">h4</h4>
+                <h5 class="text-truncate text-align-left">
+                  <span>
+                    <img [src]="getTemplateIcon(template.icon)" alt="Icon" class="me-2" height="50" />
+                  </span>
+                  <span [ngbTooltip]="template.templateName | translate" class="value text-truncate">{{
+                    template.templateName | translate
+                  }}</span>
+                </h5>
+                <p class="visually-hidden">content</p>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="primary-information-section" class="row py-4 mb-5">
+      <div class="col-md-4">
+        <h3 class="fw-bold">{{ 'anagrafica.structure.primaryInformation' | translate }}</h3>
+      </div>
+      <div class="col-md-4">
+        <form [formGroup]="structureCreateFgControl">
+          <div class="form-group">
+            <gls-input
+              [id]="structureCreateObject.fieldName"
+              [formGroup]="structureCreateFgControl"
+              [controlName]="structureCreateObject.fieldName"
+              [label]="'anagrafica.structure.' + structureCreateObject.fieldName"
+              [placeholder]="'anagrafica.structure.field.insert' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true">
+            </gls-input>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </ng-template>
+  <ng-template #step2>
+    @if (stuctureButtonType) {
+      <ng-container>
+        <div class="row mt-4">
+          <div class="col-md-6 mt-4">
+            <h2 class="fw-bold">{{ 'anagrafica.structure.deactivation' | translate }}</h2>
+            <span class="container-subtitle mt-3">{{ 'anagrafica.structure.enterTheDateThePropertyWillClose' | translate }}</span>
+            <form [formGroup]="structureFg">
+              <div class="mt-3 mb-3" *ngFor="let field of fieldVisibleList">
+                <div *ngIf="field.fieldType === 'timestamp' && field.fieldName === 'EndOfOperationalActivity'" class="form-group">
+                  <div class="col-md-7">
+                    <gls-input-date
+                      [id]="field.fieldName!"
+                      [formGroup]="structureFg"
+                      [controlName]="field.fieldName!"
+                      [label]="'anagrafica.structure.field.' + field.fieldName!"
+                      [type]="'date'"
+                      [class]="'form-control'"
+                      [showError]="false"
+                      [showStatus]="true">
+                    </gls-input-date>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+      </ng-container>
+    } @else {
+      <ng-container>
+        <ng-container id="nav-tab">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-tabs-top pt-5 justify-content-start gap-2">
+            @if (checkToShowSection('anagrafica')) {
+              <li [ngbNavItem]="1">
+                <button ngbNavLink>
+                  @if (isSectionInvalid('anagrafica')) {
+                    <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+                  }
+                  {{ 'anagrafica.structure.sectionTitle.anagrafica' | translate }}
+                </button>
+                <ng-template ngbNavContent>
+                  @if (checkToShowSubSection('anagrafica', 'general')) {
+                    <ng-container *ngTemplateOutlet="formSection; context: { section: 'anagrafica', subSection: 'general' }"></ng-container>
+                  }
+                  @if (checkToShowSubSection('anagrafica', 'address')) {
+                    <ng-container *ngTemplateOutlet="formSection; context: { section: 'anagrafica', subSection: 'address' }"></ng-container>
+                  }
+                  @if (checkToShowSubSection('anagrafica', 'other')) {
+                    <ng-container *ngTemplateOutlet="formSection; context: { section: 'anagrafica', subSection: 'other' }"></ng-container>
+                  }
+                </ng-template>
+              </li>
+            }
+            @if (checkToShowSection('recapiti')) {
+              <li [ngbNavItem]="2">
+                <button ngbNavLink>
+                  @if (isSectionInvalid('recapiti')) {
+                    <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+                  }
+                  {{ 'anagrafica.structure.sectionTitle.recapiti' | translate }}
+                </button>
+                <ng-template ngbNavContent>
+                  @if (checkToShowSubSection('recapiti', 'general')) {
+                    <ng-container *ngTemplateOutlet="formSection; context: { section: 'recapiti', subSection: 'general' }"></ng-container>
+                  }
+                </ng-template>
+              </li>
+            }
+            @if (checkToShowSection('gestioneOperativa')) {
+              <li [ngbNavItem]="3">
+                <button ngbNavLink>
+                  @if (isSectionInvalid('gestioneOperativa')) {
+                    <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+                  }
+                  {{ 'anagrafica.structure.sectionTitle.gestioneOperativa' | translate }}
+                </button>
+                <ng-template ngbNavContent>
+                  @if (checkToShowSubSection('gestioneOperativa', 'general')) {
+                    <ng-container
+                      *ngTemplateOutlet="formSection; context: { section: 'gestioneOperativa', subSection: 'general' }"></ng-container>
+                  }
+                  @if (checkToShowSubSection('gestioneOperativa', 'services')) {
+                    <ng-container
+                      *ngTemplateOutlet="formSection; context: { section: 'gestioneOperativa', subSection: 'services' }"></ng-container>
+                  }
+                </ng-template>
+              </li>
+            }
+            @if (checkToShowSection('support')) {
+              <li [ngbNavItem]="4">
+                <button ngbNavLink>
+                  @if (isSectionInvalid('support')) {
+                    <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+                  }
+                  {{ 'anagrafica.structure.sectionTitle.support' | translate }}
+                </button>
+                <ng-template ngbNavContent>
+                  @if (checkToShowSubSection('support', 'general')) {
+                    <ng-container *ngTemplateOutlet="formSection; context: { section: 'support', subSection: 'general' }"></ng-container>
+                  }
+                </ng-template>
+              </li>
+            }
+            @if (checkToShowSection('datiStrutturali')) {
+              <li [ngbNavItem]="5">
+                <button ngbNavLink>
+                  @if (isSectionInvalid('datiStrutturali')) {
+                    <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+                  }
+                  {{ 'anagrafica.structure.sectionTitle.datiStrutturali' | translate }}
+                </button>
+                <ng-template ngbNavContent>
+                  @if (checkToShowSubSection('datiStrutturali', 'general')) {
+                    <ng-container
+                      *ngTemplateOutlet="formSection; context: { section: 'datiStrutturali', subSection: 'general' }"></ng-container>
+                  }
+                </ng-template>
+              </li>
+            }
+            @if (checkToShowSection('performance')) {
+              <li [ngbNavItem]="6">
+                <button ngbNavLink>
+                  @if (isSectionInvalid('performance')) {
+                    <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+                  }
+                  {{ 'anagrafica.structure.sectionTitle.performance' | translate }}
+                </button>
+                <ng-template ngbNavContent>
+                  @if (checkToShowSubSection('performance', 'general')) {
+                    <ng-container
+                      *ngTemplateOutlet="formSection; context: { section: 'performance', subSection: 'general' }"></ng-container>
+                  }
+                </ng-template>
+              </li>
+            }
+            <li [ngbNavItem]="7">
+              <button ngbNavLink>
+                {{ 'anagrafica.structure.sectionTitle.attach' | translate }}
+              </button>
+              <ng-template ngbNavContent>
+                <ng-container *ngTemplateOutlet="attachments"></ng-container>
+              </ng-template>
+            </li>
+          </ul>
+        </ng-container>
+
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </ng-container>
+    }
+  </ng-template>
+</div>
+<ng-template #attachments>
+  <ng-container>
+    <div class="row">
+      <!-- Left Column -->
+      <div class="col-xl-6">
+        <h1 class="fw-bold visually-hidden">h1</h1>
+        <h2 class="fw-bold">{{ 'anagrafica.structure.sectionTitle.attachments.attachpresent' | translate }}</h2>
+        <div class="file-list">
+          <ng-container *ngFor="let attachment of attachmentModel">
+            @if (!attachment.isMap) {
+              <div class="file-item">
+                <div class="d-flex align-items-center justify-content-between">
+                  @if (attachment.updatedAt) {
+                    <div class="pe-4 d-flex align-items-center">
+                      <gls-title-budge
+                        class="col-auto"
+                        [label]="'anagrafica.structure.updatedAt' | translate"
+                        [value]="(attachment.updatedAt | date: 'dd/MM/yyyy') || ''">
+                      </gls-title-budge>
+                    </div>
+                  }
+                  <button class="btn btn-link pe-3" (click)="downloadAttachment(attachment.id!, attachment.name!)">
+                    {{ attachment.name | truncateText: 30 }}
+                  </button>
+                </div>
+                <button class="btn btn-outline-primary" (click)="deleteAttachment(attachment.id!)">
+                  {{ 'anagrafica.structure.sectionTitle.attachments.elimina' | translate }}
+                </button>
+              </div>
+            }
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-xl-6">
+        <h2 class="fw-bold visually-hidden">h2</h2>
+        @if (showAttach) {
+          <div class="upload-container d-flex justify-content-between align-items-center flex-wrap">
+            <ng-container *ngIf="!fileName">
+              <div class="col-md-8 upload-info">
+                <h3>{{ 'anagrafica.structure.sectionTitle.attachments.addattachment' | translate }}</h3>
+                <p>{{ 'anagrafica.structure.sectionTitle.attachments.acceptedformats' | translate }}</p>
+              </div>
+
+              <div class="col-md-4 d-flex flex-column align-items-center">
+                <label for="file-upload" class="btn upload-button d-flex align-items-center">
+                  <em class="bi bi-cloud-upload"></em>{{ 'anagrafica.structure.sectionTitle.attachments.choosefile' | translate }}
+                </label>
+                <input type="file" id="file-upload" (change)="onFileSelected($event)" />
+              </div>
+            </ng-container>
+
+            <!-- Progress Bar -->
+            <div *ngIf="fileName" class="upload-progress">
+              <div class="d-flex align-items-center">
+                <em class="bi bi-cloud-upload text-primary"></em>
+                <span class="fw-bold ms-2">{{ fileName }}</span>
+              </div>
+              <p class="mb-1">{{ 'anagrafica.structure.sectionTitle.attachments.loading' | translate }}...</p>
+              <div class="progress">
+                <ngb-progressbar
+                  class="mb-3"
+                  type="primary"
+                  textType="white"
+                  [value]="progress"
+                  style="width: 100%"
+                  [showValue]="true"
+                  [attr.aria-valuenow]="progress"
+                  aria-valuemin="0"
+                  aria-valuemax="100" />
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Success Message -->
+        @if (uploadComplete && !showError) {
+          <div class="mt-3 success-message d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <em class="bi bi-check-circle"></em>
+              <span class="fw-bold ms-2">{{ 'anagrafica.structure.sectionTitle.attachments.succesmessage' | translate }}</span>
+            </div>
+            <div>
+              <button aria-pressed="true" type="button" class="btn my-3 my-3 btn-link" (click)="closeSuccessMessage()">
+                <i class="bi bi-x close-icon"></i>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #formSection let-section="section" let-subSection="subSection">
+  <ng-container>
+    <div class="row">
+      <ng-container id="template-header">
+        <div class="col-md-6">
+          <h2 class="fw-bold">{{ 'anagrafica.structure.subsection.' + subSection | translate }}</h2>
+        </div>
+      </ng-container>
+      <ng-container id="template-section">
+        <div class="col-md-6">
+          <ng-container *ngIf="showForm">
+            <form [formGroup]="structureFg">
+              <div>
+                <div class="mt-3 mb-3" *ngFor="let field of fieldVisibleList">
+                  <ng-container *ngIf="field.section === section && field.subSection === subSection">
+                    <div *ngIf="field.fieldType === 'varchar' || field.fieldType === 'text'" class="form-group">
+                      <gls-input
+                        [id]="field.fieldName!"
+                        [formGroup]="structureFg"
+                        [controlName]="field.fieldName!"
+                        [label]="'anagrafica.structure.field.' + field.fieldName!"
+                        [placeholder]="'anagrafica.structure.field.insert' | translate"
+                        [type]="'text'"
+                        [class]="'form-control'"
+                        [showError]="structureDetailResponse?.status === 'COMPLETED' || structureDetailResponse?.status === 'ACTIVE'"
+                        [showStatus]="true">
+                      </gls-input>
+                    </div>
+                    <div *ngIf="field.fieldType === 'int'" class="form-group">
+                      <gls-input
+                        [id]="field.fieldName!"
+                        [formGroup]="structureFg"
+                        [controlName]="field.fieldName!"
+                        [label]="'anagrafica.structure.field.' + field.fieldName!"
+                        [placeholder]="'anagrafica.structure.field.insert' | translate"
+                        [type]="'number'"
+                        [class]="'form-control'"
+                        [showError]="structureDetailResponse?.status === 'COMPLETED' || structureDetailResponse?.status === 'ACTIVE'"
+                        [showStatus]="true">
+                      </gls-input>
+                    </div>
+                    <div *ngIf="field.fieldType === 'decimal'" class="form-group">
+                      <gls-input
+                        [id]="field.fieldName!"
+                        [formGroup]="structureFg"
+                        [controlName]="field.fieldName!"
+                        [label]="'anagrafica.structure.field.' + field.fieldName!"
+                        [placeholder]="'anagrafica.structure.field.insert' | translate"
+                        [type]="'number'"
+                        [class]="'form-control'"
+                        [showError]="
+                          structureDetailResponse?.status === 'COMPLETED' ||
+                          structureDetailResponse?.status === 'ACTIVE' ||
+                          decimalErrorMap[field.fieldName!] ||
+                          rangeErrorMap[field.fieldName!]
+                        "
+                        [min]="field.minLength!"
+                        [max]="field.maxLength!"
+                        [showStatus]="true"
+                        (input)="validateDecimalInput($event, field.fieldName!, field.decimal ?? 0, field.minLength!, field.maxLength!)">
+                      </gls-input>
+
+                      <!-- Decimal error message -->
+                      <div *ngIf="decimalErrorMap[field.fieldName!]">
+                        {{ 'generic.error.decimalValidation.dplaceAllowed' | translate }}: {{ field.decimal ?? 0 }}
+                      </div>
+
+                      <!-- Range error message -->
+                      <div *ngIf="rangeErrorMap[field.fieldName!]">
+                        {{
+                          'generic.error.decimalValidation.between'
+                            | translate
+                              : {
+                                  minLength: field.minLength,
+                                  maxLength: field.maxLength
+                                }
+                        }}
+                      </div>
+                    </div>
+                    <div *ngIf="field.fieldType === 'file'" class="form-group">
+                      @if (field?.value && retrieveAttachById(field.value)) {
+                        <div class="file-list">
+                          <div class="file-item">
+                            <button class="btn btn-link" (click)="downloadAttachment(field.value!, retrieveAttachById(field.value)?.name!)">
+                              {{ retrieveAttachById(field.value)?.name }}
+                            </button>
+                            <button class="btn btn-outline-primary" (click)="deleteAttachment(field.value!, true)">
+                              {{ 'anagrafica.structure.sectionTitle.attachments.elimina' | translate }}
+                            </button>
+                          </div>
+                        </div>
+                      } @else {
+                        @if (progress > 0) {
+                          <p class="mb-1">{{ 'anagrafica.structure.sectionTitle.attachments.loading' | translate }} ...</p>
+                          <div class="progress">
+                            <ngb-progressbar
+                              class="mb-3"
+                              type="primary"
+                              textType="white"
+                              [value]="progress"
+                              style="width: 100%"
+                              [showValue]="true"
+                              [attr.aria-valuenow]="progress"
+                              aria-valuemin="0"
+                              aria-valuemax="100" />
+                          </div>
+                        } @else {
+                          <gls-input-file
+                            [id]="field.fieldName!"
+                            [formGroup]="structureFg"
+                            [controlName]="field.fieldName!"
+                            [label]="'anagrafica.structure.field.' + field.fieldName!"
+                            [type]="'file'"
+                            [class]="'form-control'"
+                            [showError]="structureDetailResponse?.status === 'COMPLETED' || structureDetailResponse?.status === 'ACTIVE'"
+                            [showStatus]="true"
+                            (fileSelected)="onFileSelectedonFields(field.fieldName, $event)">
+                          </gls-input-file>
+                        }
+                      }
+                    </div>
+                    <div *ngIf="field.fieldType === 'checkbox'" class="form-check">
+                      <gls-input-checkbox
+                        [id]="field.fieldName!"
+                        [formGroup]="structureFg"
+                        [controlName]="field.fieldName!"
+                        [label]="'anagrafica.structure.field.' + field.fieldName!"
+                        [type]="'checkbox'"
+                        [class]="'form-check-input'"
+                        [showError]="structureDetailResponse?.status === 'COMPLETED' || structureDetailResponse?.status === 'ACTIVE'"
+                        [showStatus]="true">
+                      </gls-input-checkbox>
+                    </div>
+                    <div *ngIf="field.fieldType === 'toggle'" class="form-group">
+                      <gls-input-toggle
+                        [id]="field.fieldName!"
+                        [formGroup]="structureFg"
+                        [controlName]="field.fieldName!"
+                        [label]="'anagrafica.structure.field.' + field.fieldName!"
+                        [type]="'checkbox'"
+                        [class]="'form-check-input'"
+                        [showError]="structureDetailResponse?.status === 'COMPLETED' || structureDetailResponse?.status === 'ACTIVE'"
+                        [showStatus]="true">
+                      </gls-input-toggle>
+                    </div>
+                    <div *ngIf="field.fieldType === 'combo'" class="form-group">
+                      <gls-input-dropdown
+                        [id]="field.fieldName!"
+                        [formGroup]="structureFg"
+                        [controlName]="field.fieldName!"
+                        [options]="field.options || []"
+                        [label]="'anagrafica.structure.field.' + field.fieldName!"
+                        [keyValue]="'id'"
+                        [keyDecsName]="'value'"
+                        [showError]="structureDetailResponse?.status === 'COMPLETED' || structureDetailResponse?.status === 'ACTIVE'"
+                        [showStatus]="true"
+                        [required]="field.isRequired!"></gls-input-dropdown>
+                    </div>
+                    <div *ngIf="field.fieldType === 'timestamp'" class="form-group">
+                      <gls-input-date
+                        [id]="field.fieldName!"
+                        [formGroup]="structureFg"
+                        [controlName]="field.fieldName!"
+                        [label]="'anagrafica.structure.field.' + field.fieldName!"
+                        [type]="'date'"
+                        [class]="'form-control'"
+                        [showError]="structureDetailResponse?.status === 'COMPLETED' || structureDetailResponse?.status === 'ACTIVE'"
+                        [showStatus]="true">
+                      </gls-input-date>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </form>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-template>
+<!--  footer for buttons  eliminate,draft,save-->
+<!-- choose-company-name-modal -->
+<div class="modal-backdrop custom-backdrop" *ngIf="isModalOpen"></div>

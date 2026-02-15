@@ -1,0 +1,112 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ 'administrative.relationshipEdit.relationshipCommercialData.selectAgentCode' | translate }}</h5>
+</div>
+<div class="modal-body">
+  <!-- Search Section -->
+  <div [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100 mb-3' : 'input-group-prepend align-items-center gap-3'" class="d-flex">
+    <div class="form-group mb-3">
+      <gls-input-dropdown
+        [id]="'typeId'"
+        [formGroup]="agentFilterForm"
+        [controlName]="'searchField'"
+        [options]="optionsPaymentSearch"
+        [keyValue]="'id'"
+        [keyDecsName]="'value'"
+        [placeholder]="'generic.select' | translate"
+        [showError]="false"
+        [showStatus]="false">
+      </gls-input-dropdown>
+    </div>
+    <div class="form-group mb-3">
+      <gls-input
+        [id]="'searchPayment'"
+        [formGroup]="agentFilterForm"
+        [controlName]="'searchTerm'"
+        [placeholder]="'generic.search' | translate"
+        [type]="'text'"
+        [class]="'form-control'"
+        [showError]="false"
+        [showStatus]="false"
+        (valueChange)="getFilterFormValue()">
+      </gls-input>
+    </div>
+    <button (click)="searchAgents()" [disabled]="!enableSearch()" class="btn btn-secondary" type="button">
+      {{ 'generic.search' | translate }}
+    </button>
+  </div>
+
+  <!-- Table Section -->
+  <div #datatableWrapper class="table-card">
+    <ngx-datatable
+      #agentTable
+      class="material striped"
+      [rows]="filteredAgents"
+      [columns]="columns"
+      [columnMode]="'force'"
+      [headerHeight]="50"
+      [footerHeight]="0"
+      [limit]="pageSize"
+      [rowHeight]="'auto'"
+      [scrollbarH]="true"
+      [externalSorting]="true"
+      (sort)="onSort($event)"
+      [messages]="{ emptyMessage: 'generic.emptyDataMessage' | translate }">
+      <!-- Radio Selection Column -->
+      <ngx-datatable-column [sortable]="false" [width]="100" [name]="'generic.action' | translate" [resizeable]="false">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <input
+            type="radio"
+            name="selectedAgent"
+            [checked]="row.agentCode === selectedAgentCode"
+            (change)="onAgentSelect(row)"
+            class="form-check-input feature-radio" />
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- Dynamic Columns -->
+      <ngx-datatable-column *ngFor="let col of columns" [name]="col.name | translate" [prop]="col.prop" [width]="200" [sortable]="true">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <div class="text-break" style="white-space: normal">
+            {{ value }}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+
+  @if (agents.length > 0) {
+    <div class="d-flex justify-content-end align-items-center mt-3 flex-wrap">
+      <b class="pb-3 pe-2 result">
+        {{
+          'generic.results'
+            | translate
+              : {
+                  firstResult: getFirstResult(),
+                  lastResult: getLastResult(),
+                  listLength: totalItems
+                }
+        }}
+      </b>
+      <gls-paginator
+        (pageChange)="onPageChange($event)"
+        [pageSize]="pageSize"
+        [page]="currentPage"
+        [totalItems]="totalItems"
+        [totalPages]="totalPages">
+      </gls-paginator>
+    </div>
+  }
+</div>
+<div class="modal-footer">
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Reload" class="btn btn-outline-primary" type="button">
+    {{ 'generic.cancel' | translate }}
+  </button>
+  <button
+    (click)="confirmSelection()"
+    (keyup.enter)="confirmSelection()"
+    [disabled]="!enableConfirmSelection()"
+    class="btn btn-primary"
+    type="button">
+    {{ 'administrative.relationshipEdit.relationshipBillingData.confirmSelection' | translate }}
+  </button>
+</div>

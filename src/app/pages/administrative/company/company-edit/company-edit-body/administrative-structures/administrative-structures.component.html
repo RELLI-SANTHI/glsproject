@@ -1,0 +1,64 @@
+<div #datatableWrapper class="table-card">
+  <ngx-datatable
+    #table
+    [columnMode]="'force'"
+    [footerHeight]="false"
+    [headerHeight]="50"
+    [limit]="10"
+    [rows]="structureList"
+    [messages]="{ emptyMessage: 'administrative.subjectList.subjectListTableColum.emptyTableMessage' | translate }"
+    [rowHeight]="50"
+    [scrollbarH]="true"
+    class="material striped">
+    <!-- Sigla -->
+    <ngx-datatable-column [name]="'administrative.structureData.sigla' | translate" prop="buildingAcronym" [sortable]="false" [width]="100">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <strong>{{ row.buildingAcronym }}</strong>
+      </ng-template>
+    </ngx-datatable-column>
+    <!-- Denominazione -->
+    <ngx-datatable-column
+      [name]="'administrative.structureData.denominazione' | translate"
+      prop="buildingName"
+      [sortable]="false"
+      [width]="100">
+    </ngx-datatable-column>
+    <!-- Tipo -->
+    <ngx-datatable-column [name]="'administrative.structureData.tipo' | translate" prop="buildingTypeName" [sortable]="false" [width]="100">
+    </ngx-datatable-column>
+    <!-- Regione -->
+    <ngx-datatable-column [name]="'administrative.structureData.regione' | translate" prop="regionName" [sortable]="false" [width]="100">
+    </ngx-datatable-column>
+    <!-- Area -->
+    <ngx-datatable-column [name]="'administrative.structureData.area' | translate" prop="areaName" [sortable]="false" [width]="100">
+    </ngx-datatable-column>
+    <!-- Datadiapertura -->
+    <ngx-datatable-column
+      [name]="'administrative.structureData.datadiapertura' | translate"
+      prop="startOfOperationalActivity"
+      [sortable]="false"
+      [width]="120">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        @if (isValidDate(row.startOfOperationalActivity)) {
+          {{ row.startOfOperationalActivity | date: 'dd/MM/yyyy' }}
+        } @else {
+          {{ row.startOfOperationalActivity }}
+        }
+      </ng-template>
+    </ngx-datatable-column>
+    <!-- Data di chiusura -->
+    <ngx-datatable-column
+      [name]="'administrative.structureData.datadichiusura' | translate"
+      prop="endOfOperationalActivity"
+      [sortable]="false"
+      [width]="120">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        @if (isValidDate(row.endOfOperationalActivity)) {
+          {{ row.endOfOperationalActivity | date: 'dd/MM/yyyy' }}
+        } @else {
+          {{ row.endOfOperationalActivity }}
+        }
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>

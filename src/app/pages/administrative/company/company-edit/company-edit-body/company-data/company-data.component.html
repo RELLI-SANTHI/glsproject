@@ -1,0 +1,156 @@
+<section class="container-fluid p-0">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.companyCreate.companyData.title' | translate }}</h2>
+    </div>
+    <div class="col-md-6">
+      @if (isWriting()) {
+        <form [formGroup]="companyDataFg()">
+          <div class="mb-3">
+            <gls-input
+              [id]="'1'"
+              [formGroup]="companyDataFg()"
+              [controlName]="'shareCapital'"
+              [label]="'administrative.companyCreate.companyData.shareCapital'"
+              [placeholder]="'administrative.companyCreate.companyData.shareCapital' | translate"
+              [type]="'number'"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mt-2 mb-3">
+            <gls-input
+              [id]="'2'"
+              [formGroup]="companyDataFg()"
+              [controlName]="'stateSocialCapital'"
+              [label]="'administrative.companyCreate.companyData.stateSocialCapital'"
+              [placeholder]="'administrative.companyCreate.companyData.stateSocialCapital' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mb-3">
+            <gls-input
+              [id]="'3'"
+              [formGroup]="companyDataFg()"
+              [controlName]="'reaNumber'"
+              [label]="'administrative.companyCreate.companyData.reaNumber'"
+              [placeholder]="'administrative.companyCreate.companyData.reaNumber' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mt-2 mb-3">
+            <gls-input
+              [id]="'4'"
+              [formGroup]="companyDataFg()"
+              [controlName]="'businessRegister'"
+              [label]="'administrative.companyCreate.companyData.businessRegister'"
+              [placeholder]="'administrative.companyCreate.companyData.businessRegisterPlaceholder' | translate"
+              [class]="'form-control'"
+              [type]="'text'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mt-2 mb-3">
+            <gls-input-dropdown
+              [id]="'5'"
+              [formGroup]="companyDataFg()"
+              [controlName]="'provinceofcRegister'"
+              [options]="provinceofcRegisterOptions"
+              [label]="'administrative.companyCreate.companyData.provinceofcRegister'"
+              [keyValue]="'id'"
+              [keyDecsName]="'name'"
+              [showError]="!isDraft()"
+              [showStatus]="true"
+              [required]="true">
+            </gls-input-dropdown>
+          </div>
+          <div class="mt-2 mb-3">
+            <gls-input
+              [id]="'6'"
+              [formGroup]="companyDataFg()"
+              [controlName]="'registrationNumber'"
+              [label]="'administrative.companyCreate.companyData.registrationNumber'"
+              [placeholder]="'administrative.companyCreate.companyData.registrationNumber' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mt-2 mb-3">
+            <gls-input-dropdown
+              [id]="'7'"
+              [formGroup]="companyDataFg()"
+              [controlName]="'singleMultipleMember'"
+              [options]="singleMultipleMemberOptions"
+              [label]="'administrative.companyCreate.companyData.singleMultipleMember'"
+              [keyValue]="'id'"
+              [keyDecsName]="'value'"
+              [showError]="!isDraft()"
+              [showStatus]="true"
+              [required]="true">
+            </gls-input-dropdown>
+          </div>
+        </form>
+      } @else {
+        <div class="row pb-3">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.companyData.shareCapital' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ (companyData?.shareCapital | number) || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.companyData.stateSocialCapital' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.shareCapitalStatus || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.companyData.reaNumber' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.rea || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.companyData.businessRegister' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.businessRegisterOf || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.companyData.provinceofcRegister' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.businessRegisterProvinceName || '--' }}</p>
+              </div>
+
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.companyData.registrationNumber' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.registrationNumberRegisterHauliers || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.companyData.singleMultipleMember' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ getMember() | translate }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

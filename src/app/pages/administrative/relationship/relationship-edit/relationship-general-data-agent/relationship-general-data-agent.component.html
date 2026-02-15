@@ -1,0 +1,123 @@
+@if (isWriting()) {
+  <div class="row mt-3">
+    <div class="col-md-4">
+      <h2
+        class="fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipAgentData.title' | translate }}</h2>
+    </div>
+
+    <div class="col-md-8">
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'agentTypeId'"
+          [formGroup]="relationshipGeneralDataAgentForm()"
+          [controlName]="'agentType'"
+          [label]="'administrative.relationshipEdit.relationshipAgentData.agentType' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipAgentData.agentType' | translate"
+          [type]="'text'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'percentageProvisionId'"
+          [formGroup]="relationshipGeneralDataAgentForm()"
+          [controlName]="'percentageProvision'"
+          [label]="'administrative.relationshipEdit.relationshipAgentData.percentageProvision' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipAgentData.percentageProvision' | translate"
+          [type]="'decimal'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'invoiceNoId'"
+          [formGroup]="relationshipGeneralDataAgentForm()"
+          [controlName]="'invoiceNo'"
+          [label]="'administrative.relationshipEdit.relationshipAgentData.invoiceNo' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipAgentData.invoiceNo' | translate"
+          [type]="'text'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'turnoverImportId'"
+          [formGroup]="relationshipGeneralDataAgentForm()"
+          [controlName]="'turnoverImp'"
+          [label]="'administrative.relationshipEdit.relationshipAgentData.turnoverImport' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipAgentData.turnoverImport' | translate"
+          [type]="'decimal'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'provisionalImportId'"
+          [formGroup]="relationshipGeneralDataAgentForm()"
+          [controlName]="'provisionalImp'"
+          [label]="'administrative.relationshipEdit.relationshipAgentData.provisionalImport' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipAgentData.provisionalImport' | translate"
+          [type]="'decimal'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="row mb-3 mt-3">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.relationshipEdit.relationshipAgentData.title' | translate }}</h2>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div
+          class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipAgentData.agentType' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ relationshipGeneralDataAgentForm().get('agentType')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipAgentData.percentageProvision' | translate }}
+        </div>
+        <div
+          class="col-6 text-break">{{ relationshipGeneralDataAgentForm().get('percentageProvision')?.value || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div
+          class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipAgentData.invoiceNo' | translate }}
+        </div>
+        <div
+          class="col-6 text-break">{{ (relationshipGeneralDataAgentForm().get('invoiceNo')?.value | number) || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipAgentData.turnoverImport' | translate }}
+        </div>
+        <div
+          class="col-6 text-break">{{ (relationshipGeneralDataAgentForm().get('turnoverImp')?.value | number) || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipAgentData.provisionalImport' | translate }}
+        </div>
+        <div
+          class="col-6 text-break">{{ (relationshipGeneralDataAgentForm().get('provisionalImp')?.value | number) || '--' }}
+        </div>
+      </div>
+    </div>
+  </div>
+}

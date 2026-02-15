@@ -1,0 +1,151 @@
+<section class="container-fluid p-0">
+  <div class="row">
+    @if (isWriting()) {
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.billingData.billingData' | translate }}</h2>
+        @if (isAtLastOneRequired()) {
+          <p class="text-break fw-normal">{{ 'administrative.billingData.subtitle' | translate }}</p>
+        }
+      </div>
+      <div class="col-md-6">
+        <form [formGroup]="formInvoiceDetail()">
+          <gls-input
+            class="mb-2"
+            [id]="'1'"
+            [formGroup]="formInvoiceDetail()"
+            [controlName]="'recipientCustomerCode'"
+            [label]="'administrative.billingData.recipientCustomerCode'"
+            [placeholder]="'administrative.billingData.recipientCustomerCode' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+          <gls-input
+            class="mb-2"
+            [id]="'2'"
+            [formGroup]="formInvoiceDetail()"
+            [controlName]="'pec'"
+            [label]="'administrative.billingData.pec'"
+            [placeholder]="'administrative.billingData.pec' | translate"
+            [type]="'email'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </form>
+      </div>
+      <hr />
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.billingData.addressInvoiceDelivery' | translate }}</h2>
+      </div>
+      <div class="col-md-6">
+        <form [formGroup]="formInvoiceDetail()">
+          <gls-input
+            class="mb-2"
+            [id]="'3'"
+            [formGroup]="formInvoiceDetail()"
+            [controlName]="'invoiceDeliveryAddress'"
+            [label]="'administrative.billingData.addressInvoiceDelivery'"
+            [placeholder]="'administrative.billingData.addressInvoiceDelivery' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+          <gls-input
+            class="mb-2"
+            [id]="'4'"
+            [formGroup]="formInvoiceDetail()"
+            [controlName]="'postcodeForInvoiceDelivery'"
+            [label]="'administrative.billingData.postalCodeInvoiceDelivery'"
+            [placeholder]="'administrative.billingData.postalCodeInvoiceDelivery' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+          <gls-input
+            class="mb-2"
+            [id]="'5'"
+            [formGroup]="formInvoiceDetail()"
+            [controlName]="'invoiceDeliveryLocation'"
+            [label]="'administrative.billingData.localityInvoiceDelivery'"
+            [placeholder]="'administrative.billingData.localityInvoiceDelivery' | translate"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+          @if (allFormsDetails()?.get('nationId')?.value === nationDefault()?.id) {
+            <gls-input-dropdown
+              [id]="'11'"
+              [formGroup]="formInvoiceDetail()"
+              [controlName]="'provinceForInvoiceDeliveryId'"
+              [options]="provinceList"
+              [label]="'administrative.billingData.provinceInvoiceDelivery'"
+              [keyValue]="'id'"
+              [keyDecsName]="'name'"
+              [showError]="!isDraft()"
+              (valueChanged)="onValueChange($event, 'provinceForInvoiceDeliveryId')"
+              [showStatus]="true" />
+          } @else {
+            <gls-input
+              class="mb-2"
+              [id]="'6'"
+              [formGroup]="formInvoiceDetail()"
+              [controlName]="'provinceForInvoiceDelivery'"
+              [label]="'administrative.billingData.provinceInvoiceDelivery'"
+              [placeholder]="'administrative.billingData.provinceInvoiceDelivery' | translate"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          }
+        </form>
+      </div>
+    } @else {
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.billingData.billingData' | translate }}</h2>
+        <p class="text-break fw-normal">{{ 'administrative.billingData.subtitle' | translate }}</p>
+      </div>
+      <div class="col-md-6">
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.billingData.recipientCustomerCode' | translate }}</div>
+          <div class="col-6 text-break">{{ formInvoiceDetail().get('recipientCustomerCode')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.billingData.pec' | translate }}</div>
+          <div class="col-6 text-break">{{ formInvoiceDetail().get('pec')?.value || '--' }}</div>
+        </div>
+      </div>
+      <hr />
+      <div class="col-md-6">
+        <h2 class="fw-bold">{{ 'administrative.billingData.addressInvoiceDelivery' | translate }}</h2>
+      </div>
+      <div class="col-md-6">
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.billingData.addressInvoiceDelivery' | translate }}</div>
+          <div class="col-6 text-break">{{ formInvoiceDetail().get('invoiceDeliveryAddress')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.billingData.postalCodeInvoiceDelivery' | translate }}</div>
+          <div class="col-6 text-break">{{ formInvoiceDetail().get('postcodeForInvoiceDelivery')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.billingData.localityInvoiceDelivery' | translate }}</div>
+          <div class="col-6 text-break">{{ formInvoiceDetail().get('invoiceDeliveryLocation')?.value || '--' }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">{{ 'administrative.billingData.provinceInvoiceDelivery' | translate }}</div>
+          <div class="col-6 text-break">
+            {{
+              (allFormsDetails()?.get('nationId')?.value === nationDefault()?.id
+                ? subjectData()?.invoiceDetail?.provinceForInvoiceDeliveryName
+                : subjectData()?.invoiceDetail?.provinceForInvoiceDeliveryName) || '--'
+            }}
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

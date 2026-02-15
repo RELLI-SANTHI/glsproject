@@ -1,0 +1,35 @@
+<div class="container-fluid p-0">
+  <app-content-header
+    (btnCreateEvent)="createRole()"
+    (btnExportEvent)="exportRoleData()"
+    [image]="'assets/img/transparent/Meeting room_blue.png'"
+    [isSmallMobile]="isSmallMobile()"
+    [isTablet]="isTablet()"
+    [labelBtnCreate]="'userProfile.roleList.createRole'"
+    [showBtnCreate]="showCrateBtn()"
+    [showBtnExport]="true"
+    [subTitle]="'userProfile.roleList.subtitle'"
+    [title]="'userProfile.roleList.title'" />
+
+  <hr />
+
+  @if (messageStatusService.messageState$ | async) {
+    <gls-messages></gls-messages>
+  }
+  <app-role-list-table
+    (pageChange)="pageChange($event)"
+    (resetFilter)="resetFilter($event)"
+    (resetFilters)="resetFilters()"
+    (searchByFilter)="filterByText()"
+    [currentPage]="currentPage()"
+    [isSmallMobile]="isSmallMobile()"
+    [isTablet]="isTablet()"
+    [pageSize]="pageSize()"
+    [roleCount]="roleCount"
+    [roleData]="roleData"
+    [roleFilterFg]="roleFilterFg"
+    [showFiltersApplied]="showFiltersApplied()"
+    [showRotateCard]="showRotateCard()"
+    [totalItems]="totalItems()"
+    [totalPages]="totalPages()" />
+</div>

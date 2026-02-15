@@ -1,0 +1,57 @@
+<div aria-label="Template List" class="container-box mt-4">
+  <ng-container id="container-header">
+    <div>
+      <div class="d-flex align-items-start">
+        <img alt="Icon" class="me-3" height="50"
+             src="assets/img/Document_blue/GLS_Icon_Send_Receive_Documents_GLSBlue_RGB_77068_0.png" />
+        <div>
+          <h1 class="container-header w-100 template-list-title">
+            {{ 'anagrafica.template.list.title' | translate }}
+          </h1>
+          <span class="container-subtitle mt-3">
+            {{ 'anagrafica.template.list.subtitle' | translate }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  @if (messageStatusService.messageState$ | async) {
+    <gls-messages></gls-messages>
+  }
+
+  <div class="d-flex justify-content-between align-items-center mt-4 row">
+    <h2 class="fw-bold col-md-6">{{ 'anagrafica.template.list.structureTypeList' | translate }}</h2>
+
+    <ng-container id="content-header">
+      <div class="text-end col-md-6">
+        <ng-container>
+          <button
+            (click)="newTemplate()"
+            *ngIf="visibility"
+            [attr.aria-label]="'anagrafica.template.list.button.new' | translate"
+            [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile() }"
+            class="btn btn-primary "
+            type="button">
+            <em class="bi bi-plus-circle-fill pe-2"></em>
+            {{ 'anagrafica.template.list.button.new' | translate }}
+          </button>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+
+  @if (templateResponseList) {
+    <div class="row pt-5">
+      @for (template of templateResponseList; track template.id) {
+        <div class="col-sm-4 mb-4">
+          <gls-card
+            [icon]="getTemplateIcon(template.icon)"
+            [title]="template.templateName"
+            [goToLink]="'anagrafica/template-detail'"
+            [goToParam]="template.id.toString()"
+            [size]="'l'"></gls-card>
+        </div>
+      }
+    </div>
+  }
+</div>

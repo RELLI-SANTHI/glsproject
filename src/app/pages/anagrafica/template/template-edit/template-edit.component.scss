@@ -1,0 +1,187 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #061ab1;
+}
+.stepper-container {
+  background: white;
+  display: flex;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  padding: 15px;
+  border-radius: 6px;
+}
+.step-container {
+  background: #ffff;
+  padding: 15px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.step-completed {
+  display: flex;
+  align-items: center;
+  background-color: #666;
+  color: white;
+  padding: 6px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  font-size: 16px;
+}
+.step-arrow {
+  margin: 0 10px;
+  color: gray;
+  font-size: 20px;
+}
+.step-active {
+  display: flex;
+  align-items: center;
+  background-color: #ffd100;
+  color: black;
+  font-weight: bold;
+  padding: 5px 12px;
+  border-radius: 50%;
+  font-size: 16px;
+  border: 2px solid #ffd100;
+}
+.step-pending {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ccc;
+  color: black;
+  font-weight: bold;
+  padding: 6px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+}
+.step-text {
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-box {
+  background: #fff;
+  border: 2px solid #061ab1;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin: 8px 0px;
+}
+
+.info-box.active {
+  background: #061ab1;
+  color: #fff;
+}
+
+.info-title {
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  color: #061ab1;
+  text-align: left;
+  margin-top: 5px;
+}
+.active .info-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #061ab1;
+}
+.active .info-subtext {
+  color: #ffffff;
+}
+
+.info-count {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #fff;
+  color: #061ab1;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1px solid #061ab1;
+}
+
+.active .info-count {
+  background: #061ab1;
+  border: 1px solid #fff;
+  color: #fff;
+}
+.info-subtext {
+  font-size: 12px;
+  color: #061ab1;
+}
+.card {
+  border: none;
+}
+
+.table thead.table-header th {
+  background-color: #d4edf7;
+  font-weight: bold;
+  text-align: left;
+  padding: 10px;
+  white-space: nowrap;
+  color: #595959;
+}
+
+thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
+  border-style: none;
+}
+.table tbody tr.group-row.even td {
+  background-color: #f8f9fa;
+}
+
+.table tbody tr.group-row.odd td {
+  background-color: #e6e6e6;
+}
+
+.list-group-item {
+  height: 100px;
+  width: 200px;
+  background-color: #061ab1; /* Change color of boxes of sections to #061ab1 */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px; /* Keep 10px space between boxes */
+  cursor: pointer;
+}
+
+.nav-tabs {
+  background-color: white; /* Set background color of the stepper to white */
+  border-bottom: 1px solid #ddd; /* Optional: Add a border to the bottom of the stepper */
+}
+
+.compilat-data {
+  background-color: #ffffff;
+}
+
+.form-switch {
+  padding-left: 1.5em;
+}

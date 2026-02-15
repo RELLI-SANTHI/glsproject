@@ -1,0 +1,40 @@
+@import "variables";
+
+.nav-tabs-top {
+  border-bottom: none;
+  margin-bottom: 3rem;
+  justify-content: space-between;
+
+  .nav-link {
+    color: black;
+    border: none;
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: $primary;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    transform: scaleX(1);
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .nav-link:hover::after {
+    background-color: $primary;
+  }
+
+  .nav-link.active {
+    font-weight: bold;
+    background-color: transparent;
+  }
+
+  .nav-link.active::after {
+    background-color: $primary;
+    height: 3px;
+  }
+}

@@ -1,0 +1,31 @@
+<footer class="form-footer d-flex justify-content-between gap-2 bg-white p-3">
+  <button (click)="goToExit()" class="btn btn-link" [attr.aria-label]="'formFooter.exit' | translate">
+    <em class="bi bi-arrow-left"></em>{{ 'formFooter.exit' | translate }}
+  </button>
+
+  <div class="d-flex ms-auto gap-2">
+    <!-- Left slot -->
+    <ng-content select="[leftContainer]"/>
+
+    @if (showDraftExit()) {
+      <button
+        class="btn btn-outline-primary"
+        (click)="saveDraftExit()"
+        [attr.aria-label]="labelDraftExit() | translate"
+        [disabled]="disableDraftExit()">
+        {{ labelDraftExit() | translate }}
+        <em class="bi bi-pencil-square"></em>
+      </button>
+    }
+
+    @if (showNextBtn()) {
+      <button class="btn btn-primary" (click)="nextBtnEv()" [disabled]="disableNextBtn()">
+        {{ labelNextBtn() | translate }}
+        <em class="bi bi-arrow-right"></em>
+      </button>
+    }
+  </div>
+
+  <!-- Right slot -->
+  <ng-content select="[rightContainer]"/>
+</footer>

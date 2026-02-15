@@ -1,0 +1,35 @@
+@import '../../../../assets/scss/variables';
+
+::ng-deep {
+  .feature-radio.form-check-input[type=radio] {
+    width: 1.2em !important;
+    height: 1.2em !important;
+    border-radius: 50% !important;
+    margin-right: 0.35rem;
+  }
+}
+
+.user-mngment-edit-container {
+  ul {
+    li:nth-child(even) {
+      background-color: #{$light-grey};
+    }
+  }
+
+  .list-border-color {
+    color: #{$border-color};
+  }
+
+  .structure-li-height {
+    height: 150px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: random($limit: 1);
+    scrollbar-color: #061ab1 #ffffff;
+    -webkit-scrollbar-thumb: 1;
+  }
+
+  .structure-list-width {
+    min-width: 105px;
+  }
+}

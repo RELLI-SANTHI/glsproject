@@ -1,0 +1,5 @@
+export enum SUBJECT_STATUS {
+  DRAFT = 'DRAFT',
+  COMPLETED = 'COMPLETED',
+  DISABLED = 'DISABLED'
+}

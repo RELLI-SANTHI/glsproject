@@ -1,0 +1,21 @@
+<div class="w-100" [formGroup]="formGroup">
+  <div class="form-check form-switch">
+    <input
+      [type]="type"
+      [class]="class"
+      [ngClass]="{ 'gls-form-input': true }"
+      [id]="id"
+      [formControlName]="controlName"
+      [attr.aria-label]="label || id | translate"
+      [attr.aria-describedby]="label || id | translate"
+      (change)="onChange($event)" />
+    <label *ngIf="label" [for]="id" class="form-label gls-form-label">{{ label | translate }}</label>
+    @if (showStatus) {
+      <gls-input-status-section
+        class="align-content-center ms-2"
+        [formGroup]="formGroup"
+        [controlName]="controlName"
+        [showError]="showError"></gls-input-status-section>
+    }
+  </div>
+</div>

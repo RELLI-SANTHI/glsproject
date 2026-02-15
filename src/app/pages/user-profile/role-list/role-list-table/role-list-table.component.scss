@@ -1,0 +1,44 @@
+@import '../../../../../assets/scss/variables.scss';
+.accordion-button:not(.collapsed) em::before {
+  transform: rotate(90deg);
+}
+.accordion-button:not(.collapsed)::after,
+.accordion-button.collapsed::after {
+  background-image: none;
+}
+
+::ng-deep {
+  .role-tree-table {
+    .ngx-datatable.material .datatable-body .datatable-body-row {
+      border: 1px solid #{$border-color};
+    }
+
+    .datatable-row-detail {
+      height: unset !important;
+      padding: 1px !important;
+    }
+  }
+}
+.role-tree-table {
+  ul {
+    li:nth-child(odd) {
+      background-color: #{$light-grey};
+    }
+  }
+  .table-card {
+    background-color: white;
+    box-shadow: 0 2px 3px #b7b7b7;
+    padding: 0.5rem;
+    max-width: calc(100vw - 2em);
+    border-collapse: collapse;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: random($limit: 1);
+    scrollbar-color: #061ab1 #ffffff;
+    -webkit-scrollbar-thumb: 1;
+  }
+}
+.custom-width {
+  width: 500px;
+}

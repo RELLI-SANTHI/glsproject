@@ -1,0 +1,266 @@
+@if (isWriting()) {
+  <div class="row mt-3">
+    <div class="col-md-4">
+      <h2 class="fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipCommercialData.title' | translate }}</h2>
+    </div>
+
+    <div class="col-md-8">
+      <div class="form-group mb-3">
+        <gls-input-dropdown
+          [id]="'typeCommercialId'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'type'"
+          [options]="relationshipTypeList"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.type' | translate"
+          [keyValue]="'id'"
+          [keyDecsName]="'value'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input-dropdown>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input-dropdown
+          [id]="'referenceOfficeId'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'referenceOfficeId'"
+          [options]="structureList()"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.referenceOfficeId' | translate"
+          [keyValue]="'id'"
+          [keyDecsName]="'value'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input-dropdown>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'fixedRight'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'fixedRight'"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.fixedRight' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipCommercialData.fixedRight' | translate"
+          [type]="'decimal'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+
+      <div class="form-group mb-3 mt-4">
+        <p>{{ 'administrative.relationshipEdit.relationshipCommercialData.agentCode' | translate }}</p>
+        <p class="fw-bold">
+          {{ agentDisplayInfo }}
+        </p>
+        <button (click)="chooseAgentCode()" (keyup.enter)="chooseAgentCode()" aria-label="Choose" class="btn btn-secondary" type="button">
+          {{ getAgentCodeBtnLabel() | translate }}
+        </button>
+        @if (selectedAgent) {
+          <ng-container deleteAgentContainer>
+            <button
+              class="btn btn-outline-primary "
+              (click)="removeAgent()"
+              [attr.aria-label]="'administrative.commercialRelations.agentRemove' | translate">
+              {{ 'generic.delete' | translate }}
+              <em class="bi bi-trash"></em>
+            </button>
+          </ng-container>
+        }
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'provPercentage'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'provPercentage'"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.commissionPercentage' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipCommercialData.commissionPercentage' | translate"
+          [type]="'decimal'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'potentialCustomerCode'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'potentialCustomerCode'"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.potentialCustomerCode' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipCommercialData.potentialCustomerCode' | translate"
+          [type]="'text'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'salesforceLeadCode'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'salesforceLeadCode'"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.potentialCustomerCodeSalesforce' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipCommercialData.potentialCustomerCodeSalesforce' | translate"
+          [type]="'text'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'discount1'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'discount1'"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.discount1' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipCommercialData.discount1' | translate"
+          [type]="'decimal'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'discount2'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'discount2'"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.discount2' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipCommercialData.discount2' | translate"
+          [type]="'decimal'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'discount3'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'discount3'"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.discount3' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipCommercialData.discount3' | translate"
+          [type]="'decimal'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input-dropdown
+          [id]="'typeDiscounts'"
+          [formGroup]="relationshipCommercialDataForm()"
+          [controlName]="'typeDiscounts'"
+          [options]="typeDiscountsOptions"
+          [label]="'administrative.relationshipEdit.relationshipCommercialData.typeDiscounts' | translate"
+          [keyValue]="'id'"
+          [keyDecsName]="'value'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input-dropdown>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="row mt-3">
+    <div class="col-md-4">
+      <h2 class="fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipCommercialData.title' | translate }}</h2>
+    </div>
+    <div class="col-md-8">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.type' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipCommercialDataForm().get('type')?.value ? (getCommercialDataType() | translate) : '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.referenceOfficeId' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ getReferenceOfficeId || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.fixedRight' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipCommercialDataForm().get('fixedRight')?.value || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.agentCode' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ getCommercialDataDetailsAgentCode || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.commissionPercentage' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipCommercialDataForm().get('provPercentage')?.value || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.potentialCustomerCode' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipCommercialDataForm().get('potentialCustomerCode')?.value || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.potentialCustomerCodeSalesforce' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipCommercialDataForm().get('salesforceLeadCode')?.value || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.discount1' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipCommercialDataForm().get('discount1')?.value || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.discount2' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipCommercialDataForm().get('discount2')?.value || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.discount3' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipCommercialDataForm().get('discount3')?.value || '--' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipCommercialData.typeDiscounts' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipCommercialDataForm().get('typeDiscounts')?.value | translate }}
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,107 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ title | translate }}</h5>
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn-close" type="button"></button>
+</div>
+
+<div class="modal-body d-flex flex-column">
+  <!-- Search Section -->
+  <div [ngClass]="{ 'd-flex': !isSmallMobile() }">
+    <form (submit)="searchAtecoCodes()" [formGroup]="atecoFilterForm" class="input-group">
+      <div [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100 mb-4' : 'input-group-prepend align-items-center gap-3'" class="d-flex">
+        <div class="form-group mb-3">
+          <gls-input-dropdown
+            [controlName]="'searchField'"
+            [formGroup]="atecoFilterForm"
+            [id]="'searchField'"
+            [keyDecsName]="'value'"
+            [keyValue]="'id'"
+            [options]="optionsAtecoSearch"
+            [placeholder]="'generic.select' | translate"
+            [showError]="false"
+            [showStatus]="false">
+          </gls-input-dropdown>
+        </div>
+        <div class="form-group mb-3">
+          <gls-input
+            [class]="'form-control'"
+            [controlName]="'searchTerm'"
+            [formGroup]="atecoFilterForm"
+            [id]="'searchPayment'"
+            [placeholder]="'generic.search' | translate"
+            [showError]="false"
+            [showStatus]="false"
+            [type]="'text'">
+          </gls-input>
+        </div>
+        <button (click)="searchAtecoCodes()" [disabled]="!enableSearch()" class="ms-2 btn btn-primary" type="button">
+          {{ 'generic.search' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div #datatableWrapper class="table-card flex-grow-1 overflow-auto border rounded" style="max-height: 50vh">
+    <ngx-datatable
+      #table
+      [columnMode]="'force'"
+      [footerHeight]="0"
+      [headerHeight]="50"
+      [limit]="10"
+      [messages]="{ emptyMessage: 'administrative.subjectList.subjectListTableColum.emptyTableMessage' | translate }"
+      [rowHeight]="'auto'"
+      [rows]="currentPageAteco()"
+      [scrollbarH]="true"
+      class="material striped">
+      <ngx-datatable-column [name]="'administrative.subjectList.atecoModal.action' | translate" sortable="false">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <input
+            (change)="selectRow(row)"
+            [checked]="row === selectedRow"
+            [class]="'form-check-input feature-radio'"
+            name="selected"
+            type="radio" />
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column *ngFor="let col of columns" [name]="translateLabelCol(col['name'])" [prop]="col['prop']" [width]="200">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <div class="text-break" style="white-space: normal">
+            {{ value }}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+
+  @if (totalItems > 0) {
+    <div class="d-flex justify-content-end align-items-center mt-3 flex-wrap">
+      <b class="pb-3 pe-2 result">
+        {{
+          'generic.results'
+            | translate
+              : {
+                  firstResult: getFirstResult(),
+                  lastResult: getLastResult(),
+                  listLength: totalItems
+                }
+        }}
+      </b>
+      <gls-paginator
+        (pageChange)="onPageChange($event)"
+        [pageSize]="pageSize"
+        [page]="currentPage"
+        [totalItems]="totalItems"
+        [totalPages]="totalPages">
+      </gls-paginator>
+    </div>
+  }
+</div>
+
+<div class="modal-footer">
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn btn-outline-primary" type="button">
+    {{ cancelText | translate }}
+  </button>
+  <button (click)="confirm()" [disabled]="!selectedRow" aria-label="Ok" class="btn btn-primary" type="button">
+    {{ confirmText | translate }}
+  </button>
+</div>

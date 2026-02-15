@@ -1,0 +1,112 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ 'administrative.relationshipEdit.relationshipBillingData.selectPaymentCode' | translate }}</h5>
+</div>
+<div class="modal-body">
+  <!-- Search Section -->
+  <div [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100 mb-3' : 'input-group-prepend align-items-center gap-3'" class="d-flex">
+    <div class="form-group mb-3">
+      <gls-input-dropdown
+        [controlName]="'searchField'"
+        [formGroup]="paymentFilterForm"
+        [id]="'typeId'"
+        [keyDecsName]="'value'"
+        [keyValue]="'id'"
+        [options]="optionsPaymentSearch"
+        [placeholder]="'generic.select' | translate"
+        [showError]="false"
+        [showStatus]="false">
+      </gls-input-dropdown>
+    </div>
+    <div class="form-group mb-3">
+      <gls-input
+        [class]="'form-control'"
+        [controlName]="'searchTerm'"
+        [formGroup]="paymentFilterForm"
+        [id]="'searchPayment'"
+        [placeholder]="'generic.search' | translate"
+        [showError]="false"
+        [showStatus]="false"
+        [type]="'text'">
+      </gls-input>
+    </div>
+    <button (click)="searchPayments()" [disabled]="!enableSearch()" class="btn btn-secondary" type="button">
+      {{ 'generic.search' | translate }}
+    </button>
+  </div>
+
+  <!-- Table Section -->
+  <div #datatableWrapper class="table-card">
+    <ngx-datatable
+      #paymentTable
+      (sort)="onSort($event)"
+      [columnMode]="'force'"
+      [columns]="columns"
+      [externalSorting]="true"
+      [footerHeight]="0"
+      [headerHeight]="50"
+      [limit]="pageSize"
+      [messages]="{ emptyMessage: 'generic.emptyDataMessage' | translate }"
+      [rowHeight]="'auto'"
+      [rows]="filteredPayments"
+      [scrollbarH]="true"
+      class="material striped">
+      <!-- Radio Selection Column -->
+      <ngx-datatable-column [name]="'generic.action' | translate" [resizeable]="false" [sortable]="false" [width]="60">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <input
+            (change)="onPaymentSelect(row)"
+            [checked]="row.id === selectedPaymentId"
+            class="form-check-input feature-radio"
+            name="selectedPayment"
+            type="radio" />
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- Dynamic Columns -->
+      <ngx-datatable-column *ngFor="let col of columns" [name]="col.name | translate" [prop]="col.prop" [sortable]="true">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <div class="text-break" style="white-space: normal">
+            {{ value }}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+
+  @if (totalItems > 0) {
+    <div class="d-flex justify-content-end align-items-center mt-3 flex-wrap">
+      <b class="pb-3 pe-2 result">
+        {{
+          'generic.results'
+            | translate
+              : {
+                  firstResult: getFirstResult(),
+                  lastResult: getLastResult(),
+                  listLength: totalItems
+                }
+        }}
+      </b>
+      <gls-paginator
+        (pageChange)="onPageChange($event)"
+        [pageSize]="pageSize"
+        [page]="currentPage"
+        [totalItems]="totalItems"
+        [totalPages]="totalPages">
+      </gls-paginator>
+    </div>
+  }
+</div>
+
+<div class="modal-footer">
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Reload" class="btn btn-outline-primary" type="button">
+    {{ 'generic.cancel' | translate }}
+  </button>
+  <button
+    (click)="confirmSelection()"
+    (keyup.enter)="confirmSelection()"
+    [disabled]="!enableConfirmSelection()"
+    class="btn btn-primary"
+    type="button">
+    {{ 'administrative.relationshipEdit.relationshipBillingData.confirmSelection' | translate }}
+  </button>
+</div>

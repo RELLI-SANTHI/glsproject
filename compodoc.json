@@ -1,0 +1,10 @@
+{
+  "tsconfig": "./tsconfig.json",
+  "output": "./documentation",
+  "name": "GLS EVA Frontend Documentation",
+  "include": [
+    "src/**/*.ts"
+  ],
+  "disableCoverage": true,
+  "theme": "gitbook"
+}

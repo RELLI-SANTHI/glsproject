@@ -1,0 +1,18 @@
+.card {
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 15px;
+}
+
+.bank-detail-row {
+    padding: 10px;
+    .col-md-6:first-child {
+        font-weight: bold;
+    }
+    &:nth-child(even) {
+        background-color: #f3f3f3;
+    }
+    &:nth-child(odd) {
+        background-color: #fff;
+    }
+}

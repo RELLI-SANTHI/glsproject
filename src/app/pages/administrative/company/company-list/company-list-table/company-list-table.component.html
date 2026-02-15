@@ -1,0 +1,181 @@
+<section class="w-100 mb-5 mt-5 user-list-table">
+  <h2 class="subtitle fw-bold">
+    {{ (companyType() === '' ? 'administrative.companyTableTitle' : 'administrative.companyGroupList.GroupDetailTableTitle') | translate }}
+  </h2>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 order-2 order-md-1 d-flex p-0" [ngClass]="{ 'flex-column  w-100': isSmallMobile() }">
+        <div class="d-flex">
+          <form [formGroup]="societyFilterFg()" (submit)="filterAppliedEmit()" class="input-group">
+            <div class="input-group">
+              <div class="d-flex gap-2" [ngClass]="isSmallMobile() ? 'flex-column  w-100' : 'input-group-prepend align-items-center'">
+                <gls-input-dropdown
+                  [controlName]="'filterType'"
+                  [formGroup]="societyFilterFg()"
+                  [id]="'filterTyle'"
+                  [keyDecsName]="'value'"
+                  [keyValue]="'id'"
+                  [options]="getFilteredSocietyFilterTypeList()"
+                  [required]="false"
+                  [showError]="false"
+                  [showStatus]="false" />
+
+                <gls-input
+                  [class]="'form-control'"
+                  [controlName]="'filterValue'"
+                  [formGroup]="societyFilterFg()"
+                  [placeholder]="'administrative.companyList.search' | translate"
+                  [showError]="false"
+                  [type]="'text'" />
+
+                <button
+                  (click)="filterAppliedEmit()"
+                  [disabled]="societyFilterFg().invalid"
+                  aria-pressed="true"
+                  class="ms-2 btn btn-primary"
+                  type="button">
+                  {{ 'administrative.companyList.search' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <ng-container
+          *ngIf="hasAccess(PROFILE.EVA_ADMIN, FUNCTIONALITY.networkAdministrativeCompany, PERMISSION.any) && companyType() === ''">
+          <div
+            class="d-flex justify-content-end ms-auto col"
+            [ngClass]="{
+              'flex-column align-items-start my-4 w-100': isSmallMobile(),
+              'align-items-center': !isSmallMobile()
+            }">
+            <p class="mb-0 me-2">{{ 'administrative.companyGroupList.view' | translate }}:</p>
+            <div [ngClass]="{ 'mt-2 w-100': isSmallMobile() }" style="flex-shrink: 0; min-width: 300px">
+              <button
+                class="btn btn-outline-secondary me-2"
+                [ngClass]="{
+                  'btn-selected': selectedButton === administrativeCompanyButtons.GROUP_SOCIETY,
+                  'btn-outline-primary': selectedButton !== administrativeCompanyButtons.GROUP_SOCIETY,
+                  'w-100 my-1': isSmallMobile(),
+                  'my-3': !isSmallMobile()
+                }"
+                type="button"
+                (click)="selectButton(administrativeCompanyButtons.GROUP_SOCIETY)">
+                {{ 'administrative.companyGroupList.corporateGroup' | translate }}
+              </button>
+              <button
+                class="btn btn-outline-secondary"
+                [ngClass]="{
+                  'btn-selected': selectedButton === administrativeCompanyButtons.SOCIETY,
+                  'btn-outline-primary': selectedButton !== administrativeCompanyButtons.SOCIETY,
+                  'w-100 my-1': isSmallMobile(),
+                  'my-3': !isSmallMobile()
+                }"
+                type="button"
+                (click)="selectButton(administrativeCompanyButtons.SOCIETY)">
+                {{ 'administrative.companyGroupList.society' | translate }}
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <app-applied-filter
+    [showFiltersApplied]="showFiltersApplied() || []"
+    (resetFilter)="resetFilter.emit($event)"
+    (resetFilters)="resetFilters.emit()"
+    [translateColumnName]="'administrative.companyList.filterDropdown'"
+    [translateStatusName]="'administrative.state'"></app-applied-filter>
+  <div #companyDataTableWrapper class="table-card">
+    <ngx-datatable
+      #companyListTable
+      (sort)="sort.emit($event)"
+      [columnMode]="'force'"
+      [footerHeight]="false"
+      [headerHeight]="50"
+      [limit]="pageSize()"
+      [messages]="{ emptyMessage: 'administrative.emptyCompanyMessage' | translate }"
+      [rowHeight]="83"
+      [rows]="administrativeCompanyList()"
+      [scrollbarH]="true"
+      class="material striped">
+      @for (col of columns(); track col; let i = $index) {
+        @if (col.columnVisible) {
+          <ngx-datatable-column [name]="getTranslatedLabel(col.label)" [prop]="col.field" [sortable]="col.sortable" [width]="col.width">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <!-- state -->
+              @if (col.field === 'Status') {
+                <section [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <img class="rounded-circle me-2" [src]="getStatusImg(row)" [alt]="'administrative.state.active' | translate" />
+                  <span>{{
+                    row.status?.toLowerCase() === 'completed'
+                      ? ('administrative.state.active' | translate)
+                      : ('administrative.state.inactive' | translate)
+                  }}</span>
+                </section>
+              }
+              <!-- companyName -->
+              @if (col.field === 'Name') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <button (click)="goToCompanyDetail(row.id)" class="btn btn-link">
+                    {{ getCompanyName(row) | slice: 0 : 30 }}
+                  </button>
+                </section>
+              }
+
+              <!-- corporateGroup -->
+              @if (col.field === 'GroupName') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <button (click)="goToCoporateGroupView(row.corporateGroupId)" class="btn btn-link">
+                    {{ getGroupname(row) | slice: 0 : 30 }}
+                  </button>
+                </section>
+              }
+
+              <!-- VatNumber -->
+              @if (col.field === 'VatNumber') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <div class="fw-normal fs-6">
+                    {{ getVatNumber(row) }}
+                  </div>
+                </section>
+              }
+
+              <!-- TaxCode -->
+              @if (col.field === 'TaxCode') {
+                <section [id]="col.field + '_blocked'" [ngClass]="{ selected: sortSelected()?.field === col.field }">
+                  <div class="fw-normal fs-6">
+                    {{ getTaxIDCode(row) }}
+                  </div>
+                </section>
+              }
+            </ng-template>
+          </ngx-datatable-column>
+        }
+      }
+    </ngx-datatable>
+  </div>
+  @if (administrativeCompanyList().length > 0) {
+    <div class="d-flex justify-content-end align-items-center mt-3 flex-wrap" style="width: 100%">
+      <b class="pb-3 pe-2 result">
+        {{
+          'administrative.table.results'
+            | translate
+              : {
+                  firstResult: getFirstResult(),
+                  lastResult: getLastResult(),
+                  listLength: totalItems()
+                }
+        }}
+      </b>
+      <gls-paginator
+        (pageChange)="pageChange.emit($event)"
+        [pageSize]="pageSize()"
+        [page]="currentPage()"
+        [totalItems]="totalItems()"
+        [totalPages]="totalPages()">
+      </gls-paginator>
+    </div>
+  }
+  <!-- } -->
+</section>

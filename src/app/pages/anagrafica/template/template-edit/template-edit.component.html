@@ -1,0 +1,104 @@
+<div class="w-100">
+  <div class="container-box mt-4" aria-label="Template Edit">
+    <!-- Header -->
+    <div class="header">
+      @if (showPage) {
+        <img [src]="getTemplateIcon(titleIcon)" alt="Icon" class="me-3" height="50" />
+        <span> {{ title | translate }}</span>
+      }
+    </div>
+    @if (activeStep === 1) {
+      <p class="mt-2">{{ 'anagrafica.structure.requiredField' | translate }}</p>
+    }
+    @if (activeStep === 2) {
+      <p class="mt-2">{{ 'anagrafica.template.texts.selectFieldsForStructure' | translate }}</p>
+    }
+    <!-- Info Badges -->
+    <div class="row mt-3">
+      <div class="col-auto">
+        @if (step1FormGroup && step1FormGroup.get('name')?.value) {
+          <gls-title-budge [label]="'anagrafica.template.edit.templateName' | translate" [value]="step1FormGroup.get('name')?.value" />
+        }
+      </div>
+    </div>
+
+    <ng-container id="header-stepper">
+      @if (steps.length) {
+        <gls-stepper
+          #stepper
+          (stepChangeEvent)="getStepperValue($event)"
+          [currentStep]="activeStep"
+          [isEditMode]="type"
+          [isPrevioursEnable]="true"
+          [steps]="steps">
+          <button class="btn btn-link" (click)="goToExit()">
+            <em class="bi bi-arrow-left"></em>{{ 'anagrafica.structure.footerButtons.exit' | translate }}
+          </button>
+          <div class="ms-auto"></div>
+          @if (activeStep === 0) {
+            <button (click)="stepper.onStepComplete()" [disabled]="step1FormGroup.invalid" class="btn btn-primary">
+              <span>{{ 'anagrafica.template.footerButtons.proceedToCompilation' | translate }}</span>
+              &rarr;
+            </button>
+          }
+          @if (activeStep === 1) {
+            <button (click)="stepper.onStepComplete()" [disabled]="step2FormGroup.invalid" class="btn btn-primary">
+              <span>{{ 'anagrafica.template.footerButtons.proceedToDataCheck' | translate }}</span>
+              &rarr;
+            </button>
+          }
+          @if (activeStep === 2) {
+            <button (click)="onSaveTemplate()" [disabled]="step1FormGroup.invalid || step2FormGroup.invalid" class="btn btn-primary">
+              <span>
+                @if (type === 'create') {
+                  {{ 'anagrafica.template.footerButtons.saveAndCreateTemplate' | translate }}
+                } @else {
+                  {{ 'anagrafica.template.footerButtons.saveTemplate' | translate }}
+                }
+              </span>
+              &rarr;
+            </button>
+          }
+        </gls-stepper>
+      }
+    </ng-container>
+    <ng-template #nomeedicona>
+      <div class="col-md-12 pt-4">
+        <h2 class="fw-bold">{{ 'anagrafica.template.texts.nameAndIcon' | translate }}</h2>
+        <p>{{ 'anagrafica.template.texts.nameAndIconSubtext' | translate }}</p>
+        <div class="col-md-4 mb-3">
+          <gls-input
+            [class]="'form-control'"
+            [controlName]="'name'"
+            [formGroup]="step1FormGroup"
+            [label]="'anagrafica.template.texts.name'"
+            [placeholder]="'anagrafica.template.texts.EnterName'"
+            [showError]="true"
+            [type]="'text'"
+            id="additionalInput1">
+          </gls-input>
+        </div>
+        <div class="row pt-5">
+          <div *ngFor="let icon of getAllIcons()" class="col-sm-2 col-4 mb-4">
+            <button
+              (mousedown)="onIconSelect(icon.code, $event)"
+              [ngClass]="{ 'selected-icon': step1FormGroup.get('icon')?.value === icon.code }"
+              class="btn btn-outline-secondary">
+              <img [src]="icon.path" alt="icon" class="icon-image" height="50" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #compiladat>
+      <div class="col-md-12 pt-4">
+        <gls-view-details [fieldsList]="fieldsList()" [formGroupInput]="step2FormGroup" [readonly]="false" />
+      </div>
+    </ng-template>
+
+    <ng-template #controlladati>
+      <gls-view-details [fieldsList]="fieldsList()" [formGroupInput]="step2FormGroup" />
+    </ng-template>
+  </div>
+</div>

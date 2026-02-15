@@ -1,0 +1,24 @@
+<div class="container-box mt-4">
+  @if (userEnabled()) {
+    <main class="d-flex flex-row align-items-start justify-content-start">
+      <div class="w-20 d-flex align-items-start justify-content-start w-auto" aria-label="User Information">
+        <img [alt]="'home.user' | translate" alt="Icon" class="me-2" src="{{ imageUrl() }}" width="53" />
+      </div>
+      <div class="d-flex flex-wrap">
+        <span class="welcome welcome-primary-font fw-normal container-header">{{ 'home.welcome' | translate }}</span>
+        <h1 class="ms-1 container-header title pt-2">{{ userName() }}</h1>
+        <p class="visually-hidden"></p>
+      </div>
+    </main>
+  } @else {
+    <section class="d-flex flex-column align-items-center mt-5">
+      <div>
+        <img [alt]="'home.accessDenied' | translate" alt="Icon" class="me-2" src="{{ imageUrl() }}" width="160" />
+      </div>
+      <div class="d-flex flex-column align-items-center mt-3">
+        <span class="fw-bold gls-field-icon-ko-info welcome-primary-font">{{ 'home.messageDenied' | translate }}</span>
+        <span class="mt-2 fw-normal fs-5">{{ 'home.contactIT' | translate }}</span>
+      </div>
+    </section>
+  }
+</div>

@@ -1,0 +1,34 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #061ab1;
+}
+
+.table thead.table-header th {
+  background-color: #d4edf7;
+  font-weight: bold;
+  text-align: left;
+  padding: 10px;
+  white-space: nowrap;
+  color: #3c3c3c !important;
+}
+
+thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
+  border-style: none;
+}
+
+.table tbody tr.group-row.even td {
+  background-color: #f8f9fa;
+}
+
+.table tbody tr.group-row.odd td {
+  background-color: #e6e6e6;
+}

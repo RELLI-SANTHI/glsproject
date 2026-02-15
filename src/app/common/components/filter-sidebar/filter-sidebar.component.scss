@@ -1,0 +1,67 @@
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px 10px 0;
+}
+
+.sidebar-content {
+  width: 100%;
+  height: 100%;
+  background-color: #061ab1;
+  box-shadow: 0 0 16px black;
+  border-radius: 30px;
+  max-width: 320px;
+  color: white;
+}
+
+.custom-filter-height {
+  height: calc(100vh - 14rem);
+  overflow-y: auto;
+}
+
+.white {
+  color: white !important;
+}
+
+.yellow {
+  color: #ffd100;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.subtitle {
+  font-weight: 900;
+  font-size: 28px;
+}
+
+.custom-filter-height {
+  height: calc(100vh - 14rem);
+  overflow-y: auto;
+
+  /* Scrollbar moderna */
+  scrollbar-width: thin;
+  scrollbar-color: #ffc107 transparent;
+
+  /* Per WebKit (Chrome, Edge, Safari) */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ffc107;
+    border-radius: 10px;
+  }
+}

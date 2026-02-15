@@ -1,0 +1,37 @@
+.page-item {
+  margin: 0 5px;
+  &:first-child {
+    margin-left: 0;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
+  button {
+    border-radius: 5px;
+  }
+}
+
+.paginator-custom {
+  ul {
+    margin: 0;
+  }
+}
+
+//TODO customizzazione da rendere globale
+
+.page-link {
+  color: #061ab1;
+  border: 2px solid #061ab1;
+}
+
+.page-link.active,
+.active > .page-link {
+  background-color: #061ab1;
+  color: white;
+}
+.page-link.active,
+.disabled > .page-link {
+  background-color: #f1f1f1;
+  border-color: #b7b7b7;
+  color: #061ab1;
+}

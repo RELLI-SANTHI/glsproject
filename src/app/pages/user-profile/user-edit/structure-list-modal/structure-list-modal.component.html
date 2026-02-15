@@ -1,0 +1,77 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    {{ 'userProfile.modal.selectTheStructure' | translate }} <span class="container-header">{{ modalData.selectSocietyName || '-' }}</span>
+  </h5>
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn-close" type="button"></button>
+</div>
+<div class="modal-body structure-list-modal-body" aria-labelledby="modal-title">
+  <p class="card-text">{{ 'userProfile.modal.SelectAssociateUser' | translate }}</p>
+  <div
+    class="d-flex"
+    [ngClass]="isSmallMobile() ? 'flex-column w-100 align-items-start gap-2' : 'flex-row align-items-center justify-content-start gap-3'">
+    <gls-input-dropdown
+      [ngClass]="{ 'w-100': isSmallMobile() }"
+      [id]="'buildingTypeName'"
+      [formGroup]="structureModalFormGroup"
+      [controlName]="'buildingTypeName'"
+      [options]="templateList"
+      [emptyOption]="'userProfile.roleList.filterDropdown.all'"
+      [emptyOptionValue]="0"
+      [keyValue]="'id'"
+      [keyDecsName]="'templateName'"
+      [showError]="true"
+      (change)="onBuildingTypeChange()">
+    </gls-input-dropdown>
+    <gls-input
+      [id]="'searchStructureControlName'"
+      [formGroup]="structureModalFormGroup"
+      [controlName]="'searchStructureControlName'"
+      [placeholder]="'userProfile.field.structureName' | translate"
+      [type]="'text'"
+      [class]="'form-control'"
+      [showError]="true"
+      class="w-100 me-2">
+    </gls-input>
+    <button
+      (click)="searchStructure()"
+      (keyup.enter)="searchStructure()"
+      [disabled]="isSearchDisabled"
+      aria-label="Search"
+      class="btn my-3 btn-primary me-3"
+      type="button">
+      {{ 'userProfile.field.near' | translate }}
+    </button>
+  </div>
+  <div class="flex-row">
+    <ul class="list-group structure-list-hight">
+      @for (structure of structureList; track structure.id) {
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="form-check">
+            <gls-input-checkbox
+              [class]="'form-check-input check-input-lg me-2'"
+              [controlName]="'structure_' + structure.id"
+              [formGroup]="structureModalFormGroup"
+              [id]="'structure_' + structure.id"
+              (click)="onCheckboxChange(structure.id, $event)"
+              (keydown)="onCheckboxChange(structure.id, $event)"
+              [checked]="structureModalFormGroup.get('structure_' + structure.id)?.value === true"
+              [type]="'checkbox'">
+            </gls-input-checkbox>
+          </div>
+          <span class="fw-bold me-auto"> {{ getStructureName(structure) }} </span>
+          <gls-title-budge-template [src]="getIcon(structure)" [templateName]="gettemplateName(structure)"></gls-title-budge-template>
+        </li>
+      } @empty {
+        <li class="align-items-center justify-content-center d-flex">{{ 'userProfile.modal.noResult' | translate }}</li>
+      }
+    </ul>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn btn-outline-primary" type="button">
+    {{ 'modal.cancelText' | translate }}
+  </button>
+  <button (click)="save()" (keyup.enter)="save()" aria-label="Ok" v class="btn btn-primary" type="button">
+    {{ 'userProfile.modal.saveStructures' | translate }}
+  </button>
+</div>

@@ -1,0 +1,113 @@
+<div class="container-fluid p-0">
+  <app-content-header
+    (btnCreateEvent)="newAgentRelationship()"
+    (btnExportEvent)="exportAgentsData()"
+    [disableExportBtn]="false"
+    [image]="'assets/img/transparent/PNG-Hand_agent.png'"
+    [labelBtnCreate]="'administrative.relationshipAgentsList.buttonNewRel'"
+    [isSmallMobile]="isSmallMobile()"
+    [isTablet]="isTablet()"
+    [showBtnCreate]="hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeAgent, PERMISSION.write)"
+    [showBtnExport]="true"
+    [subTitle]="'administrative.relationshipAgentsList.subtitle'"
+    [title]="'administrative.relationshipAgentsList.title'" />
+
+  <hr />
+
+  <gls-messages />
+
+  @if (listAgentsDraft().length && hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeAgent, PERMISSION.write)) {
+    <h2 class="subtitle fw-bold fs-3">
+      {{ 'structureList.draftTitle' | translate: { numberItems: listAgentsDraft().length } }}
+    </h2>
+
+    <div class="d-flex flex-column">
+      <app-carousel (clickEvent)="loadEditRelPage($event)" [listCarousel]="listAgentsDraft()">
+        <ng-template let-slide>
+          <div class="card-content w-100 d-flex flex-column justify-content-start align-items-start">
+            <p
+              class="card-code p-0 m-0 pb-1"
+              ngbTooltip="{{ 'administrative.relationshipCustomerList.agent' | translate }}"
+              container="body">
+              {{ 'administrative.relationshipCustomerList.agent' | translate }}
+            </p>
+            <h5 class="card-title mb-0 p-0 m-0 pb-1" ngbTooltip="{{ slide.agentCode }}" container="body">
+              {{ slide.agentCode }}
+            </h5>
+            <p [ngbTooltip]="slide.lastUpdated | date: 'dd/MM/yyyy HH:mm'" class="card-info p-0 m-0 pb-1 fs-6 text-break">
+              {{ slide.lastUpdated | date: 'dd/MM/yyyy HH:mm' }}
+            </p>
+          </div>
+        </ng-template>
+      </app-carousel>
+    </div>
+  }
+
+  <h2 class="subtitle fw-bold">{{ 'administrative.relationshipAgentsList.labelAgentsList' | translate }}</h2>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div [ngClass]="{ 'd-flex': !isSmallMobile() }" class="col-12 order-2 order-md-1 p-0">
+        <!-- <button (click)="openSidebar()" class="btn btn-link pe-4">
+          <b><em class="bi bi-filter pe-1"></em>{{ 'userProfile.userList.filter' | translate }}</b>
+        </button> -->
+        <div [ngClass]="{ 'd-flex': !isSmallMobile(), 'filter-tablet-ratio': isTablet() }">
+          <form (submit)="filterByAcronym()" [formGroup]="agentsFilterFg" class="input-group">
+            <div class="input-group">
+              <div [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100' : 'input-group-prepend align-items-center gap-3'" class="d-flex">
+                <gls-input-dropdown
+                  [controlName]="'filterType'"
+                  [formGroup]="agentsFilterFg"
+                  [id]="'filterStyle'"
+                  [keyDecsName]="'value'"
+                  [keyValue]="'id'"
+                  [options]="filterAgentsList"
+                  [required]="false"
+                  [showError]="false"
+                  [showStatus]="false"
+                  (change)="onFilterTypeChange($event)" />
+
+                <gls-input
+                  [class]="'form-control'"
+                  [controlName]="'filterValue'"
+                  [formGroup]="agentsFilterFg"
+                  [placeholder]="'structureList.code' | translate"
+                  [showError]="false"
+                  [type]="inputType" />
+
+                <button
+                  (click)="filterByAcronym()"
+                  [disabled]="agentsFilterFg.invalid || agentsFilterFg.get('filterValue')?.value.length < 1"
+                  aria-pressed="true"
+                  class="ms-2 btn btn-primary"
+                  type="button">
+                  {{ 'structureList.search' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-badge-filters (resetFilters)="resetFilters($event)" [showFiltersApplied]="Array.from(badgeFilters)" />
+
+  <app-relationship-list-table
+    (itemIdSelected)="loadDetailRelPage($event)"
+    (pageChange)="pageChange($event)"
+    (sort)="onSort($event)"
+    [currentPage]="currentPage()"
+    [isAgent]="true"
+    [listRelationships]="listAgents()"
+    [nameFirstColumn]="firstCol()"
+    [pageSize]="pageSize()"
+    [relationshipType]="relationshipType"
+    [showRotateRelaship]="showRotateRelationship()"
+    [totalItems]="totalItems()"
+    [totalPages]="totalPages()" />
+</div>
+
+@if (showSidebar()) {
+  <app-filter-sidebar [filters]="filters" (closeSideBarEv)="closeSidebar()" (applyFiltersEv)="applyFilters($event)" />
+}

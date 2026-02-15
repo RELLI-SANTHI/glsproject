@@ -1,0 +1,10 @@
+<div class="col-auto">
+    <div class="badge text-black bg-white font-weight-normal">
+    <span class="p-2">
+      <strong>{{ label() | translate }}</strong>: <ng-content select="[before-value]"></ng-content>
+      {{ value() ?? '' | translate }}
+      <ng-content select="[after-value]"></ng-content>
+    </span>
+  </div>
+</div>
+

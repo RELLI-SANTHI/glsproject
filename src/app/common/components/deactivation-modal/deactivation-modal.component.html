@@ -1,0 +1,25 @@
+<div class="d-flex justify-content-between flex-column">
+  <div>
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ titleLabel | translate }} <span class="company-title">{{ titleParam }}</span>
+      </h5>
+    </div>
+    <div [innerHTML]="titleBody | translate" class="modal-body"></div>
+  </div>
+
+  <div class="modal-footer">
+    <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn btn-outline-primary"
+            type="button">
+      {{ 'deactivationModal.cancel' | translate }}
+    </button>
+    <button
+      (click)="confirmDeactivation()"
+      (keyup.enter)="confirmDeactivation()"
+      aria-label="Proceed"
+      class="btn btn-primary"
+      type="button">
+      {{ 'deactivationModal.proceed' | translate }}
+    </button>
+  </div>
+</div>

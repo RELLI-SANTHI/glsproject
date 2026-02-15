@@ -1,0 +1,211 @@
+<div class="container-box mt-4">
+  @if (userDetailsModelResponse) {
+    <section class="d-flex justify-content-between w-100 flex-wrap" aria-label="User Details">
+      <div class="col-12 col-md-6" [ngClass]="{ 'col-md-12': isTablet() }">
+        <div>
+          <h1 class="w-100 container-header">
+            {{ userDetailsModelResponse!.name || '--' }} {{ userDetailsModelResponse!.surname || '--' }}
+          </h1>
+        </div>
+        <ng-container id="budges">
+          <div class="row mt-3">
+            <gls-title-budge
+              class="col-auto notranslate"
+              [label]="'userProfile.userDetail.profile' | translate"
+              [value]="getProfileValue(userDetailsModelResponse)">
+            </gls-title-budge>
+            <gls-title-budge
+              class="col-auto notranslate"
+              [label]="'userProfile.userDetail.state' | translate"
+              [value]="
+                'userProfile.userList.state.' + (userDetailsModelResponse ? userDetailsModelResponse.status?.toLowerCase() : 'state')
+                  | translate
+              ">
+            </gls-title-budge>
+            <gls-title-budge
+              [ngClass]="{ 'mt-3': isSmallMobile() }"
+              class="col-auto"
+              [label]="'userProfile.userDetail.lastModified' | translate"
+              [value]="userDetailsModelResponse.updatedAt | date: 'dd/MM/yyyy'">
+              <i class="bi bi-calendar3 me-2" before-value></i>
+              <i class="bi bi-clock ms-2" after-value></i>
+              <span class="ms-1" after-value>{{ userDetailsModelResponse.updatedAt | date: 'HH:mm' }}</span>
+            </gls-title-budge>
+          </div>
+        </ng-container>
+      </div>
+
+      <div
+        class="d-flex align-items-start col-12 col-md-6"
+        [ngClass]="{ 'flex-column': isSmallMobile(), '': isTablet() }"
+        [ngClass]="isSmallMobile() ? 'flex-column' : isTablet() ? 'col-md-12 justify-content-start gap-3' : 'justify-content-end'">
+        <button
+          *ngIf="user.profile !== 'EVA_FIELD' && showManageBtn()"
+          (click)="impersonificateUserModal()"
+          (keyup.enter)="impersonificateUserModal()"
+          [attr.aria-label]="'userProfile.userDetail.impersonificateUser' | translate"
+          class="btn btn-outline-primary"
+          [ngClass]="isSmallMobile() ? 'w-100 mt-3' : isTablet() ? 'mt-3' : 'ms-3'"
+          type="button">
+          <em class="bi bi-person"></em>
+          {{ 'userProfile.userDetail.impersonificateUser' | translate }}
+        </button>
+
+        @if (showManageBtn()) {
+          <button
+            (click)="goToUserEdit()"
+            [attr.aria-label]="'userProfile.userDetail.manageUser' | translate"
+            class="btn btn-primary"
+            [ngClass]="isSmallMobile() ? 'w-100 mt-3' : isTablet() ? 'mt-3' : 'ms-3'"
+            type="button">
+            <em class="bi bi-pencil-square"></em>
+            {{ 'userProfile.userDetail.manageUser' | translate }}
+          </button>
+        }
+      </div>
+    </section>
+    <hr />
+    @if (messageStatusService.messageState$ | async) {
+      <gls-messages></gls-messages>
+    }
+    <section aria-label="General Information">
+      <div class="row pb-3">
+        <div class="col-5 pb-3" [ngClass]="{ 'w-100': isSmallMobile() }">
+          <h2 class="fw-bold">{{ 'userProfile.userDetail.section.generalInformation' | translate }}</h2>
+        </div>
+        <div class="col-7">
+          <div class="row">
+            <div class="col-6 label">
+              <strong>{{ 'userProfile.userDetail.labels.name' | translate }}</strong>
+            </div>
+            <div class="col-6 value">
+              <p class="info-value view-company-value notranslate">
+                {{ userDetailsModelResponse!.name || '--' }}
+              </p>
+            </div>
+            <div class="col-6 label">
+              <strong>{{ 'userProfile.userDetail.labels.surname' | translate }}</strong>
+            </div>
+            <div class="col-6 value">
+              <p class="info-value view-company-value notranslate">
+                {{ userDetailsModelResponse!.surname || '--' }}
+              </p>
+            </div>
+            <div class="col-6 label">
+              <strong>{{ 'userProfile.userDetail.labels.corporateGroup' | translate }}</strong>
+            </div>
+            <div class="col-6 value">
+              <p class="info-value view-company-value notranslate">
+                {{ userDetailsModelResponse!.corporateGroup!.corporateName || '--' }}
+              </p>
+            </div>
+            <div class="col-6 label">
+              <strong>{{ 'userProfile.userDetail.labels.email' | translate }}</strong>
+            </div>
+            <div class="col-6 value">
+              <p class="info-value view-company-value notranslate">
+                {{ userDetailsModelResponse!.email || '--' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr />
+    <section aria-label="Society and Structures">
+      <div class="row pb-3">
+        <div class="col-5 pb-3" [ngClass]="{ 'w-100': isSmallMobile() }">
+          <h2 class="fw-bold">{{ 'userProfile.userDetail.section.societyAndStructures' | translate }}</h2>
+        </div>
+        <div class="col-7">
+          <ng-container *ngFor="let administratives of administrativeList; let last = last; trackBy: trackByAdministrativeId">
+            <div class="row">
+              <div class="col-6 label">
+                <strong>{{ 'userProfile.userDetail.labels.society' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">
+                  {{ administratives.name || '--' }}
+                </p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'userProfile.userDetail.labels.structureEnablement' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value">
+                  {{ (getStructureEnabled(administratives) | translate) || '--' }}
+                </p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'userProfile.userDetail.labels.structureList' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                @if (!administratives.associateAllStructures) {
+                  <ul class="px-0 mb-0">
+                    @for (structure of administratives.structures; track structure?.id) {
+                      <li class="notranslate">{{ structure?.buildingAcronym }} - {{ structure?.buildingName }}</li>
+                    }
+                  </ul>
+                  @if (administratives.structures?.length === 0) {
+                    <p class="info-value view-company-value">{{ 'userProfile.userDetail.noStructure' | translate }}</p>
+                  }
+                } @else {
+                  <!-- Se le strutture sono più di 5, mostra il bottone per visualizzare tutte -->
+                  @if (administratives.structures!.length > 5) {
+                    <ul class="px-0 mb-0">
+                      @for (
+                        structure of administratives.showAllStructures
+                          ? administratives.structures
+                          : administratives.structures!.slice(0, 5);
+                        track structure?.id
+                      ) {
+                        <li class="notranslate">{{ structure?.buildingAcronym }} - {{ structure?.buildingName }}</li>
+                      }
+                    </ul>
+                    <button
+                      class="btn btn-link px-0"
+                      style="margin-left: -20px"
+                      (click)="administratives.showAllStructures = !administratives.showAllStructures">
+                      {{
+                        administratives.showAllStructures
+                          ? ('userProfile.roleList.filterDropdown.hideStructure' | translate)
+                          : ('userProfile.roleList.filterDropdown.showStructure' | translate)
+                      }}
+                    </button>
+                  } @else {
+                    <ul class="px-0 mb-0">
+                      @for (structure of administratives.structures; track structure?.id) {
+                        <li class="notranslate">{{ structure?.buildingAcronym }} - {{ structure?.buildingName }}</li>
+                      }
+                    </ul>
+                  }
+                }
+              </div>
+            </div>
+            <hr *ngIf="!last" />
+          </ng-container>
+        </div>
+      </div>
+    </section>
+    <hr />
+    <section aria-label="Roles">
+      <div class="row pb-3">
+        <div class="col-5 pb-3" [ngClass]="{ 'w-100': isSmallMobile() }">
+          <h2 class="fw-bold">{{ 'userProfile.userDetail.section.role' | translate }}</h2>
+        </div>
+        <div class="col-7">
+          <ul>
+            @for (role of userDetailsModelResponse!.roles; track role.id) {
+              <li class="d-flex justify-content-between align-items-center notranslate">
+                <span>{{ role.name }}</span>
+                <app-app-special-badge [showBadge]="checkIsSpecial(role)"></app-app-special-badge>
+              </li>
+            } @empty {
+              <li>{{ 'userProfile.userDetail.noRoles' | translate }}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+  }
+</div>

@@ -1,0 +1,85 @@
+<a href="#main-content" class="skip-to-content-link visually-hidden-focusable">Skip to main content</a>
+@if (loadUserProfile) {
+  <gls-top-banner></gls-top-banner>
+}
+
+<div class="d-flex overflow-hidden">
+  @if (spinnerService.loaderState()) {
+    <div class="overlay-container">
+      <div class="spinner-border text-primary">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
+
+  @if (loadUserProfile) {
+    @if (isSmallMobile() || isTablet()) {
+      <div [ngClass]="{ overlay: !isShowNavBar || showNavBar() }"></div>
+    }
+
+    @if (!isSmallMobile() && !isTablet()) {
+      <div class="collapse sidebar-collapsed-desk" id="navbarToggleExternalContent" [ngClass]="{ show: !isShowNavBar }">
+        <gls-navbar (toggleSidebar)="setShowNavBar()">
+          <app-sidebar-content [(activePage)]="pageSelected" (toggleSidebar)="setShowNavBar()" />
+        </gls-navbar>
+      </div>
+      @if (isShowNavBar && !isSmallMobile()) {
+        <nav class="navbar navbar-dark bg-dark d-flex align-items-start p-0 vh-100" aria-label="Sidebar">
+          <div class="container-fluid pt-2 d-flex flex-column vh-100">
+            <button
+              (click)="setShowNavBar()"
+              class="btn btn-icon-primary row"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarToggleExternalContent"
+              aria-controls="navbarToggleExternalContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+              <i class="bi bi-arrow-bar-right arrow-icon"></i>
+            </button>
+            <!-- navbar for desktop mode -->
+            <div class="row flex-grow-1">
+              <app-sidebar-content [(activePage)]="pageSelected" [onlyIcons]="true" (toggleSidebar)="setShowNavBar()" />
+            </div>
+          </div>
+        </nav>
+      }
+    } @else if (!isSmallMobile() && isTablet()) {
+      <div class="collapse sidebar-collapsed" id="navbarToggleExternalContent1" [ngClass]="{ show: !isShowNavBar }">
+        <gls-navbar (toggleSidebar)="setShowNavBar()">
+          <app-sidebar-content [(activePage)]="pageSelected" (toggleSidebar)="setShowNavBar()" />
+        </gls-navbar>
+      </div>
+      <nav class="navbar navbar-dark bg-dark d-flex align-items-start p-0 vh-100" aria-label="Navigation">
+        <div class="container-fluid pt-2 d-flex flex-column vh-100">
+          <button
+            (click)="setShowNavBar()"
+            class="btn btn-icon-primary"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarToggleExternalContent1"
+            aria-controls="navbarToggleExternalContent1"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+            <i class="bi bi-arrow-bar-right arrow-icon"></i>
+          </button>
+          <div class="row flex-grow-1">
+            <!-- navbar for tablet mode -->
+            <app-sidebar-content [(activePage)]="pageSelected" [onlyIcons]="true" (toggleSidebar)="setShowNavBar()" />
+          </div>
+        </div>
+      </nav>
+    } @else {
+      <gls-navbar (toggleSidebar)="toggleSidebar()" [ngClass]="{ 'd-flex': showNavBar(), 'd-none': !showNavBar() }">
+        <app-sidebar-content [(activePage)]="pageSelected" (toggleSidebar)="setShowNavBar()" />
+      </gls-navbar>
+    }
+
+    <div class="flex-grow-1 d-flex flex-column h-100 overflow-hidden">
+      <gls-top-menu (toggleSidebar)="toggleSidebar()" [isIconEnabled]="isSmallMobile()" id="main-content" />
+      <div class="content-height">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  }
+</div>

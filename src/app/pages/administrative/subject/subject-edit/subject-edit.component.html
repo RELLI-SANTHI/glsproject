@@ -1,0 +1,52 @@
+<div class="container-box mt-4">
+  <app-content-header [image]="''" [subTitle]="subtitle" [title]="title" />
+
+  <!-- fix me lastUpdate to API result -->
+  @if (lastUpdated) {
+    <gls-title-budge
+      [label]="'administrative.subjectEdit.lastUpdate'"
+      [value]="lastUpdated | date: 'dd/MM/yyyy - HH:mm'"
+      class="col-auto me-3 mb-3" />
+  }
+
+  <div class="d-flex">
+    @for (title of titles; track title) {}
+  </div>
+
+  <hr />
+
+  @if (messageStatusService.messageState$ | async) {
+    <gls-messages />
+  }
+
+  @if (subjectEditForm) {
+    <app-subject-edit-body
+      [formParent]="subjectEditForm"
+      [isWrite]="true"
+      [showTabs]="showTabs()"
+      [isDraft]="isDraft"
+      [nationDefault]="nationDefault()"
+      [nationList]="nationList()"
+      [(warningOrError)]="warningOrError" />
+  }
+
+  @if (subjectEditForm) {
+    <app-form-footer
+      (exitEvent)="goBack()"
+      (nextBtnEvent)="saveSubject(false)"
+      [showDraftExit]="status !== 'COMPLETED'"
+      (saveDraftExitEvent)="saveSubject(true)"
+      [labelNextBtn]="labelNext"
+      [disableDraftExit]="isDraftExitDisabled"
+      [disableNextBtn]="subjectEditForm.invalid || warningOrError()">
+      @if (idSubject) {
+        <ng-container leftContainer>
+          <button class="btn btn-outline-primary" (click)="deleteSubject(idSubject)" [attr.aria-label]="labelDelete | translate">
+            {{ labelDelete | translate }}
+            <em class="bi bi-trash"></em>
+          </button>
+        </ng-container>
+      }
+    </app-form-footer>
+  }
+</div>

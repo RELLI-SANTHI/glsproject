@@ -1,0 +1,23 @@
+<div class="userdetails-container">
+  @if (genericService.viewMode()) {
+    <a href="#" class="link-underline-light" aria-label="View user details">
+      <span class="spacer gls-bold-black">
+        <i class="gls-color-primary bi bi-person-circle fs-1"></i>
+        <i class="bi bi-chevron-right chevron-small"></i>
+      </span>
+    </a>
+  } @else {
+    <div class="d-flex align-items-center">
+      <i class="gls-color-primary bi bi-person-circle fs-1 me-2"></i>
+      <div class="d-flex flex-column">
+        <span>{{ getProfileValue(user) }}</span>
+        <span>
+          {{ 'generic.greeting' | translate }},
+          <strong class="spacer gls-bold-black" style="text-transform: capitalize">
+            {{ user?.name || ('' | translate) }}
+          </strong>
+        </span>
+      </div>
+    </div>
+  }
+</div>

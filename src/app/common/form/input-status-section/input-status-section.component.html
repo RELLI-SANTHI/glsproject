@@ -1,0 +1,21 @@
+@if (isrRquiredFieldControl() && !invalid()) {
+  <span class="gls-field-span gls-field-icon-ok">
+    <em class="bi bi-check-circle"></em>
+  </span>
+} @else if (isrRquiredFieldControl() && invalid() && showError()) {
+  <span class="gls-field-span gls-field-icon-ko">
+    <em class="bi bi-exclamation-circle"></em>
+  </span>
+} @else if (isrRquiredFieldControl() && invalid() && !showError()) {
+  <span class="gls-field-span gls-field-icon-ko-info">
+    <em class="bi bi-exclamation-circle"></em>
+  </span>
+} @else if (!isrRquiredFieldControl() && !invalid()) {
+  <span class="gls-field-span gls-field-icon-info">
+    <em class="bi bi-circle"></em>
+  </span>
+} @else if (!isrRquiredFieldControl() && invalid()) {
+  <span class="gls-field-span gls-field-icon-ko">
+    <em class="bi bi-exclamation-circle"></em>
+  </span>
+}

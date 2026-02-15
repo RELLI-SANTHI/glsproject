@@ -1,0 +1,45 @@
+<div class="col-md-12 pt-4">
+  <div class="row mt-3 mx-2 bg-white">
+    <div class="col-md-3">
+      <div class="sidebar-vertical mt-2">
+        <ul #nav="ngbNav" [(activeId)]="active" class="nav-tabs" ngbNav>
+          <li [ngClass]="{ active: active === 'tab1' }" [ngbNavItem]="'tab1'" class="nav-item info-box">
+            <button class="w-85 info-title d-flex flex-column align-items-start" ngbNavLink>
+              {{ 'administrative.commercialRelations.clients' | translate }}
+              <div class="info-count">{{ CustomerCount }}</div>
+            </button>
+            <ng-template ngbNavContent>
+              @if (CustomerCount) {
+                <app-commercial-relations-table [isCustomer]="true" [comRelList]="commercialRelationsData" />
+              }
+            </ng-template>
+          </li>
+          <li [ngClass]="{ active: active === 'tab2' }" [ngbNavItem]="'tab2'" class="nav-item info-box">
+            <button class="w-85 info-title d-flex flex-column align-items-start" ngbNavLink>
+              {{ 'administrative.commercialRelations.clientsLac' | translate }}
+              <div class="info-count">{{ CountLAC }}</div>
+            </button>
+            <ng-template ngbNavContent>
+              <app-commercial-relations-table [comRelList]="commercialRelationsDataLAC" [isCustomer]="true" />
+            </ng-template>
+          </li>
+          <li [ngClass]="{ active: active === 'tab3' }" [ngbNavItem]="'tab3'" class="nav-item info-box">
+            <button class="w-85 info-title d-flex flex-column align-items-start" ngbNavLink>
+              {{ 'administrative.commercialRelations.agent' | translate }}
+              <div class="info-count">{{ AgentsCount }}</div>
+            </button>
+            <ng-template ngbNavContent>
+              <app-commercial-relations-table [comRelList]="commercialRelationsAgents" [isCustomer]="false" />
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div class="border border-0 mt-2">
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>

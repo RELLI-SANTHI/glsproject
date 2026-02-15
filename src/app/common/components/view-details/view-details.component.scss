@@ -1,0 +1,80 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-box {
+  background: #fff;
+  border: 2px solid #061ab1;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin: 8px 0px;
+}
+
+.info-box.active {
+  background: #061ab1;
+  color: #fff;
+}
+
+.info-title {
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  color: #061ab1;
+  text-align: left;
+  margin-top: 5px;
+}
+
+.active .info-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #061ab1;
+}
+
+.active .info-subtext {
+  color: #ffffff;
+}
+
+.info-count {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #fff;
+  color: #061ab1;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1px solid #061ab1;
+}
+
+.active .info-count {
+  background: #061ab1;
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.info-subtext {
+  font-size: 12px;
+  color: #061ab1;
+}
+
+.card {
+  border: none;
+}
+
+.nav-tabs {
+  background-color: white; /* Set background color of the stepper to white */
+  border-bottom: 1px solid #ddd; /* Optional: Add a border to the bottom of the stepper */
+}
+
+.compilat-data {
+  background-color: #ffffff;
+}

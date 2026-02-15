@@ -1,0 +1,19 @@
+@if (impersonatedUser) {
+  <div class="alert alert-warning alert-dismissible fade show mb-0" role="alert">
+    <span class="spacer gls-bold-black">
+      <i class="bi bi-person-circle"></i>
+    </span>
+    <span class="spacer ms-1 me-1"
+      ><strong>{{ logedUser?.name || ('' | translate) }} </strong> {{ 'userProfile.modal.operatingas' | translate }}
+      <strong>{{ impersonatedUser.name }} {{ impersonatedUser.surname }}</strong></span
+    >
+    <button
+      [attr.aria-label]="'userProfile.modal.stopimpersonating' | translate"
+      class="btn btn-outline-primary ms-3 impersonating"
+      (click)="stopImpersonating()"
+      type="button">
+      {{ 'userProfile.modal.stopimpersonating' | translate }}
+      <em class="bi bi-x" data-bs-dismiss="alert" aria-label="Close"></em>
+    </button>
+  </div>
+}

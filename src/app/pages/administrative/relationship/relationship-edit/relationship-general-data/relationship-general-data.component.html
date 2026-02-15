@@ -1,0 +1,55 @@
+@if (isWriting()) {
+  <div class="row mt-3">
+    <div class="col-md-4">
+      <h2 class="fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipAgentData.title' | translate }}</h2>
+    </div>
+    <div class="col-md-8">
+      <div class="form-group mb-3">
+        <gls-input-dropdown
+          [id]="'societyId'"
+          [formGroup]="relationshipGeneralDataForm()"
+          [controlName]="'categoryId'"
+          [options]="categoryClientList()"
+          [label]="'administrative.relationshipEdit.relationshipGeneralData.categoryCustomer' | translate"
+          [keyValue]="'id'"
+          [keyDecsName]="'value'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input-dropdown>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'refAdministration'"
+          [formGroup]="relationshipGeneralDataForm()"
+          [controlName]="'administrationReference'"
+          [label]="'administrative.relationshipEdit.relationshipData.refAdministration' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipData.placeholderRefAdministration' | translate"
+          [type]="'text'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="row mb-3 mt-3">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.relationshipEdit.relationshipAgentData.title' | translate }}</h2>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipGeneralData.categoryCustomer' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ getCategoryCustomerLabel(relationshipGeneralDataForm().get('categoryCode')?.value) }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipData.refAdministration' | translate }}</div>
+        <div class="col-6 text-break">{{ relationshipGeneralDataForm().get('administrationReference')?.value || '--' }}</div>
+      </div>
+    </div>
+  </div>
+}

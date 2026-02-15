@@ -1,0 +1,9 @@
+{
+  "$schema": "./../node_modules/ng-openapi-gen/ng-openapi-gen-schema.json",
+  "input": "src/assets/swagger/openapi_administrative.yaml",
+  "output": "src/app/api/glsAdministrativeApi",
+  "module": "GlsAdministrativeApiInterfaceModule",
+  "enumStyle": "alias",
+  "modelType": "type",
+  "modelIndex": "models"
+}

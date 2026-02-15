@@ -1,0 +1,38 @@
+<!-- <div class="col-12 col-md-6">
+  <h1 class="w-100 container-header">{{ 'administrative.company-group-create.title' | translate }}</h1>
+  <span class="subtitle"> {{ 'administrative.company-group-create.subtitle' | translate }}</span>
+</div> -->
+<app-content-header
+  [image]="''"
+  [subTitle]="'administrative.company-group-create.subtitle'"
+  [title]="'administrative.company-group-create.title'">
+  </app-content-header>
+<hr />
+<div class="row py-4 mb-5">
+  <div class="w-25">
+    <h2 class="fw-bold">{{ 'administrative.company-group-create.sectionTitle' | translate }}</h2>
+  </div>
+  <div class="col-md-4">
+    <form [formGroup]="companyGroupNameFg">
+      <div clas="form-group">
+        <gls-input
+          [class]="'form-control custom-input-size'"
+          [controlName]="'name'"
+          [formGroup]="companyGroupNameFg"
+          [placeholder]="'administrative.company-group-create.placeholder' | translate"
+          [label]="'administrative.company-group-create.label' | translate"
+          [showError]="false"
+          [type]="'text'"
+          [showError]="true"
+          [showStatus]="true" />
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-form-footer
+  (exitEvent)="goToExit()"
+  (nextBtnEvent)="corporateGroupCreate()"
+  [disableNextBtn]="!companyGroupNameFg.valid"
+  [showDraftExit]="false"
+  [labelNextBtn]="'administrative.company-group-create.confirmCreateCompanyGroup'" />

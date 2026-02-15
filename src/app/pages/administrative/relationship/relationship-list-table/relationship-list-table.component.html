@@ -1,0 +1,106 @@
+<section class="w-100 mt-4">
+  @if (showRotateRelaship()) {
+    <div class="my-4">
+      <app-info-mobile class="my-4" [label]="'generic.mobile.table-view'" />
+    </div>
+  }
+
+  <div #datatableWrapper class="table-card">
+    <ngx-datatable
+      #table
+      (sort)="sort.emit($event)"
+      [columnMode]="'force'"
+      [footerHeight]="false"
+      [headerHeight]="50"
+      [limit]="10"
+      [messages]="{ emptyMessage: 'administrative.relationshipListTable.emptyTableMessage' | translate }"
+      [rowHeight]="50"
+      [rows]="listRelationships()"
+      [scrollbarH]="true"
+      class="material striped">
+      @if (!isAgent()) {
+        <!-- warning -->
+        <ngx-datatable-column
+          [name]="'administrative.relationshipListTable.warning' | translate"
+          [sortable]="true"
+          [width]="100"
+          prop="warningOrError">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <td>
+              <app-warning-status
+                [row]="row"
+                [label]="
+                  row.error
+                    ? 'administrative.tooltipStatus.warning.relationship'
+                    : ('administrative.tooltipStatus.warning.relationshipWarning' | translate)
+                "></app-warning-status>
+            </td>
+          </ng-template>
+        </ngx-datatable-column>
+      }
+
+      <ngx-datatable-column
+        [name]="nameFirstColumn() | translate"
+        [sortable]="true"
+        [width]="100"
+        prop="{{ isAgent() ? 'agentCode' : 'customerCode' }}">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <button (click)="goToCustomersDetail(row.id)" class="btn btn-link">
+            {{ isAgent() ? row.agentCode : row.customerCode }}
+          </button>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column
+        [name]="'administrative.relationshipListTable.companyName' | translate"
+        [sortable]="true"
+        [width]="250"
+        prop="surnameNameCompanyName">
+      </ngx-datatable-column>
+
+      <ngx-datatable-column
+        [name]="'administrative.relationshipListTable.vatNumber' | translate"
+        [sortable]="true"
+        [width]="100"
+        prop="vatNumber">
+      </ngx-datatable-column>
+
+      <ngx-datatable-column
+        [name]="'administrative.relationshipListTable.taxCode' | translate"
+        [sortable]="true"
+        [width]="120"
+        prop="taxCode">
+      </ngx-datatable-column>
+
+      <ngx-datatable-column
+        [name]="'administrative.relationshipListTable.society' | translate"
+        [sortable]="true"
+        [width]="100"
+        prop="administrativeName">
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+
+  @if (listRelationships().length) {
+    <div class="d-flex justify-content-end align-items-center mt-3 mb-5 flex-wrap" style="width: 100%">
+      <b class="pb-3 pe-2 result">
+        {{
+          'structureList.table.results'
+            | translate
+              : {
+                  firstResult: getFirstResult(),
+                  lastResult: getLastResult(),
+                  listLength: totalItems()
+                }
+        }}
+      </b>
+      <gls-paginator
+        (pageChange)="pageChange.emit($event)"
+        [pageSize]="pageSize()"
+        [page]="currentPage()"
+        [totalItems]="totalItems()"
+        [totalPages]="totalPages()">
+      </gls-paginator>
+    </div>
+  }
+</section>

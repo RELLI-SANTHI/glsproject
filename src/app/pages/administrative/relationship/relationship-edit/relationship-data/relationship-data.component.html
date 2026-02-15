@@ -1,0 +1,203 @@
+@if (isWriting()) {
+  <form [formGroup]="relationshipDataForm()">
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <h2 class="fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipData.title' | translate }}</h2>
+      </div>
+
+      <div class="col-md-8">
+        @if (companies().length > 1 || isFromSubject()) {
+          <div class="form-group mb-3">
+            <gls-input-dropdown
+              [id]="'administrativeId'"
+              [formGroup]="relationshipDataForm()"
+              [controlName]="'administrativeId'"
+              [options]="companies()"
+              [label]="'administrative.relationshipEdit.relationshipData.society' | translate"
+              [keyValue]="'id'"
+              [keyDecsName]="'name'"
+              [placeholder]="'administrative.relationshipEdit.relationshipData.placeholder' | translate"
+              [showError]="true"
+              (valueChanged)="onValueChange($event, 'administrativeId')"
+              [showStatus]="true"
+              [required]="true">
+            </gls-input-dropdown>
+          </div>
+        } @else {
+          <div class="row mb-2">
+            <div class="col-6 fw-bold text-break">
+              {{ 'administrative.relationshipEdit.relationshipData.society' | translate }}
+            </div>
+            <div class="col-6 text-break">{{ companies()[0] ? companies()[0].name : '---' }}</div>
+          </div>
+        }
+        @if (isFromSubject()) {
+          <div class="mb-2">
+            <p class="mb-1 form-label gls-form-label">{{ 'administrative.relationshipEdit.relationshipData.typeRelation' | translate }}*</p>
+            <div class="d-flex flex-column justify-content-start map-3 leagal-data-checkbox">
+              @if (hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCustomer, PERMISSION.write)) {
+                <gls-input-checkbox
+                  [id]="'relationshipData_typeClient'"
+                  [formGroup]="relationshipDataForm()"
+                  [controlName]="'typeRelationship'"
+                  [class]="'form-check-input feature-radio'"
+                  [label]="'administrative.relationshipEdit.relationshipData.client'"
+                  [type]="'radio'"
+                  [checked]="relationshipDataForm().get('typeRelationship')?.value === 'Client'"
+                  (valueChange)="relationshipDataForm().get('typeRelationship')?.setValue('Client')">
+                </gls-input-checkbox>
+              }
+              @if (hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCustomerLAC, PERMISSION.write)) {
+                <gls-input-checkbox
+                  [id]="'relationshipData_typeClientLac'"
+                  [formGroup]="relationshipDataForm()"
+                  [controlName]="'typeRelationship'"
+                  [class]="'form-check-input feature-radio'"
+                  [label]="'administrative.relationshipEdit.relationshipData.clientLac'"
+                  [type]="'radio'"
+                  [checked]="relationshipDataForm().get('typeRelationship')?.value === 'ClientLac'"
+                  (valueChange)="relationshipDataForm().get('typeRelationship')?.setValue('ClientLac')">
+                </gls-input-checkbox>
+              }
+              @if (hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeAgent, PERMISSION.write)) {
+                <gls-input-checkbox
+                  [id]="'relationshipData_typeAgent'"
+                  [formGroup]="relationshipDataForm()"
+                  [controlName]="'typeRelationship'"
+                  [class]="'form-check-input feature-radio'"
+                  [label]="'administrative.relationshipEdit.relationshipData.agent'"
+                  [type]="'radio'"
+                  [checked]="relationshipDataForm().get('typeRelationship')?.value === 'Agent'"
+                  (valueChange)="relationshipDataForm().get('typeRelationship')?.setValue('Agent')">
+                </gls-input-checkbox>
+              }
+            </div>
+          </div>
+        } @else {
+          <div class="row mb-2">
+            <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipData.typeRelation' | translate }}*</div>
+            <div class="col-6 text-break">
+              {{ 'generic.'.concat(relationshipDataForm().get('typeRelationship')?.value) | translate }}
+            </div>
+          </div>
+        }
+
+        @if (relationshipDataForm().get('typeRelationship')?.value === 'Agent') {
+          <div class="form-group mb-3">
+            <gls-input
+              [id]="'agentCodeId'"
+              [formGroup]="relationshipDataForm()"
+              [controlName]="'agentCode'"
+              [label]="'administrative.relationshipEdit.relationshipData.agentCode' | translate"
+              [placeholder]="'administrative.relationshipEdit.relationshipData.placeholderAgentCode' | translate"
+              [type]="'number'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+            <p>{{ 'administrative.relationshipEdit.relationshipData.clientCodeSubtitle' | translate }}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <hr />
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <h2 class="fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipData.endValidityReport' | translate }}
+        </h2>
+        <p class="text-break fw-normal">{{ 'administrative.relationshipEdit.relationshipData.endValiditySubtitle' | translate }}</p>
+      </div>
+
+      <div class="col-md-8">
+        <div class="form-group mb-3">
+          @if (isEnabledDate()) {
+            <gls-input-date
+              [id]="'data'"
+              [formGroup]="relationshipDataForm()"
+              [controlName]="'endOfRelationshipValidity'"
+              [label]="'administrative.relationshipEdit.relationshipData.endDateValidityReport' | translate"
+              [type]="'date'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input-date>
+          } @else {
+            <gls-input
+              [id]="'data'"
+              [formGroup]="relationshipDataForm()"
+              [controlName]="'endOfRelationshipValidity'"
+              [label]="'administrative.relationshipEdit.relationshipData.endDateValidityReport' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          }
+        </div>
+      </div>
+    </div>
+  </form>
+} @else {
+  <div class="row mb-3 mt-3">
+    <div class="col-md-6">
+      <h2 class="fw-bold">
+        {{ 'administrative.relationshipEdit.relationshipData.title' | translate }}
+      </h2>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipData.society' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ getSocietyName() || '--' }}
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipData.typeRelation' | translate }}</div>
+        <div class="col-6 text-break">
+          {{ 'generic.'.concat(relationshipDataForm().get('typeRelationship')?.value) | translate }}
+        </div>
+      </div>
+
+      @if (isFromAgent()) {
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.relationshipData.agentCode' | translate }}
+          </div>
+          <div class="col-6 text-break">{{ relationshipDataForm().get('agentCode')?.value || '--' }}</div>
+        </div>
+      } @else {
+        <div class="row mb-2">
+          <div class="col-6 fw-bold text-break">
+            {{ 'administrative.relationshipEdit.relationshipData.clientCode' | translate }}
+          </div>
+          <div class="col-6 text-break">{{ relationshipDataForm().get('customerCode')?.value || '--' }}</div>
+        </div>
+      }
+    </div>
+
+    <div class="col-12">
+      <hr />
+    </div>
+
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.relationshipEdit.relationshipData.endValidityReport' | translate }}</h2>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipData.endDateValidityReport' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ (relationshipDataForm().get('endOfRelationshipValidity')?.value | date: 'dd/MM/yyyy') || '--' }}
+        </div>
+      </div>
+    </div>
+  </div>
+}

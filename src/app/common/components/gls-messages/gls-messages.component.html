@@ -1,0 +1,70 @@
+@if (messageStatusService.messageState$ | async) {
+  <div class="alert alert-success mt-4 alert-dismissible d-flex align-items-center" role="alert">
+    <em aria-label="Success:" class="bi bi-check-circle-fill text-success"></em>
+    <span class="ms-2 text-dark">
+      <strong>
+        {{ (messageStatusService.messageState$ | async) || 'message.generic' | translate }}
+      </strong>
+    </span>
+    <button aria-label="Close" class="btn-close" (click)="messageStatusService.hide()" data-bs-dismiss="alert" type="button"></button>
+  </div>
+}
+
+@if (messageStatusService.getWarningMessage()) {
+  <div class="alert alert-warning alert-dismissible fade show mt-3 d-flex" role="alert">
+    <div><em class="bi bi-exclamation-circle-fill me-2 warning-icon"></em></div>
+    <div>
+      <span class="warning-message-title">
+        {{ messageStatusService.getWarningMessage()?.title ?? '' | translate: messageStatusService.getParams() }}
+      </span>
+      <p class="mb-0 warning-message-body">
+        {{ messageStatusService.getWarningMessage()?.message ?? '' | translate }}
+      </p>
+    </div>
+    <button
+      (click)="closeWarningMessage()"
+      (keyup.enter)="closeWarningMessage()"
+      aria-label="Close"
+      class="btn-close warning-close-icon"
+      type="button"></button>
+  </div>
+}
+
+@if (messageStatusService.getSuccessMessage()) {
+  <div class="alert alert-success alert-dismissible fade show mt-3 d-flex" role="alert">
+    <div><em class="bi bi-check-circle-fill me-2 gls-field-icon-ok fs-4"></em></div>
+    <div class="container-fluid">
+      <p class="warning-message-title m-0">
+        {{ messageStatusService.getSuccessMessage()?.title ?? '' | translate: messageStatusService.getParams() }}
+      </p>
+      <div class="d-flex justify-content-between">
+        <div class="col">
+          <p
+            class="mb-0 warning-message-body"
+            [innerHtml]="messageStatusService.getSuccessMessage()?.message ?? '' | translate: messageStatusService.getParams()"></p>
+        </div>
+        @if (messageStatusService.getSuccessMessage()?.showDownloadReportButton) {
+        <div class="col-3 d-flex justify-content-end" >
+          <button
+            (click)="downloadReport()"
+            (keyup.enter)="downloadReport()"
+            class="mb-0 text-end btn btn-link p-0 link-offset-2 link-underline link-underline-opacity-0"
+            style="text-decoration: none"
+            type="button">
+            <i class="bi bi-download me-2"></i>
+            {{ 'message.downloadReport' | translate }}
+          </button>
+        </div>
+      }
+      </div>
+    </div>
+    <div>
+      <button
+        (click)="closeSuccessMessage()"
+        (keyup.enter)="closeSuccessMessage()"
+        aria-label="Close"
+        class="btn-close warning-close-icon"
+        type="button"></button>
+    </div>
+  </div>
+}

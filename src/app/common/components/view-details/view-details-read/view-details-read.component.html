@@ -1,0 +1,38 @@
+<div class="table-responsive">
+  <table class="table">
+    <thead class="table-header">
+      <tr>
+        <th>{{ 'anagrafica.template.texts.informationGroup' | translate }}</th>
+        <th>{{ 'anagrafica.template.texts.fieldToInclude' | translate }}</th>
+        <th>{{ 'anagrafica.template.texts.obligatory' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (field of fieldsVisible(); track field; let i = $index) {
+        @if (isVisible(field) === true) {
+          <tr [ngClass]="getSubSectionClass(field.subSection)" class="group-row">
+            @if (i === 0 || fieldsVisible()[i - 1].subSection !== field.subSection) {
+              <td>
+                <strong> {{ 'anagrafica.structure.subsection.' + field.subSection | translate }} </strong>
+              </td>
+            } @else {
+              <td></td>
+            }
+
+            <td>
+              {{ 'anagrafica.structure.field.' + field.fieldName | translate }}
+              @if (field.fieldName === 'BuildingAcronym') {
+                <br />
+                <strong>Min: </strong>{{ buildingAcronymMin() || 'N/A' }} <strong> - Max: </strong>{{ buildingAcronymMax() || 'N/A' }}
+              }
+            </td>
+
+            <td>
+              <strong> {{ isRequired(field) ? ('generic.yes' | translate) : ('generic.no' | translate) }}</strong>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

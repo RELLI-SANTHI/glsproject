@@ -1,0 +1,9 @@
+@import "variables";
+
+.card {
+  --bs-card-border-radius: 0.938rem;
+  .card-title {
+    --bs-card-title-color: #{$primary};
+    font-weight: bold;
+  }
+}

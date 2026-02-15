@@ -1,0 +1,99 @@
+<div #datatableWrapper class="table-card">
+  <ngx-datatable
+    #table
+    (sort)="onSort($event)"
+    [columnMode]="'force'"
+    [footerHeight]="false"
+    [headerHeight]="50"
+    [limit]="10"
+    [messages]="{ emptyMessage: 'administrative.subjectList.subjectListTableColum.emptyTableMessage' | translate }"
+    [rowHeight]="50"
+    [rows]="comRelListFiltered()"
+    [scrollbarH]="true"
+    class="material striped">
+    <!-- Columns for customer -->
+
+    @if (isCustomer()) {
+      <ngx-datatable-column
+        [name]="'administrative.commercialRelations.commercialRelationsTable.customerCode' | translate"
+        prop="customerCode"
+        [sortable]="true"
+        [width]="70">
+      </ngx-datatable-column>
+
+      <ngx-datatable-column
+        [name]="'administrative.commercialRelations.commercialRelationsTable.relationCategory' | translate"
+        prop="categoryDescription"
+        [sortable]="true"
+        [width]="150">
+      </ngx-datatable-column>
+    } @else {
+      <!-- Columns for Agent -->
+      <ngx-datatable-column
+        [name]="'administrative.commercialRelations.commercialRelationsTable.agentCode' | translate"
+        prop="agentCode"
+        [sortable]="true"
+        [width]="100">
+      </ngx-datatable-column>
+      <ngx-datatable-column
+        [name]="'administrative.commercialRelations.commercialRelationsTable.agentTypeDescription' | translate"
+        prop="agentTypeDescription"
+        [sortable]="true"
+        [width]="100">
+      </ngx-datatable-column>
+    }
+
+    <!-- Company name -->
+    <ngx-datatable-column
+      [name]="'administrative.commercialRelations.commercialRelationsTable.companyName' | translate"
+      [sortable]="true"
+      [width]="100"
+      prop="businessName">
+    </ngx-datatable-column>
+
+    <!-- Relation date -->
+    <ngx-datatable-column
+      [name]="'administrative.commercialRelations.commercialRelationsTable.creationDate' | translate"
+      [sortable]="true"
+      [width]="100"
+      prop="creationDate">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.creationDate | date: 'dd/MM/yyyy' }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- State -->
+    <ngx-datatable-column
+      [name]="'administrative.commercialRelations.commercialRelationsTable.state' | translate"
+      [sortable]="true"
+      [width]="100"
+      prop="status">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ 'anagrafica.structure.status.' + (row ? row.status?.toLowerCase() : '') | translate }}
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>
+
+@if (totalItems > 0) {
+  <div class="d-flex justify-content-end align-items-center mt-3 flex-wrap">
+    <b class="pb-3 pe-2 result">
+      {{
+        'generic.results'
+          | translate
+            : {
+                firstResult: getFirstResult(),
+                lastResult: getLastResult(),
+                listLength: totalItems
+              }
+      }}
+    </b>
+    <gls-paginator
+      (pageChange)="onPageChange($event)"
+      [pageSize]="pageSize"
+      [page]="currentPage"
+      [totalItems]="totalItems"
+      [totalPages]="totalPages">
+    </gls-paginator>
+  </div>
+}

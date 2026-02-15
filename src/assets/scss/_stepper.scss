@@ -1,0 +1,61 @@
+@import 'variables';
+
+.common-stepper {
+  .steps-container {
+    padding: 0 10px 0 10px;
+    border-radius: 10px;
+  }
+
+  .step {
+    margin: 10px 5px 10px 5px;
+  }
+
+  .arrow {
+    font-size: 24px;
+    color: $black;
+  }
+
+  .step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: $white;
+    color: $black;
+    border: 1px solid $black;
+    margin: 0 auto;
+  }
+
+  .step.active .step-circle {
+    background-color: $secondary;
+    border-color: $secondary;
+  }
+
+  .step.disabled {
+    opacity: 0.8;
+  }
+
+  .step.completed .step-circle {
+    background-color: $btn-text-disabled;
+    border-color: $btn-text-disabled;
+    color: $white;
+  }
+
+  .completed-title {
+    color: $btn-text-disabled;
+    font-weight: normal !important;
+  }
+}
+
+:root {
+  --dynamic-stepper-width: 4.25rem;
+}
+
+.stepper-footer {
+  width: calc(100% - var(--dynamic-stepper-width));
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  transition:
+    left 0.3s ease,
+    width 0.3s ease;
+}

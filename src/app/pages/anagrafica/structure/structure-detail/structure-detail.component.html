@@ -1,0 +1,313 @@
+<div aria-label="Structure Detail Content" class="container-box mt-4">
+  <section aria-label="Structure Detail" class="d-flex justify-content-between w-100 flex-wrap">
+    @if (apiResponse) {
+      <div class="col-12 col-md-6">
+        <div>
+          <h1 class="w-100 container-header">
+            <img [src]="getTemplateIcon(apiResponse.icon)" alt="Icon" height="50" class="me-3" />
+            {{ getFieldDescription('BuildingName') || getFieldDescription('BuildingAcronym') }}
+          </h1>
+        </div>
+        <div>
+          <span class="container-subtitle mt-3">
+            {{ 'generic.lastModificationDate' | translate }} {{ apiResponse.updatedAt | date: 'dd/MM/yyyy' }}
+          </span>
+        </div>
+        <ng-container id="budges">
+          <div class="row mt-3">
+            <gls-title-budge class="col-auto" [label]="'anagrafica.structure.structureType' | translate"
+                             [value]="apiResponse.buildingType">
+            </gls-title-budge>
+            <gls-title-budge class="col-auto" [label]="'anagrafica.structure.acronym' | translate"
+                             [value]="apiResponse.buildingAcronym">
+            </gls-title-budge>
+            <gls-title-budge
+              class="col-auto"
+              [label]="'anagrafica.structure.labelStatus' | translate"
+              [value]="'anagrafica.structure.status.' + displayStatus.toLowerCase() | translate">
+            </gls-title-budge>
+          </div>
+        </ng-container>
+      </div>
+    }
+    @let status = displayStatus;
+    <div class="d-flex justify-content-end align-items-start col-12 col-md-6 flex-wrap">
+      @if (showPage && status === 'ACTIVE') {
+        <button
+          *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkStructure, PERMISSION.write)"
+          [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile() }"
+          (click)="disableStructure()"
+          [attr.aria-label]="'generic.disableStructure' | translate"
+          class="btn btn-outline-primary "
+          type="button">
+          <em class="bi bi-power"></em>
+          {{ 'generic.disableStructure' | translate }}
+        </button>
+
+        <button
+          *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkStructure, PERMISSION.write)"
+          [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile() }"
+          (click)="editStructure()"
+          [attr.aria-label]="'generic.editStructure' | translate"
+          class="btn btn-primary "
+          type="button">
+          <em class="bi bi-pencil-square"></em>
+          {{ 'generic.editStructure' | translate }}
+        </button>
+      } @else if ((showPage && (status === 'COMPLETED' || status === 'ACTIVE')) || status === 'DRAFT') {
+        <button
+          *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkStructure, PERMISSION.write)"
+          [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile() }"
+          (click)="editStructure()"
+          [attr.aria-label]="'generic.editStructure' | translate"
+          class="btn btn-primary "
+          type="button">
+          <em class="bi bi-pencil-square"></em>
+          {{ 'generic.editStructure' | translate }}
+        </button>
+      } @else if (showPage && status === 'DISABLED') {
+        <button
+          *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkStructure, PERMISSION.write)"
+          [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile() }"
+          (click)="activateStructure()"
+          [attr.aria-label]="'generic.reactivateStructure' | translate"
+          class="btn btn-primary "
+          type="button">
+          <em class="bi bi-power"></em>
+          {{ 'generic.reactivateStructure' | translate }}
+        </button>
+      }
+    </div>
+  </section>
+
+  @if (messageStatusService.messageState$ | async) {
+    <gls-messages></gls-messages>
+  }
+
+  <!-- Navigation Tabs -->
+  <ul
+    #nav="ngbNav"
+    [(activeId)]="active"
+    aria-label="Structure Navigation Tabs"
+    class="nav-tabs nav-tabs-top pt-5 justify-content-start gap-2"
+    ngbNav>
+    @if (checkToShowSection('anagrafica')) {
+      <li [ngbNavItem]="1">
+        <button ngbNavLink>
+          @if (showWarningForSection('anagrafica')) {
+            <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+          }
+          {{ 'anagrafica.structure.sectionTitle.anagrafica' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          @if (checkToShowSubSection('anagrafica', 'general')) {
+            <div>
+              <ng-container
+                *ngTemplateOutlet="formSection; context: { section: 'anagrafica', subSection: 'general' }" />
+            </div>
+          }
+          @if (checkToShowSubSection('anagrafica', 'address')) {
+            <div>
+              <ng-container
+                *ngTemplateOutlet="formSection; context: { section: 'anagrafica', subSection: 'address' }" />
+            </div>
+          }
+          @if (checkToShowSubSection('anagrafica', 'other')) {
+            <div>
+              <ng-container *ngTemplateOutlet="formSection; context: { section: 'anagrafica', subSection: 'other' }" />
+            </div>
+          }
+        </ng-template>
+      </li>
+    }
+
+    @if (checkToShowSection('recapiti')) {
+      <li [ngbNavItem]="2">
+        <button ngbNavLink>
+          @if (showWarningForSection('recapiti')) {
+            <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+          }
+          {{ 'anagrafica.structure.sectionTitle.recapiti' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          @if (checkToShowSubSection('recapiti', 'general')) {
+            <div>
+              <ng-container *ngTemplateOutlet="formSection; context: { section: 'recapiti', subSection: 'general' }" />
+            </div>
+          }
+        </ng-template>
+      </li>
+    }
+
+    @if (checkToShowSection('gestioneOperativa')) {
+      <li [ngbNavItem]="3">
+        <button ngbNavLink>
+          @if (showWarningForSection('gestioneOperativa')) {
+            <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+          }
+          {{ 'anagrafica.structure.sectionTitle.gestioneOperativa' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          @if (checkToShowSubSection('gestioneOperativa', 'general')) {
+            <ng-container
+              *ngTemplateOutlet="formSection; context: { section: 'gestioneOperativa', subSection: 'general' }" />
+          }
+          @if (checkToShowSubSection('gestioneOperativa', 'services')) {
+            <ng-container
+              *ngTemplateOutlet="formSection; context: { section: 'gestioneOperativa', subSection: 'services' }" />
+          }
+        </ng-template>
+      </li>
+    }
+
+    @if (checkToShowSection('support')) {
+      <li [ngbNavItem]="4">
+        <button ngbNavLink>
+          @if (showWarningForSection('support')) {
+            <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+          }
+          {{ 'anagrafica.structure.sectionTitle.support' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          @if (checkToShowSubSection('support', 'general')) {
+            <div>
+              <ng-container *ngTemplateOutlet="formSection; context: { section: 'support', subSection: 'general' }" />
+            </div>
+          }
+        </ng-template>
+      </li>
+    }
+
+    @if (checkToShowSection('datiStrutturali')) {
+      <li [ngbNavItem]="5">
+        <button ngbNavLink>
+          @if (showWarningForSection('datiStrutturali')) {
+            <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+          }
+          {{ 'anagrafica.structure.sectionTitle.datiStrutturali' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          @if (checkToShowSubSection('datiStrutturali', 'general')) {
+            <div>
+              <ng-container
+                *ngTemplateOutlet="formSection; context: { section: 'datiStrutturali', subSection: 'general' }" />
+            </div>
+          }
+        </ng-template>
+      </li>
+    }
+
+    @if (checkToShowSection('performance')) {
+      <li [ngbNavItem]="6">
+        <button ngbNavLink>
+          @if (showWarningForSection('performance')) {
+            <em aria-label="Success:" class="bi bi-exclamation-circle-fill ko-icon"></em>
+          }
+          {{ 'anagrafica.structure.sectionTitle.performance' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          @if (checkToShowSubSection('performance', 'general')) {
+            <div>
+              <ng-container
+                *ngTemplateOutlet="formSection; context: { section: 'performance', subSection: 'general' }" />
+            </div>
+          }
+        </ng-template>
+      </li>
+    }
+
+    @if (checkToShowAttachments()) {
+      <li [ngbNavItem]="7">
+        <button ngbNavLink>
+          {{ 'anagrafica.structure.sectionTitle.attach' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          <ng-container *ngTemplateOutlet="attachments" />
+        </ng-template>
+      </li>
+    }
+  </ul>
+
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+</div>
+
+<ng-template #attachments>
+  <div class="row">
+    <!-- Left Column -->
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'anagrafica.structure.sectionTitle.attachments.attachpresent' | translate }}</h2>
+      <div class="file-list">
+        @for (attachment of apiResponse?.attachments; track attachment) {
+          @if (!attachment.isMap) {
+            <div class="d-flex align-items-center justify-content-start">
+              @if (attachment.updatedAt) {
+                <div class="pe-4 d-flex align-items-center">
+                  <gls-title-budge
+                    class="col-auto"
+                    [label]="'anagrafica.structure.updatedAt' | translate"
+                    [value]="(attachment.updatedAt | date: 'dd/MM/yyyy') || ''">
+                  </gls-title-budge>
+                </div>
+              }
+              <div class="file-item">
+                <button (click)="downloadAttachment(attachment.id!, attachment.name!)" class="btn btn-link file-name">
+                  {{ attachment.name }}
+                </button>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #formSection let-section="section" let-subSection="subSection">
+  <ng-container>
+    <div class="row">
+      <div class="col-md-6 pb-3">
+        <h2 class="fw-bold">{{ 'anagrafica.structure.subsection.' + subSection | translate }}</h2>
+      </div>
+    </div>
+    <div class="row col-md-6 pb-3">
+      @for (field of fieldVisibleList; track field) {
+        @if (field?.isVisible && field?.section === section && field?.subSection === subSection) {
+          <div class="col-6 label mb-2">
+            <strong>{{ 'anagrafica.structure.field.' + field.fieldName | translate }}</strong>
+          </div>
+          <div class="col-6 value mb-2">
+            @if (field.fieldType === 'varchar' ||
+            field.fieldType === 'text' ||
+            field.fieldType === 'decimal' ||
+            field.fieldType === 'int' ||
+            field.fieldType === 'combo') {
+              <p class="info-value view-company-value">
+                {{ field.value || '--' }}
+              </p>
+            } @else if (field.fieldType === 'checkbox' || field.fieldType === 'toggle') {
+              <p class="info-value view-company-value">
+                {{ field.value || '--' }}
+              </p>
+            } @else if (field.fieldType === 'timestamp') {
+              <p class="info-value view-company-value">
+                {{ (field.value | date: 'dd/MM/yyyy') || '--' }}
+              </p>
+            } @else if (field.fieldType === 'file') {
+              @if (retrieveAttachById(field.value)?.name) {
+                <div class="file-item">
+                  <button (click)="downloadAttachment(field.value!, retrieveAttachById(field.value)?.name!)"
+                          class="btn btn-link file-name">
+                    {{ retrieveAttachById(field.value)?.name }}
+                  </button>
+                </div>
+              } @else {
+                <span class="file-item"> -- </span>
+              }
+            }
+          </div>
+        }
+      }
+      <hr />
+    </div>
+  </ng-container>
+</ng-template>

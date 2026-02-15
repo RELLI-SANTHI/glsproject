@@ -1,0 +1,219 @@
+<div class="container-box mt-4">
+  <app-content-header [image]="''" [subTitle]="getSubtitleRelatioshipEdit()" [title]="headerTitle" />
+
+  @if (type === 'create' && isFromSubject()) {
+    <gls-title-budge [label]="'administrative.relationshipEdit.subject'" [value]="subjectName || '---'" class="col-auto me-3 mb-3" />
+  }
+
+  @if (type === 'edit') {
+    <div class="d-flex flex-wrap">
+      <gls-title-budge [label]="'administrative.relationshipEdit.subject'" [value]="subjectName || '---'" class="col-auto me-3 mb-3" />
+      <gls-title-budge
+        [label]="'administrative.relationshipEdit.relationshipStatus'"
+        [value]="'administrative.relationshipEdit.' + status.toLowerCase() | translate"
+        class="col-auto me-3 mb-3" />
+      <gls-title-budge
+        [label]="'administrative.relationshipEdit.lastUpdate'"
+        [value]="lastUpdate | date: 'dd/MM/yyyy - HH:mm'"
+        class="col-auto me-3 mb-3" />
+    </div>
+  }
+
+  <hr />
+
+  @if (steps.length > 0) {
+    <ng-container id="header-stepper">
+      <gls-stepper
+        #stepper
+        (stepChangeEvent)="getStepperValue($event)"
+        [currentStep]="activeStep"
+        [enableStepsNavigation]="false"
+        [isEditMode]="type"
+        [isPrevioursEnable]="true"
+        [preserveContent]="true"
+        [steps]="steps">
+        <button (click)="goToExit()" class="btn btn-link">
+          <em class="bi bi-arrow-left"></em>
+          {{ 'anagrafica.structure.footerButtons.exit' | translate }}
+        </button>
+
+        <div class="ms-auto"></div>
+        @if (activeStep === steps.length - 1) {
+          <!-- @if (canSaveDraft()) {
+          <button (click)="saveRelationship(true)" class="btn btn-outline-primary" [disabled]="disableSaveDraft()">
+            <span>
+              <em class="bi bi-pencil-square"></em>
+              {{ 'administrative.relationshipEdit.footerButtonsRelation.save' | translate }}
+            </span>
+          </button>
+        } -->
+          <button (click)="saveRelationship(false)" [disabled]="relationshipForm.invalid" class="btn btn-primary">
+            <span>
+              {{ getLabelSave() | translate }}
+            </span>
+            &rarr;
+          </button>
+        } @else {
+          <button (click)="nextStep()" [disabled]="isDisabledNextStep()" class="btn btn-primary">
+            <span>
+              {{ 'administrative.relationshipEdit.footerButtonsRelation.proceed' | translate }}
+            </span>
+            &rarr;
+          </button>
+        }
+      </gls-stepper>
+    </ng-container>
+  }
+
+  <ng-template #relationshipData>
+    <app-relationship-data
+      [(corporateGroupId)]="corporateGroupId"
+      [isDraft]="isDraft"
+      [isEnabledDate]="isEnabledDate()"
+      [isFromAgent]="isFromAgent() || chooseAgentRelationship"
+      [isFromSubject]="isFromSubject()"
+      [isWriting]="true"
+      [relationshipDataForm]="relationshipForm" />
+  </ng-template>
+
+  <ng-template #createSubject>
+    <app-relationship-subject-container
+      (isItalianSubject)="isItalianSubject.set($event)"
+      (subjectSelected)="onSubjectSelected($event)"
+      [corporateGroupId]="corporateGroupId()"
+      [isDraft]="isDraft"
+      [isWrite]="isWritingSubject()"
+      [isFromAgent]="this.isFromAgent()"
+      [relationshipForm]="relationshipForm" />
+  </ng-template>
+
+  <ng-template #personalData>
+    @if (isFromAgent() || chooseAgentRelationship) {
+      <app-relationship-general-data-agent
+        [isFromSubject]="isFromSubject()"
+        [isWriting]="true"
+        [relationshipGeneralDataAgentForm]="relationshipForm"
+        [isDraft]="isDraft" />
+    } @else {
+      <ul #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-tabs-top pt-5 justify-content-start gap-2" ngbNav [destroyOnHide]="false">
+        <li [ngbNavItem]="1">
+          <button ngbNavLink>
+            @if (isSectionInvalid('generalData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.relationshipEdit.relationshipAgentData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-general-data [isWriting]="true" [relationshipGeneralDataForm]="relationshipForm" [isDraft]="isDraft" />
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <button ngbNavLink>
+            @if (isSectionInvalid('fiscalData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.relationshipEdit.relationshipFiscalData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-fiscal-data
+              [corporateGroupId]="corporateGroupId()"
+              [filscalDataForm]="getFinancialDetail()"
+              [isWriting]="true"
+              [formParent]="relationshipForm"
+              [isDraft]="isDraft"></app-relationship-fiscal-data>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <button ngbNavLink>
+            @if (isSectionInvalid('billingData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.relationshipEdit.relationshipBillingData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-billing-data
+              [isFromSubject]="isFromSubject()"
+              [isWriting]="true"
+              [relationshipBillingDataForm]="getBillingDataForm()"
+              [isDraft]="isDraft"
+              [corporateGroupId]="corporateGroupId()" />
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="4">
+          <button ngbNavLink>
+            @if (error() || warning()) {
+              <app-warning-status [row]="{ error: error(), warning: warning() }"></app-warning-status>
+            }
+            {{ 'administrative.relationshipEdit.relationshipBankingData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-banking-data
+              #bank
+              (bankDetailEvent)="setBankDetailApi($event, false)"
+              [error]="isBankError()"
+              [warning]="isBankWarning()"
+              [isFromSubject]="isFromSubject()"
+              [isItalianRelationship]="isItalianSubject()"
+              [isWriting]="true"
+              [relationshipBankingDataForm]="getBankingDataForm()"
+              [titleLabel]="'administrative.relationshipEdit.relationshipBankingData.titleBank'"
+              [titleLabelCard]="'administrative.relationshipEdit.relationshipBankingData.selectBank'"
+              [isDraft]="isDraft" />
+
+            <hr />
+            <app-relationship-banking-data
+              #bankRemittance
+              (bankDetailEvent)="setBankDetailApi($event, true)"
+              [error]="isRemittanceBankError()"
+              [warning]="isRemittanceBankWarning()"
+              [isFromSubject]="isFromSubject()"
+              [isItalianRelationship]="isItalianSubject()"
+              [isRemittance]="true"
+              [isWriting]="true"
+              [relationshipBankingDataForm]="getBankingDataForm()"
+              [titleLabel]="'administrative.relationshipEdit.relationshipBankingData.titleRemittance'"
+              [titleLabelCard]="'administrative.relationshipEdit.relationshipBankingData.selectRemittanceBank'"
+              [isDraft]="isDraft" />
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="5">
+          <button ngbNavLink>
+            @if (isSectionInvalid('commercialData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.relationshipEdit.relationshipCommercialData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            @if (relationshipForm) {
+              <app-relationship-commercial-data
+                [corporateGroupId]="corporateGroupId()"
+                [isEnabledDate]="isEnabledDate()"
+                [isFromSubject]="isFromSubject()"
+                [isWriting]="true"
+                [relationshipCommercialDataForm]="relationshipForm"
+                [isDraft]="isDraft"
+                [relationshipForm]="relationshipForm"
+                [administrativeId]="administrativeId()" />
+            }
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="6">
+          <button ngbNavLink>
+            @if (isSectionInvalid('otherData')) {
+              <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+            }
+            {{ 'administrative.relationshipEdit.relationshipOtherData.title' | translate }}
+          </button>
+          <ng-template ngbNavContent>
+            <app-relationship-other-data
+              [isFromSubject]="isFromSubject()"
+              [isWriting]="true"
+              [relationshipOtherDataForm]="relationshipForm"
+              [isDraft]="isDraft" />
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    }
+  </ng-template>
+</div>

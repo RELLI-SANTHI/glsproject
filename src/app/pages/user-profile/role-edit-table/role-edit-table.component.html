@@ -1,0 +1,77 @@
+<div *ngIf="type === 'edit'" class="modal-header">
+  <h2 class="modal-title fw-bold me-2">
+    {{ 'userProfile.roleEdit.featureList' | translate }}
+    <span class="container-header">
+      {{ '(' + (checkedCount || '0') + ')' }}
+    </span>
+  </h2>
+</div>
+<div [ngClass]="{ 'd-flex flex-column gap-3': isSmallMobile || isTablet, 'd-flex align-items-start gap-5': !isSmallMobile && !isTablet }">
+  <div *ngIf="type === 'create'" class="modal-header w-25" [ngClass]="{ 'w-100': isSmallMobile }">
+    <h2 class="modal-title fw-bold">
+      {{ 'userProfile.roleEdit.selectFunctionality' | translate }}
+    </h2>
+  </div>
+
+  <div *ngIf="featureFormGroup" class="role-edit-table flex-grow-1">
+    <div #datatableWrapper class="table-card mb-3">
+      <ngx-datatable
+        #table
+        [columnMode]="'force'"
+        [footerHeight]="false"
+        [headerHeight]="50"
+        [messages]="{ emptyMessage: 'anagrafica.structure.emptyStructuresMessage' | translate }"
+        [rowHeight]="50"
+        [rows]="featureList"
+        [scrollbarH]="true"
+        class="material striped">
+        <ngx-datatable-column [name]="'userProfile.roleEdit.funzionalitàDaIncludere' | translate" [sortable]="false" [width]="490">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="d-flex align-items-center custom-width">
+              <gls-input-checkbox
+                class="form-check-input check-input-lg me-2"
+                [formGroup]="featureFormGroup"
+                [controlName]="row.description"
+                [id]="'feature_' + row.id"
+                [label]="'userProfile.roleEdit.' + row.name | translate"
+                (change)="onCheckboxChange(row)"
+                [checked]="(row.accessType === 'Read' || row.accessType === 'Write') && idUser() !== undefined"
+                [type]="'checkbox'">
+              </gls-input-checkbox>
+              <div class="ms-auto">
+                <app-app-special-badge [showBadge]="hasSpecialPermission(row)"></app-app-special-badge>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [name]="'userProfile.roleEdit.enableReadWritePermissions' | translate" [sortable]="false" [width]="300">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="d-flex justify-content-center align-items-center gap-2">
+              <gls-input-checkbox
+                [id]="'permission-' + row.id"
+                [formGroup]="featureFormGroup"
+                [controlName]="'read_' + row.id"
+                [label]="'userProfile.roleEdit.readonly'"
+                [class]="'form-check-input feature-radio'"
+                [type]="'radio'"
+                [checked]="featureFormGroup.get('read_' + row.id)?.value === 'Read'"
+                (change)="onPermissionChange(row.id, 'Read')">
+              </gls-input-checkbox>
+              <gls-input-checkbox
+                [id]="'permission-write-' + row.id"
+                [formGroup]="featureFormGroup"
+                [controlName]="'write_' + row.id"
+                [label]="'userProfile.roleEdit.readingAndWriting'"
+                [class]="'form-check-input feature-radio'"
+                [type]="'radio'"
+                [checked]="featureFormGroup.get('write_' + row.id)?.value === 'Write'"
+                (change)="onPermissionChange(row.id, 'Write')">
+              </gls-input-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

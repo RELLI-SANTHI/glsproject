@@ -1,0 +1,59 @@
+<div class="common-stepper mt-4">
+  <div class="stepper" id="stepper">
+    <div class="steps-container bg-white d-flex flex-wrap justify-content-start">
+      <button
+        type="button"
+        (click)="i !== currentStep && (isStepEnabled(i) || (isPrevioursEnable && hasVisitedStep(i))) ? onStepChange(i) : null"
+        (keydown)="onKeyDownHandler($event, i)"
+        *ngFor="let step of steps; let i = index"
+        [ngClass]="{
+          completed: i < currentStep,
+          active: i === currentStep,
+          disabled: !isStepEnabled(i) && !(isPrevioursEnable && hasVisitedStep(i))
+        }"
+        [attr.aria-label]="'Step ' + (i + 1) + ': ' + ('stepper.' + step.title | translate)"
+        class="step gap-2 d-flex text-center align-items-center">
+        <ng-container *ngIf="i < currentStep">
+          <span class="step-circle align-items-center d-flex justify-content-center"><em class="bi bi-check"></em></span>
+        </ng-container>
+        <ng-container *ngIf="i > currentStep || i === currentStep">
+          <span class="step-circle align-items-center d-flex justify-content-center">
+            <strong>{{ i + 1 }}</strong>
+          </span>
+        </ng-container>
+
+        @if (isSmallMobile() && i === currentStep) {
+          <span class="step-title">
+            <strong>{{ 'stepper.' + step.title | translate }}</strong>
+          </span>
+        } @else if (!isSmallMobile()) {
+          <span class="step-title">
+            <strong>{{ 'stepper.' + step.title | translate }}</strong>
+          </span>
+        }
+        <div *ngIf="i < steps.length - 1" class="arrow">
+          <em class="bi bi-arrow-right"></em>
+        </div>
+      </button>
+    </div>
+    <div class="stepper-content-container">
+      <div class="stepper-content">
+        @if (!!preserveContent) {
+          <ng-container *ngFor="let step of steps; let i = index">
+            <div [style.display]="i === currentStep ? 'block' : 'none'">
+              <ng-container *ngTemplateOutlet="step.template"></ng-container>
+            </div>
+          </ng-container>
+        } @else {
+          <ng-container *ngIf="steps[currentStep]">
+            <ng-container *ngTemplateOutlet="steps[currentStep].template"></ng-container>
+          </ng-container>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stepper-footer d-flex justify-content-start gap-2 bg-white p-3">
+  <ng-content></ng-content>
+</div>

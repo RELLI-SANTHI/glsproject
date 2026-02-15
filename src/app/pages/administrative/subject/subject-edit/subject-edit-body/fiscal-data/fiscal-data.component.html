@@ -1,0 +1,146 @@
+@if (isWriting()) {
+  <div class="row">
+    <!-- Column with title -->
+    <div class="col-md-4">
+      <h2 class="fw-bold">{{ 'administrative.subjectEdit.subjectFiscalDate.title' | translate }}</h2>
+    </div>
+
+    <!-- Column with form -->
+    <div class="col-md-8">
+      <div class="mb-2">
+        <p class="mb-1 form-label gls-form-label">{{ 'administrative.subjectEdit.subjectFiscalDate.subtitle' | translate }}</p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'subjectTypeYes'"
+            [formGroup]="formFiscalData()"
+            [controlName]="'subjectType'"
+            [label]="'administrative.subjectEdit.subjectFiscalDate.labelYes'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="formFiscalData().get('subjectType')?.value"
+            (valueChange)="formFiscalData().get('subjectType')!.setValue(true); onCheckboxChange()">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'subjectTypeNo'"
+            [formGroup]="formFiscalData()"
+            [controlName]="'subjectType'"
+            [label]="'administrative.subjectEdit.subjectFiscalDate.labelNo'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="!formFiscalData().get('subjectType')?.value"
+            (valueChange)="formFiscalData().get('subjectType')!.setValue(false); onCheckboxChange()">
+          </gls-input-checkbox>
+        </div>
+      </div>
+
+      @if (formFiscalData().get('subjectType')?.value) {
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'addressId'"
+            [formGroup]="formFiscalData()"
+            [controlName]="'address'"
+            [label]="'administrative.subjectEdit.subjectFiscalDate.labelAddress' | translate"
+            [placeholder]="'administrative.subjectEdit.subjectFiscalDate.placeholderAddres' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'cityId'"
+            [formGroup]="formFiscalData()"
+            [controlName]="'city'"
+            [label]="'administrative.subjectEdit.subjectFiscalDate.labelCity' | translate"
+            [placeholder]="'administrative.subjectEdit.subjectFiscalDate.placeholderCity' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input-dropdown
+            [id]="'provinceId'"
+            [formGroup]="formFiscalData()"
+            [controlName]="'provinceId'"
+            [options]="provinces"
+            [label]="'administrative.subjectEdit.subjectFiscalDate.labelProvince'"
+            [placeholder]="'generic.select'"
+            [keyValue]="'id'"
+            [keyDecsName]="'name'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input-dropdown>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'postCodeId'"
+            [formGroup]="formFiscalData()"
+            [controlName]="'postCode'"
+            [label]="'administrative.subjectEdit.subjectFiscalDate.labelPostCode' | translate"
+            [placeholder]="'administrative.subjectEdit.subjectFiscalDate.placeholderPostCode' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+        <div class="form-group mb-3">
+          <gls-input-dropdown
+            [id]="'nationId'"
+            [formGroup]="formFiscalData()"
+            [controlName]="'nationId'"
+            [options]="nations"
+            [label]="'administrative.subjectEdit.subjectFiscalDate.labelNation' | translate"
+            [keyValue]="'id'"
+            [keyDecsName]="'value'"
+            [placeholder]="'administrative.subjectEdit.subjectFiscalDate.placeholderNation' | translate"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input-dropdown>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.subjectEdit.subjectFiscalDate.title' | translate }}</h2>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectFiscalDate.labelAddress' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ formFiscalData().get('address')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectFiscalDate.labelCity' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ formFiscalData().get('city')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectFiscalDate.labelProvince' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ subjectData()?.permanentEstablishmentDetail?.provinceName || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectFiscalDate.labelPostCode' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ formFiscalData().get('postCode')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.subjectEdit.subjectFiscalDate.labelNation' | translate }}</div>
+        <div class="col-6 text-break">{{ subjectData()?.permanentEstablishmentDetail?.nationName || '--' }}</div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,30 @@
+<div class="w-100" [formGroup]="formGroup">
+  <label *ngIf="label" [for]="id" class="form-label gls-form-label">{{ label | translate }}{{ requiredFieldControl() }}:</label>
+  <div class="input-group">
+    <input
+      [id]="id"
+      [formControlName]="controlName"
+      [type]="type"
+      [class]="class"
+      [ngClass]="{ 'gls-form-input': true, error: invalid() }"
+      [placeholder]="placeholder || '' | translate"
+      [attr.aria-label]="label || id | translate"
+      [attr.aria-describedby]="label || id | translate"
+      (change)="onFileChange($event)" />
+    <!-- <span
+      [id]="id + '-error-icon'"
+      *ngIf="invalid(formGroup, controlName)"
+      class="input-group-text gls-input-group-icon-error"
+      id="login-modal"
+      ><i class="bi bi-exclamation-circle-fill icon-error"></i
+    ></span> -->
+    @if (showStatus) {
+      <gls-input-status-section
+        class="align-content-center ms-2"
+        [formGroup]="formGroup"
+        [controlName]="controlName"
+        [showError]="showError"></gls-input-status-section>
+    }
+  </div>
+  <span [id]="id + '-error-label'" *ngIf="invalid()" class="gls-form-error">{{ getErrorMessage() | translate }}</span>
+</div>

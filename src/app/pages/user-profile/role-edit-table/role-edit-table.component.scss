@@ -1,0 +1,28 @@
+::ng-deep {
+  .role-edit-table {
+    .table-card {
+      background-color: white;
+      box-shadow: 0 2px 3px #b7b7b7;
+      padding: 0.5rem;
+      max-width: calc(100vw - 2em);
+      border-collapse: collapse;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: random($limit: 1);
+      scrollbar-color: #061ab1 #ffffff;
+      -webkit-scrollbar-thumb: 1;
+    }
+    .feature-radio {
+      margin-top: 0.25rem;
+      margin-right: 0.55rem;
+    }
+  }
+}
+gls-input-checkbox.form-check-input {
+  border-width: 0px;
+  display: flex;
+}
+.custom-width {
+  width: 470px;
+}

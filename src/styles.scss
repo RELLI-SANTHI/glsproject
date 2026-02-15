@@ -1,0 +1,42 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'assets/scss/variables';
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+/* angular-cli file: src/styles.css */
+@import '../node_modules/angular-calendar/css/angular-calendar.css';
+
+@import 'assets/scss/buttons';
+@import 'assets/scss/form';
+@import 'assets/scss/classes';
+@import 'assets/scss/modal';
+@import 'assets/scss/progress';
+@import 'assets/scss/stepper';
+@import 'assets/scss/nav';
+@import 'assets/scss/card';
+
+html,
+body {
+  font-family: #{$font-family-base} !important;
+  overflow-y: hidden;
+}
+
+/* library ngx-datatable */
+@import '../node_modules/@swimlane/ngx-datatable/themes/material';
+@import '../node_modules/@swimlane/ngx-datatable/assets/icons.css';
+
+/*TODO: MOVE IT INTO CLASSES FILE*/
+.w-85 {
+  width: 85% !important;
+}
+
+.container-header {
+  font-weight: bold;
+  color: $primary;
+}
+
+.datatable-tree-button .datatable-icon-up::before {
+  content: '\70';
+}

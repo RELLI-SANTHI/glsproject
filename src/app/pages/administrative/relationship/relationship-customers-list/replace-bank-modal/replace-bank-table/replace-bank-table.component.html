@@ -1,0 +1,75 @@
+<div #datatableWrapper class="table-card">
+  <ngx-datatable
+    #table
+    [columnMode]="'force'"
+    [footerHeight]="false"
+    [headerHeight]="50"
+    [limit]="10"
+    [rows]="bankListFiltered()"
+    [messages]="{ emptyMessage: 'administrative.subjectList.subjectListTableColum.emptyTableMessage' | translate }"
+    [rowHeight]="50"
+    [scrollbarH]="true"
+    class="material striped">
+    <!-- Radio btn -->
+    <ngx-datatable-column sortable="false" [width]="30">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <input type="radio" [name]="tableId()" (change)="rowSelected.emit(row)" class="form-check-input feature-radio" />
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- ABI -->
+    <ngx-datatable-column
+      [name]="'administrative.relationshipEdit.relationshipBankingData.abi' | translate"
+      prop="abiCode"
+      [sortable]="true"
+      [width]="70">
+    </ngx-datatable-column>
+
+    <!-- CAB -->
+    <ngx-datatable-column
+      [name]="'administrative.relationshipEdit.relationshipBankingData.cab' | translate"
+      prop="cabCode"
+      [sortable]="true"
+      [width]="70">
+    </ngx-datatable-column>
+
+    <!-- bankDescription -->
+    <ngx-datatable-column
+      [name]="'administrative.relationshipEdit.relationshipBankingData.bankDescription' | translate"
+      prop="bankDescription"
+      [sortable]="true"
+      [width]="180">
+    </ngx-datatable-column>
+
+    <!-- agencyDescription -->
+    <ngx-datatable-column
+      [name]="'administrative.relationshipEdit.relationshipBankingData.agencyDescription' | translate"
+      prop="bankAgencyDescription"
+      [sortable]="true"
+      [width]="180">
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>
+
+@if (totalItems > 0) {
+  <div class="d-flex justify-content-end align-items-center mt-3">
+    <b class="pb-3 pe-2 result">
+      {{
+        'generic.results'
+          | translate
+            : {
+                firstResult: getFirstResult(),
+                lastResult: getLastResult(),
+                listLength: totalItems
+              }
+      }}
+    </b>
+    <gls-paginator
+      (pageChange)="onPageChange($event)"
+      [pageSize]="pageSize"
+      [page]="currentPage"
+      [totalItems]="totalItems"
+      [totalPages]="totalPages">
+    </gls-paginator>
+  </div>
+}

@@ -1,0 +1,94 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ 'userProfile.modal.assignRoles' | translate }}</h5>
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn-close" type="button"></button>
+</div>
+<div class="modal-body role-list-modal-body">
+  <p class="card-text">{{ 'userProfile.modal.roleModalSubTitle' | translate }}</p>
+  <div
+    class="d-flex"
+    [ngClass]="isSmallMobile() ? 'flex-column w-100 align-items-start gap-2' : 'flex-row align-items-start justify-content-start'">
+    <gls-input
+      [id]="'searchRoleControlName'"
+      [formGroup]="roleFormGroup"
+      [controlName]="'searchRoleControlName'"
+      [label]="'userProfile.field.searchRole'"
+      [placeholder]="'userProfile.field.insert' | translate"
+      [type]="'text'"
+      [class]="'form-control'"
+      [showError]="true"
+      class="w-100 me-2"
+      [errorMessage]="'userProfile.field.searchRoleError' | translate">
+    </gls-input>
+    <button
+      (click)="searchRole()"
+      (keyup.enter)="searchRole()"
+      [disabled]="isSearchDisabled"
+      aria-label="Ok"
+      class="btn my-3 btn-primary me-3"
+      type="button">
+      {{ 'userProfile.field.near' | translate }}
+    </button>
+  </div>
+  <div class="flex-row border border-1 border-color role-list-hight">
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+      <ng-container *ngFor="let role of roleData; trackBy: trackByRoleId">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="flush-heading-{{ role.id }}">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#flush-collapse-' + role.id"
+              aria-expanded="false"
+              [attr.aria-controls]="'flush-collapse-' + role.id">
+              <gls-input-checkbox
+                [class]="'form-check-input check-input-lg me-2'"
+                [controlName]="'role_' + role.id"
+                [formGroup]="roleFormGroup"
+                [id]="'role_' + role.id"
+                (click)="onCheckboxChange(role.id, $event)"
+                (keydown)="onCheckboxChange(role.id, $event)"
+                [type]="'checkbox'"
+                [checked]="roleFormGroup.get('role_' + role.id)?.value === true">
+              </gls-input-checkbox>
+              <em class="bi bi-chevron-right me-2"></em>
+              <span class="fw-bold me-2">{{ role.name }} ({{ role?.permissions?.length }})</span>
+              <app-app-special-badge [showBadge]="checkIsSpecial(role)"></app-app-special-badge>
+            </button>
+          </h2>
+          <div
+            id="flush-collapse-{{ role.id }}"
+            class="accordion-collapse collapse"
+            [attr.aria-labelledby]="'flush-heading-' + role.id"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body p-0">
+              <ul class="list-group list-group-flush">
+                <ng-container *ngFor="let items of role?.permissions; trackBy: trackByPermissionsId">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ getRolePermissionName(items) | translate }}</span>
+                    <app-app-special-badge [showBadge]="items?.isSpecial ?? false"></app-app-special-badge>
+
+                    <span class="border rounded-1 border-1 border-color p-1 bg-white">{{ getpermissionValue(items) | translate }}</span>
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!roleData?.length">
+        <div class="d-flex justify-content-center align-items-center h-100">
+          <p class="text-muted">{{ 'userProfile.emptyUserMessage' | translate }}</p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn btn-outline-primary" type="button">
+    {{ 'modal.cancelText' | translate }}
+  </button>
+  <button (click)="save()" (keyup.enter)="save()" aria-label="Ok" [disabled]="!enableSaveButton()" class="btn btn-primary" type="button">
+    {{ 'userProfile.modal.saveRoles' | translate }}
+  </button>
+</div>

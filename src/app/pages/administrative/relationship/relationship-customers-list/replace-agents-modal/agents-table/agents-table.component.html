@@ -1,0 +1,36 @@
+<div #datatableWrapper class="table-card">
+  <ngx-datatable
+    #table
+    [columnMode]="'force'"
+    [footerHeight]="false"
+    [headerHeight]="50"
+    [limit]="10"
+    [rows]="agentsList() || newAgentsList()"
+    [messages]="{ emptyMessage: 'administrative.subjectList.subjectListTableColum.emptyTableMessage' | translate }"
+    [rowHeight]="50"
+    [scrollbarH]="true"
+    class="material striped">
+    <!-- Azione -->
+    <ngx-datatable-column sortable="false" [width]="30">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <input type="radio" [name]="tableId()" [checked]="row === selectedRow" (change)="selectRow(row)" class="form-check-input feature-radio"/>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- Agent Code -->
+    <ngx-datatable-column [name]="'administrative.agentsTable.agentCode' | translate" prop="agentCode" [sortable]="true" [width]="120">
+    </ngx-datatable-column>
+
+    <!-- Company name -->
+    <ngx-datatable-column [name]="'administrative.agentsTable.companyName' | translate" prop="companyName" [sortable]="true" [width]="280">
+    </ngx-datatable-column>
+
+    <!-- VAT Number -->
+    <ngx-datatable-column [name]="'administrative.agentsTable.vatNumber' | translate" prop="vatNumber" [sortable]="true" [width]="150">
+    </ngx-datatable-column>
+
+    <!-- Fiscal Code -->
+    <ngx-datatable-column [name]="'administrative.agentsTable.fiscalCode' | translate" prop="fiscalCode" [sortable]="true" [width]="200">
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>

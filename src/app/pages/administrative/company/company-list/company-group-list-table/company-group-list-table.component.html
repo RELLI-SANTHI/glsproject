@@ -1,0 +1,162 @@
+<section class="w-100 mb-5 mt-5 role-tree-table">
+  <h2 class="subtitle fw-bold">{{ 'administrative.corporateGroupTableTitle' | translate }}</h2>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 order-2 order-md-1 d-flex p-0">
+        <div
+          class="d-flex justify-content-end ms-auto"
+          [ngClass]="{ 'flex-column align-items-start my-3 w-100': isSmallMobile(), 'align-items-center': !isSmallMobile() }">
+          <p class="mb-0 me-2">{{ 'administrative.companyGroupList.view' | translate }}:</p>
+          <div [ngClass]="{ 'mt-2 w-100': isSmallMobile() }">
+            <button
+              class="btn btn-outline-secondary me-2"
+              [ngClass]="{
+                'btn-selected': selectValue === viewButtonConstants.GROUP_SOCIETY,
+                'btn-outline-primary': selectValue !== viewButtonConstants.GROUP_SOCIETY,
+                'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile()
+              }"
+              type="button"
+              (click)="selectButton(viewButtonConstants.GROUP_SOCIETY)">
+              {{ 'administrative.companyGroupList.corporateGroup' | translate }}
+            </button>
+            <button
+              class="btn btn-outline-secondary"
+              [ngClass]="{
+                'btn-selected': selectValue === viewButtonConstants.SOCIETY,
+                'btn-outline-primary': selectValue !== viewButtonConstants.SOCIETY,
+                'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile()
+              }"
+              type="button"
+              (click)="selectButton(viewButtonConstants.SOCIETY)">
+              {{ 'administrative.companyGroupList.society' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div #datatableWrapper class="table-card mt-5">
+      <ngx-datatable
+        #corporateTable
+        [columnMode]="'force'"
+        [footerHeight]="false"
+        [headerHeight]="0"
+        [messages]="{ emptyMessage: 'anagrafica.structure.emptyStructuresMessage' | translate }"
+        [rowHeight]="isSmallMobile() ? 90 : 50"
+        [rows]="corporateGroupList()"
+        [scrollbarH]="true"
+        class="material expandable">
+        <!-- Row Detail Template -->
+        <ngx-datatable-row-detail [rowHeight]="150" #myDetailRow (toggle)="onDetailToggle($event)" class="p-0">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <ul class="list-group rounded-0">
+              @if (row.administratives.length > 0) {
+                <ng-container *ngFor="let items of row.administratives; trackBy: trackById">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <button class="btn btn-link" (click)="goToSocietyView(items.id)">
+                      {{ items.name | slice: 0 : 30 }}
+                    </button>
+                  </li>
+                </ng-container>
+              } @else {
+                <li class="list-group-item d-flex justify-content-center align-items-center">
+                  <div class="info-value">
+                    {{ 'administrative.companyGroupList.noCorporateGroupData' | translate }}
+                  </div>
+                </li>
+              }
+            </ul>
+          </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!-- Expand/Collapse Column -->
+        <ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+            <button
+              [class.bi-chevron-right]="!expanded"
+              [class.bi-chevron-down]="expanded"
+              class="btn my-3 my-3 btn-link"
+              title="Expand/Collapse Row"
+              (click)="toggleExpandRow(row)"></button>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- Other Columns -->
+
+        @if (isSmallMobile()) {
+          <!-- mobile -->
+          <ngx-datatable-column name="corporateName" prop="corporateName">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div>
+                <div>
+                  <span class="fw-bold">{{ row.corporateName }}</span>
+                </div>
+                <div>
+                  <span class="text-muted">
+                    {{ row.administratives.length || 0 }} {{ 'administrative.companyGroupList.society' | translate }}
+                  </span>
+                </div>
+                <div class="align-items-center d-flex justify-content-start">
+                  <button (click)="goToCoporateGroupView(row.id)" class="btn btn-link">
+                    <span class="px-2"> {{ 'administrative.companyGroupList.groupTab' | translate }} </span>
+                    <em class="bi bi-chevron-right"></em>
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        } @else if (isTablet()) {
+          <!-- tablet -->
+          <ngx-datatable-column name="corporateName" prop="corporateName">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div>
+                <div>
+                  <span class="fw-bold">{{ row.corporateName }}</span>
+                </div>
+                <div>
+                  <span class="text-muted">
+                    {{ row.administratives.length || 0 }} {{ 'administrative.companyGroupList.society' | translate }}
+                  </span>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Description" prop="description" hidden>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="align-items-center d-flex justify-content-start">
+                <button (click)="goToCoporateGroupView(row.id)" class="btn btn-link">
+                  <span class="px-2"> {{ 'administrative.companyGroupList.groupTab' | translate }} </span>
+                  <em class="bi bi-chevron-right"></em>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        } @else {
+          <!-- desktop -->
+          <ngx-datatable-column name="corporateName" prop="corporateName">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="d-flex justify-content-start align-items-center gap-2">
+                <span class="fw-bold">{{ row.corporateName }}</span>
+                <div class="vr"></div>
+                <span class="text-muted">
+                  {{ row.administratives.length || 0 }} {{ 'administrative.companyGroupList.society' | translate }}
+                </span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Description" prop="description" hidden>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="align-items-center d-flex justify-content-start">
+                <button (click)="goToCoporateGroupView(row.id)" class="btn btn-link">
+                  <span class="px-2"> {{ 'administrative.companyGroupList.groupTab' | translate }} </span>
+                  <em class="bi bi-chevron-right"></em>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        }
+      </ngx-datatable>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,121 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ title | translate }}</h5>
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn-close" type="button"></button>
+</div>
+<div class="modal-body">
+  <h6 class="modal-title mb-2">{{ selection | translate }}</h6>
+  <!-- gls input accept only a form -->
+  <gls-input-dropdown
+    [controlName]="'agencyName'"
+    [formGroup]="replaceAgentFormFg"
+    [id]="'filterStyle'"
+    [keyDecsName]="'name'"
+    [keyValue]="'id'"
+    [options]="choiseAgency"
+    [required]="false"
+    [showError]="false"
+    [showStatus]="false"
+    (valueChanged)="onCompanySelected($event)" />
+  @if (replaceAgentFormFg.get('agencyName')?.valid) {
+    <hr />
+    <h6 class="modal-title mb-2 mt-3">{{ selectAgToRep | translate }}</h6>
+    <div [formGroup]="replaceAgentFormFg">
+      <div
+        [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100 mb-3' : 'input-group-prepend align-items-center gap-3'"
+        class="d-flex">
+        <div class="flex-grow-1">
+          <gls-input-dropdown
+            [formGroup]="oldAgentForm"
+            [controlName]="'choiseSr'"
+            [id]="'filterStyle'"
+            [keyDecsName]="'label'"
+            [keyValue]="'value'"
+            [options]="choiseSearch"
+            [required]="false"
+            [showError]="false"
+            [showStatus]="false" />
+        </div>
+        <div class="flex-grow-1">
+          <gls-input
+            [class]="'form-control'"
+            [formGroup]="oldAgentForm"
+            [controlName]="'inputSr'"
+            [placeholder]="search"
+            [showError]="false"
+            [type]="'text'" />
+        </div>
+        <button
+          (click)="filterFirTableByAcronym()"
+          [disabled]="replaceAgentFormFg.get('oldAgent')?.invalid || replaceAgentFormFg.get('oldAgent.inputSr')?.value.length < 1"
+          aria-pressed="true"
+          class="ms-2 btn btn-primary"
+          type="button">
+          {{ 'structureList.search' | translate }}
+        </button>
+      </div>
+    </div>
+
+    @if (isVisibleFirstTable) {
+      <div class="mt-3">
+        <app-agents-table [agentsList]="filteredOldAgents()" [tableId]="'replaced'" (rowSelectedFT)="selectedAgentReplaced.set($event)" />
+      </div>
+    }
+    <hr />
+    <h6 class="modal-title mb-2">{{ selectNewAg | translate }}</h6>
+    <div [formGroup]="replaceAgentFormFg">
+      <div
+        [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100 mb-3' : 'input-group-prepend align-items-center gap-3'"
+        class="d-flex">
+        <div class="flex-grow-1">
+          <gls-input-dropdown
+            [formGroup]="newAgentForm"
+            [controlName]="'choiseSr'"
+            [id]="'filterStyle'"
+            [keyDecsName]="'label'"
+            [keyValue]="'value'"
+            [options]="choiseSearch"
+            [required]="false"
+            [showError]="false"
+            [showStatus]="false" />
+        </div>
+        <div class="flex-grow-1">
+          <gls-input
+            [class]="'form-control'"
+            [formGroup]="newAgentForm"
+            [controlName]="'inputSr'"
+            [placeholder]="search"
+            [showError]="false"
+            [type]="'text'" />
+        </div>
+        <button
+          (click)="filterSecTableByAcronym()"
+          [disabled]="replaceAgentFormFg.get('newAgent')?.invalid || replaceAgentFormFg.get('newAgent.inputSr')?.value.length < 1"
+          aria-pressed="true"
+          class="ms-2 btn btn-primary"
+          type="button">
+          {{ 'structureList.search' | translate }}
+        </button>
+      </div>
+    </div>
+
+    @if (isVisibleSecondTable) {
+      <div class="mt-3">
+        <app-agents-table [newAgentsList]="filteredNewAgents()" [tableId]="'new'" (rowSelectedST)="selectedAgentNew.set($event)" />
+      </div>
+    }
+  }
+</div>
+<div class="modal-footer">
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Close" class="btn btn-outline-primary" type="button">
+    {{ cancel | translate }}
+  </button>
+  <button
+    aria-label="Ok"
+    class="btn btn-primary"
+    type="button"
+    (click)="replaceAgents()"
+    (keyup.enter)="replaceAgents()"
+    [disabled]="!isSelectionValid()">
+    {{ confirm | translate }}
+  </button>
+</div>

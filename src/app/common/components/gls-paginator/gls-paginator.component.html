@@ -1,0 +1,18 @@
+<nav aria-label="table navigation" class="paginator-custom">
+  <ul class="pagination flex-wrap">
+    <li class="page-item" [class.disabled]="page === 1">
+      <button class="page-link" (click)="previousPage()">{{ 'structureList.table.prev' | translate }}</button>
+    </li>
+    <ng-container *ngFor="let p of pages">
+      <li *ngIf="p !== 0" class="page-item" [class.active]="p === page">
+        <button class="page-link" (click)="goToPage(p)">{{ p }}</button>
+      </li>
+      <li *ngIf="p === 0" class="page-item">
+        <div class="page-link">...</div>
+      </li>
+    </ng-container>
+    <li class="page-item" [class.disabled]="page === totalPages">
+      <button class="page-link" (click)="nextPage()">{{ 'structureList.table.next' | translate }}</button>
+    </li>
+  </ul>
+</nav>

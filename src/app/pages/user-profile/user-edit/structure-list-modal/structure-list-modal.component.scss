@@ -1,0 +1,10 @@
+@import '../../../../../assets//scss/variables';
+.structure-list-modal-body{
+    .structure-list-hight{
+        height: calc(100vh - 21em);
+        overflow-y: auto;
+    }
+    .card-width{
+        min-width: 105px;
+    }
+}

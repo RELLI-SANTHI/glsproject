@@ -1,0 +1,117 @@
+<div class="container-fluid p-0">
+  <app-content-header
+    (btnCreateEvent)="createSubject()"
+    (btnExportEvent)="exportData()"
+    [image]="'assets/img/transparent/PNG-Subjects.png'"
+    [isSmallMobile]="isSmallMobile()"
+    [isTablet]="isTablet()"
+    [labelBtnCreate]="'administrative.subjectList.btnCreateSubject'"
+    [showBtnCreate]="hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeSubject, PERMISSION.write)"
+    [showBtnExport]="true"
+    [subTitle]="'administrative.subjectList.subtitle'"
+    [title]="'administrative.subjectList.title'" />
+
+  <div class="d-flex">
+    <gls-title-budge *ngFor="let title of titles" [label]="''" [value]="''" class="col-auto me-3 mb-3" />
+  </div>
+
+  <hr />
+
+  <!-- @if (messageStatusService.messageState$ | async) { -->
+    <gls-messages />
+  <!-- } -->
+
+  @if (isLoaded) {
+    @if (subjectListDraft().length && hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeSubject, PERMISSION.write)) {
+      <h2 class="subtitle fw-bold fs-3">
+        {{ 'structureList.draftTitle' | translate: { numberItems: subjectListDraft().flat().length } }}
+      </h2>
+
+      <div class="d-flex flex-column">
+        <app-carousel (clickEvent)="loadEditSubjectPage($event)" [listCarousel]="subjectListDraft()">
+          <ng-template let-slide>
+            <div class="card-content w-100 d-flex flex-column justify-content-start align-items-start">
+              <p class="card-code p-0 m-0 pb-1" ngbTooltip="{{ 'administrative.subjectList.subject' | translate }}"
+                 container="body">
+                {{ 'administrative.subjectList.subject' | translate }}
+              </p>
+              <h3 class="visually-hidden">h3</h3>
+              <h4 class="visually-hidden">h4</h4>
+              <h5 class="card-title mb-0 p-0 m-0 pb-1" ngbTooltip="{{ slide.surnameNameCompanyName }}" container="body">
+                {{ slide.surnameNameCompanyName }}
+              </h5>
+              <p [ngbTooltip]="slide.lastUpdated | date: 'dd/MM/yyyy HH:mm'"
+                 class="card-info p-0 m-0 pb-1 fs-6 text-break">
+                {{ slide.dateAdded | date: 'dd/MM/yyyy HH:mm' }}
+              </p>
+            </div>
+          </ng-template>
+        </app-carousel>
+      </div>
+    }
+
+    <h2 class="subtitle fw-bold">{{ 'administrative.subjectList.labelSubjectList' | translate }}</h2>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div [ngClass]="{ 'd-flex': !isSmallMobile() }" class="col-12 order-2 order-md-1 p-0">
+          <button (click)="openSidebar()" class="btn btn-link pe-4">
+            <b><em class="bi bi-filter pe-1"></em>{{ 'userProfile.userList.filter' | translate }}</b>
+          </button>
+          <div [ngClass]="{ 'd-flex': !isSmallMobile(), 'filter-tablet-ratio': isTablet() }">
+            <form (submit)="filterByText()" [formGroup]="subjectFilterFg" class="input-group">
+              <div class="input-group">
+                <div
+                  [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100' : 'input-group-prepend align-items-center gap-3'"
+                  class="d-flex">
+                  <gls-input-dropdown
+                    [controlName]="'filterType'"
+                    [formGroup]="subjectFilterFg"
+                    [id]="'filterTyle'"
+                    [keyDecsName]="'value'"
+                    [keyValue]="'id'"
+                    [options]="filterTypeList"
+                    [required]="false"
+                    [showError]="false"
+                    [showStatus]="false" />
+
+                  <gls-input
+                    [class]="'form-control'"
+                    [controlName]="'filterValue'"
+                    [formGroup]="subjectFilterFg"
+                    [placeholder]="'structureList.search'"
+                    [showError]="false"
+                    [type]="'text'" />
+
+                  <button
+                    (click)="filterByText()"
+                    [disabled]="subjectFilterFg.invalid || !subjectFilterFg.get('filterValue')?.value?.length"
+                    aria-pressed="true"
+                    class="ms-2 btn btn-primary"
+                    type="button">
+                    {{ 'structureList.search' | translate }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-badge-filters (resetFilters)="resetFilters($event)" [showFiltersApplied]="Array.from(badgeFilters)" />
+    <app-subject-list-table
+      (pageChange)="pageChange($event)"
+      (sort)="onSort($event)"
+      [currentPage]="currentPage()"
+      [pageSize]="pageSize()"
+      [showRotateSubject]="showRotateSubject()"
+      [subjectList]="subjectList()"
+      [totalItems]="totalItems()"
+      [totalPages]="totalPages()" />
+  }
+</div>
+
+@if (showSidebar()) {
+  <app-filter-sidebar [filters]="filters" (closeSideBarEv)="closeSidebar()" (applyFiltersEv)="applyFilters($event)" />
+}

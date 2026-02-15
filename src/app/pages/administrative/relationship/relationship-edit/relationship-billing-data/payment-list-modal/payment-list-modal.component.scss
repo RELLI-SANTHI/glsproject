@@ -1,0 +1,8 @@
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+::ng-deep gls-input .gls-form-error {
+  display: none !important;
+}

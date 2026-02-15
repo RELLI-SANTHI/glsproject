@@ -1,0 +1,2691 @@
+openapi: 3.0.1
+info:
+  title: GLS Network API Services
+  version: '1.0'
+servers:
+  - url: https://apim-glsit-eva-dev-germanywestcentral-001.azure-api.net/structures
+paths:
+  /private/v1/regions:
+    get:
+      tags:
+        - ReferenceData
+      summary: Retrieves the list of all available regions that the user can select.
+      description: Retrieves the list of all available regions that the user can select.
+      operationId: get-api-referencedata-v1-regions
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegionModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegionModel'
+              example:
+                - id: 0
+                  code: string
+                  description: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegionModel'
+              example:
+                - id: 0
+                  code: string
+                  description: string
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  /private/v1/areas:
+    get:
+      tags:
+        - ReferenceData
+      summary: Retrieves the list of all available areas that the user can select.
+      description: Retrieves the list of all available areas that the user can select.
+      operationId: get-api-referencedata-v1-areas
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AreaModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AreaModel'
+              example:
+                - id: 0
+                  name: string
+                  responsible: string
+                  description: string
+                  code: 0
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AreaModel'
+              example:
+                - id: 0
+                  name: string
+                  responsible: string
+                  description: string
+                  code: 0
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  /private/v1/provinces:
+    get:
+      tags:
+        - ReferenceData
+      summary: Retrieves the list of all available provinces that the user can select.
+      description: Retrieves the list of all available provinces that the user can select.
+      operationId: get-api-referencedata-v1-provinces
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProvinceModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProvinceModel'
+              example:
+                - id: 0
+                  name: string
+                  code: string
+                  region: string
+                  idgls: 0
+                  canceled: string
+                  idSupplier: string
+                  lastUpdated: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProvinceModel'
+              example:
+                - id: 0
+                  name: string
+                  code: string
+                  region: string
+                  idgls: 0
+                  canceled: string
+                  idSupplier: string
+                  lastUpdated: string
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  '/private/v1/lookup/{groupname}':
+    get:
+      tags:
+        - ReferenceData
+      summary: Retrieves the list of all available values for the specified group name that the user can select.
+      description: Retrieves the list of all available values for the specified group name that the user can select.
+      operationId: get-api-referencedata-v1-lookup-groupname
+      parameters:
+        - name: groupname
+          in: path
+          description: The name of the group to retrieve available values for.
+          required: true
+          schema:
+            type: string
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LookupModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LookupModel'
+              example:
+                - id: 0
+                  groupName: string
+                  value: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LookupModel'
+              example:
+                - id: 0
+                  groupName: string
+                  value: string
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /private/v1/structures/export:
+    post:
+      tags:
+        - Export
+      summary: Export CSV file report.
+      description: Export CSV file report.
+      operationId: post-api-export-v1-export
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetStructuresRequestPayloadExportCsv'
+            example:
+              buildingType: 0
+              buildingAcronym: string
+              buildingName: string
+              name: 0
+              companyName: string
+              province: 0
+              region: 0
+              area: 0
+              status:
+                - string
+              createdAt: string
+              updatedAt: string
+              startOfOperationalActivity: string
+              warning: true
+              page: 0
+              pageSize: 0
+              orderBy:
+                field: Status
+                direction: string
+              fieldsToReturn:
+                - field: Status
+                  label: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/GetStructuresRequestPayloadExportCsv'
+            example:
+              buildingType: 0
+              buildingAcronym: string
+              buildingName: string
+              name: 0
+              companyName: string
+              province: 0
+              region: 0
+              area: 0
+              status:
+                - string
+              createdAt: string
+              updatedAt: string
+              startOfOperationalActivity: string
+              warning: true
+              page: 0
+              pageSize: 0
+              orderBy:
+                field: Status
+                direction: string
+              fieldsToReturn:
+                - field: Status
+                  label: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/GetStructuresRequestPayloadExportCsv'
+            example:
+              buildingType: 0
+              buildingAcronym: string
+              buildingName: string
+              name: 0
+              companyName: string
+              province: 0
+              region: 0
+              area: 0
+              status:
+                - string
+              createdAt: string
+              updatedAt: string
+              startOfOperationalActivity: string
+              warning: true
+              page: 0
+              pageSize: 0
+              orderBy:
+                field: Status
+                direction: string
+              fieldsToReturn:
+                - field: Status
+                  label: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: binary
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: string
+                format: binary
+              example: string
+            text/json:
+              schema:
+                type: string
+                format: binary
+              example: string
+        '400':
+          description: Bad Request
+        '204':
+          description: No Content
+        '500':
+          description: Internal Server Error
+  /private/v1/attachments:
+    post:
+      tags:
+        - Attachment
+      summary: Uploads an attachment for a specific structure.
+      description: Uploads an attachment for a specific structure.
+      operationId: post-api-attachment-v1
+      parameters:
+        - name: structureId
+          in: query
+          description: The ID of the structure.
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                File:
+                  type: string
+                  description: The file to upload.
+                  format: binary
+                Name:
+                  type: string
+                  description: The label name of the file.
+                IsMap:
+                  type: boolean
+                  description: boolean showing if the attachment is a map or not
+      responses:
+        '201':
+          description: Created
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AttachmentModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentModel'
+              example:
+                id: 0
+                name: string
+                structureId: 0
+                fileName: string
+                blobUrl: string
+                fileSize: 0
+                mimeType: string
+                updatedAt: string
+                isMap: true
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentModel'
+              example:
+                id: 0
+                name: string
+                structureId: 0
+                fileName: string
+                blobUrl: string
+                fileSize: 0
+                mimeType: string
+                updatedAt: string
+                isMap: true
+        '400':
+          description: Bad Request
+        '415':
+          description: Unsupported Media Type
+        '500':
+          description: Internal Server Error
+  '/private/v1/attachments/{id}':
+    get:
+      tags:
+        - Attachment
+      summary: Downloads an attachment file by its ID.
+      description: Downloads an attachment file by its ID.
+      operationId: get-api-attachment-v1-id
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the attachment.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: binary
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: string
+                format: binary
+              example: string
+            text/json:
+              schema:
+                type: string
+                format: binary
+              example: string
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Attachment
+      summary: Deletes the attachment file by its ID.
+      description: Deletes the attachment file by its ID.
+      operationId: delete-api-attachment-v1-id
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the attachment.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /private/v1/structures/create:
+    post:
+      tags:
+        - Structure
+      summary: Insert a new structure in EvA.
+      description: Insert a new structure in EvA.
+      operationId: post-api-structure-v1-create
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        description: The structure object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StructureCreateModel'
+            example:
+              buildingType: 0
+              buildingAcronym: string
+          text/json:
+            schema:
+              $ref: '#/components/schemas/StructureCreateModel'
+            example:
+              buildingType: 0
+              buildingAcronym: string
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/StructureCreateModel'
+            example:
+              buildingType: 0
+              buildingAcronym: string
+      responses:
+        '201':
+          description: Created
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StructureModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StructureModel'
+              example:
+                id: 0
+                buildingType: 0
+                buildingAcronym: string
+                buildingName: string
+                status: string
+                createdBy: string
+                createdAt: string
+                updatedBy: string
+                updatedAt: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StructureModel'
+              example:
+                id: 0
+                buildingType: 0
+                buildingAcronym: string
+                buildingName: string
+                status: string
+                createdBy: string
+                createdAt: string
+                updatedBy: string
+                updatedAt: string
+        '400':
+          description: Bad Request
+        '409':
+          description: Conflict
+        '500':
+          description: Internal Server Error
+  '/private/v1/structures/{id}':
+    get:
+      tags:
+        - Structure
+      summary: Retrieves the details of a structure by its unique identifier (ID).
+      description: Retrieves the details of a structure by its unique identifier (ID).
+      operationId: GetStructureById
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the structure.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: refreadonly
+          in: query
+          description: 'Optional. If true, retrieves the structure in read-only mode (default: false).'
+          schema:
+            type: boolean
+            default: false
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StructureDetailResponse'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StructureDetailResponse'
+              example:
+                id: 0
+                icon: string
+                templateId: 0
+                buildingAcronym: string
+                buildingType: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+                status: string
+                createdBy: string
+                createdAt: string
+                updatedBy: string
+                updatedAt: string
+                warning: true
+                fields:
+                  - id: 0
+                    fieldName: string
+                    fieldType: string
+                    value: { }
+                    isVisible: true
+                    isRequired: true
+                    section: string
+                    subSection: string
+                    minLength: 0
+                    maxLength: 0
+                    decimal: 0
+                    pattern: string
+                    options:
+                      - id: 0
+                        value: string
+                attachments:
+                  - id: 0
+                    fileName: string
+                    fileSize: 0
+                    fileType: string
+                    createdBy: string
+                    createdAt: string
+                    updatedAt: string
+                    name: string
+                    isMap: true
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StructureDetailResponse'
+              example:
+                id: 0
+                icon: string
+                templateId: 0
+                buildingAcronym: string
+                buildingType: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+                status: string
+                createdBy: string
+                createdAt: string
+                updatedBy: string
+                updatedAt: string
+                warning: true
+                fields:
+                  - id: 0
+                    fieldName: string
+                    fieldType: string
+                    value: { }
+                    isVisible: true
+                    isRequired: true
+                    section: string
+                    subSection: string
+                    minLength: 0
+                    maxLength: 0
+                    decimal: 0
+                    pattern: string
+                    options:
+                      - id: 0
+                        value: string
+                attachments:
+                  - id: 0
+                    fileName: string
+                    fileSize: 0
+                    fileType: string
+                    createdBy: string
+                    createdAt: string
+                    updatedAt: string
+                    name: string
+                    isMap: true
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Structure
+      summary: Update a structure in EvA.
+      description: Update a structure in EvA.
+      operationId: put-api-structure-v1-id
+      parameters:
+        - name: id
+          in: path
+          description: The structure id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        description: The structure object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StructureUpdateModel'
+            example:
+              status: string
+              fields:
+                - id: 0
+                  value: { }
+          text/json:
+            schema:
+              $ref: '#/components/schemas/StructureUpdateModel'
+            example:
+              status: string
+              fields:
+                - id: 0
+                  value: { }
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/StructureUpdateModel'
+            example:
+              status: string
+              fields:
+                - id: 0
+                  value: { }
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StructureDetailResponse'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StructureDetailResponse'
+              example:
+                id: 0
+                icon: string
+                templateId: 0
+                buildingAcronym: string
+                buildingType: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+                status: string
+                createdBy: string
+                createdAt: string
+                updatedBy: string
+                updatedAt: string
+                warning: true
+                fields:
+                  - id: 0
+                    fieldName: string
+                    fieldType: string
+                    value: { }
+                    isVisible: true
+                    isRequired: true
+                    section: string
+                    subSection: string
+                    minLength: 0
+                    maxLength: 0
+                    decimal: 0
+                    pattern: string
+                    options:
+                      - id: 0
+                        value: string
+                attachments:
+                  - id: 0
+                    fileName: string
+                    fileSize: 0
+                    fileType: string
+                    createdBy: string
+                    createdAt: string
+                    updatedAt: string
+                    name: string
+                    isMap: true
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StructureDetailResponse'
+              example:
+                id: 0
+                icon: string
+                templateId: 0
+                buildingAcronym: string
+                buildingType: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+                status: string
+                createdBy: string
+                createdAt: string
+                updatedBy: string
+                updatedAt: string
+                warning: true
+                fields:
+                  - id: 0
+                    fieldName: string
+                    fieldType: string
+                    value: { }
+                    isVisible: true
+                    isRequired: true
+                    section: string
+                    subSection: string
+                    minLength: 0
+                    maxLength: 0
+                    decimal: 0
+                    pattern: string
+                    options:
+                      - id: 0
+                        value: string
+                attachments:
+                  - id: 0
+                    fileName: string
+                    fileSize: 0
+                    fileType: string
+                    createdBy: string
+                    createdAt: string
+                    updatedAt: string
+                    name: string
+                    isMap: true
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '500':
+          description: Internal Server Error
+  /private/v1/structures:
+    post:
+      tags:
+        - Structure
+      summary: Retrieves the list of all available structures with the given filter with pagination
+      description: Retrieves the list of all available structures with the given filter with pagination
+      operationId: post-api-structure-v1
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetStructuresRequestPayload'
+            example:
+              buildingType: 0
+              buildingAcronym: string
+              buildingName: string
+              name: 0
+              companyName: string
+              province: 0
+              region: 0
+              area: 0
+              status:
+                - string
+              createdAt: string
+              updatedAt: string
+              startOfOperationalActivity: string
+              warning: true
+              page: 0
+              pageSize: 0
+              orderBy:
+                field: Status
+                direction: string
+              isDepot: true
+              fieldsToReturn:
+                - Status
+          text/json:
+            schema:
+              $ref: '#/components/schemas/GetStructuresRequestPayload'
+            example:
+              buildingType: 0
+              buildingAcronym: string
+              buildingName: string
+              name: 0
+              companyName: string
+              province: 0
+              region: 0
+              area: 0
+              status:
+                - string
+              createdAt: string
+              updatedAt: string
+              startOfOperationalActivity: string
+              warning: true
+              page: 0
+              pageSize: 0
+              orderBy:
+                field: Status
+                direction: string
+              isDepot: true
+              fieldsToReturn:
+                - Status
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/GetStructuresRequestPayload'
+            example:
+              buildingType: 0
+              buildingAcronym: string
+              buildingName: string
+              name: 0
+              companyName: string
+              province: 0
+              region: 0
+              area: 0
+              status:
+                - string
+              createdAt: string
+              updatedAt: string
+              startOfOperationalActivity: string
+              warning: true
+              page: 0
+              pageSize: 0
+              orderBy:
+                field: Status
+                direction: string
+              isDepot: true
+              fieldsToReturn:
+                - Status
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetStructuresResponse'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStructuresResponse'
+              example:
+                currentPage: 0
+                pageSize: 0
+                totalItems: 0
+                totalPages: 0
+                structures:
+                  - id: 0
+                    status: string
+                    icon: string
+                    fields:
+                      - fieldName: string
+                        value: { }
+                        description: string
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetStructuresResponse'
+              example:
+                currentPage: 0
+                pageSize: 0
+                totalItems: 0
+                totalPages: 0
+                structures:
+                  - id: 0
+                    status: string
+                    icon: string
+                    fields:
+                      - fieldName: string
+                        value: { }
+                        description: string
+        '400':
+          description: Bad Request
+        '204':
+          description: No Content
+        '500':
+          description: Internal Server Error
+  /private/v1/fields:
+    get:
+      tags:
+        - Template
+      summary: Retrieves all available fields.
+      description: Retrieves all available fields.
+      operationId: get-api-template-v1-fields
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FieldModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FieldModel'
+              example:
+                - id: 0
+                  fieldName: string
+                  fieldType: string
+                  description: string
+                  section: string
+                  subSection: string
+                  minLength: 0
+                  maxLength: 0
+                  decimal: 0
+                  lookupTable: string
+                  mandatory: true
+                  isRequired: true
+                  isVisible: true
+                  pattern: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FieldModel'
+              example:
+                - id: 0
+                  fieldName: string
+                  fieldType: string
+                  description: string
+                  section: string
+                  subSection: string
+                  minLength: 0
+                  maxLength: 0
+                  decimal: 0
+                  lookupTable: string
+                  mandatory: true
+                  isRequired: true
+                  isVisible: true
+                  pattern: string
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  /private/v1/templates:
+    get:
+      tags:
+        - Template
+      summary: Retrieves the list of all available templates that the user can select to create a new structure.
+      description: Retrieves the list of all available templates that the user can select to create a new structure.
+      operationId: get-api-template-v1
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TemplateModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TemplateModel'
+              example:
+                - id: 0
+                  templateName: string
+                  icon: string
+                  createdAt: string
+                  updatedAt: string
+                  createdBy: string
+                  updatedBy: string
+                  buildingAcronymMinLength: 0
+                  buildingAcronymMaxLength: 0
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TemplateModel'
+              example:
+                - id: 0
+                  templateName: string
+                  icon: string
+                  createdAt: string
+                  updatedAt: string
+                  createdBy: string
+                  updatedBy: string
+                  buildingAcronymMinLength: 0
+                  buildingAcronymMaxLength: 0
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+        - Template
+      summary: Creates a new template.
+      description: Creates a new template.
+      operationId: post-api-template-v1
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateCreateModel'
+            example:
+              templateName: string
+              icon: string
+              buildingAcronymMinLength: 0
+              buildingAcronymMaxLength: 0
+              fields:
+                - fieldId: 0
+                  isVisible: true
+                  isRequired: true
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TemplateCreateModel'
+            example:
+              templateName: string
+              icon: string
+              buildingAcronymMinLength: 0
+              buildingAcronymMaxLength: 0
+              fields:
+                - fieldId: 0
+                  isVisible: true
+                  isRequired: true
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TemplateCreateModel'
+            example:
+              templateName: string
+              icon: string
+              buildingAcronymMinLength: 0
+              buildingAcronymMaxLength: 0
+              fields:
+                - fieldId: 0
+                  isVisible: true
+                  isRequired: true
+      responses:
+        '201':
+          description: Created
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/TemplateModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateModel'
+              example:
+                id: 0
+                templateName: string
+                icon: string
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TemplateModel'
+              example:
+                id: 0
+                templateName: string
+                icon: string
+                createdAt: string
+                updatedAt: string
+                createdBy: string
+                updatedBy: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Template
+      summary: Update a new template in EvA.
+      description: Update a new template in EvA.
+      operationId: put-api-template-v1
+      parameters:
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      requestBody:
+        description: The template object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateUpdateModel'
+            example:
+              id: 0
+              templateName: string
+              icon: string
+              buildingAcronymMinLength: 0
+              buildingAcronymMaxLength: 0
+              fields:
+                - fieldId: 0
+                  isVisible: true
+                  isRequired: true
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TemplateUpdateModel'
+            example:
+              id: 0
+              templateName: string
+              icon: string
+              buildingAcronymMinLength: 0
+              buildingAcronymMaxLength: 0
+              fields:
+                - fieldId: 0
+                  isVisible: true
+                  isRequired: true
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TemplateUpdateModel'
+            example:
+              id: 0
+              templateName: string
+              icon: string
+              buildingAcronymMinLength: 0
+              buildingAcronymMaxLength: 0
+              fields:
+                - fieldId: 0
+                  isVisible: true
+                  isRequired: true
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/TemplateDetailsModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateDetailsModel'
+              example:
+                id: 0
+                templateName: string
+                icon: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+                fields:
+                  - id: 0
+                    fieldName: string
+                    section: string
+                    subSection: string
+                    isVisible: true
+                    isRequired: true
+                    mandatory: true
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TemplateDetailsModel'
+              example:
+                id: 0
+                templateName: string
+                icon: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+                fields:
+                  - id: 0
+                    fieldName: string
+                    section: string
+                    subSection: string
+                    isVisible: true
+                    isRequired: true
+                    mandatory: true
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/templates/{id}':
+    get:
+      tags:
+        - Template
+      summary: Gets the details of a template by its Id.
+      description: Gets the details of a template by its Id.
+      operationId: GetTemplateById
+      parameters:
+        - name: id
+          in: path
+          description: The Id of the template
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/TemplateDetailsModel'
+              examples:
+                default:
+                  value: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateDetailsModel'
+              example:
+                id: 0
+                templateName: string
+                icon: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+                fields:
+                  - id: 0
+                    fieldName: string
+                    section: string
+                    subSection: string
+                    isVisible: true
+                    isRequired: true
+                    mandatory: true
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TemplateDetailsModel'
+              example:
+                id: 0
+                templateName: string
+                icon: string
+                buildingAcronymMinLength: 0
+                buildingAcronymMaxLength: 0
+                fields:
+                  - id: 0
+                    fieldName: string
+                    section: string
+                    subSection: string
+                    isVisible: true
+                    isRequired: true
+                    mandatory: true
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /health:
+    get:
+      summary: health
+      description: health
+      operationId: health
+      responses:
+        '200':
+          description: 'null'
+  '/private/v1/provinces/{id}':
+    get:
+      tags:
+        - ReferenceData
+      summary: Retrieves the available provinces that the user select by Id.
+      description: Retrieves the available provinces that the user select by Id.
+      operationId: get-api-referencedata-v1-provinces-id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/private/v1/structures/{id}/lock':
+    post:
+      tags:
+        - Structure
+      summary: Lock structure by internal ID
+      description: Lock structure by internal ID
+      operationId: post-api-structure-v1-id-lock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/structures/{id}/unlock':
+    post:
+      tags:
+        - Structure
+      summary: Unlock structure by internal ID
+      description: Unlock structure by internal ID
+      operationId: post-api-structure-v1-id-unlock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/templates/{id}/lock':
+    post:
+      tags:
+        - Template
+      summary: Lock company by internal ID
+      description: Lock company by internal ID
+      operationId: post-api-template-v1-id-lock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/private/v1/templates/{id}/unlock':
+    post:
+      tags:
+        - Template
+      summary: Unlock company by internal ID
+      description: Unlock company by internal ID
+      operationId: post-api-template-v1-id-unlock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: X-Impersonated-User
+          in: header
+          description: Optional Impersonation User header
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    AreaModel:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique Area Id
+          format: int64
+        name:
+          maxLength: 30
+          minLength: 1
+          type: string
+          description: Area Name
+        responsible:
+          maxLength: 30
+          type: string
+          description: Area Responsible
+          nullable: true
+        description:
+          maxLength: 30
+          type: string
+          description: Area Description
+          nullable: true
+        code:
+          maximum: 9999.0
+          minimum: 1.0
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+      description: Represents an Area that can be used in searhing structures
+    AttachmentModel:
+      required:
+        - blobUrl
+        - fileName
+        - fileSize
+        - name
+        - structureId
+        - updatedAt
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the attachment.
+          format: int64
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: The name of the attachment.
+        structureId:
+          type: integer
+          description: The unique identifier of the related structure.
+          format: int64
+        fileName:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: The file name of the attachment.
+        blobUrl:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: The URL of the blob storage where the file is stored.
+        fileSize:
+          type: integer
+          description: The size of the file in bytes.
+          format: int64
+        mimeType:
+          maxLength: 50
+          type: string
+          description: The MIME type of the file.
+          nullable: true
+        updatedAt:
+          type: string
+          description: The DateTime of last Update Upload
+          format: date-time
+        isMap:
+          type: boolean
+      additionalProperties: false
+      description: Represents an attachment of a structure entity.
+    AttachmentResponse:
+      required:
+        - fileName
+        - fileSize
+        - fileType
+        - id
+        - name
+        - updatedAt
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the attachment.
+          format: int64
+        fileName:
+          minLength: 1
+          type: string
+          description: File name of the attachment.
+        fileSize:
+          type: integer
+          description: File size of the attachment.
+          format: int64
+        fileType:
+          minLength: 1
+          type: string
+          description: File type of the attachment.
+        createdBy:
+          type: string
+          description: User who created the attachment.
+          nullable: true
+        createdAt:
+          type: string
+          description: Timestamp of when the attachment was created.
+          format: date-time
+        updatedAt:
+          type: string
+          description: Timestamp of when the attachment was updated.
+          format: date-time
+        name:
+          minLength: 1
+          type: string
+          description: Original Name of the attachment
+        isMap:
+          type: boolean
+          description: Identifies if attachemtn is a map or not
+          nullable: true
+      additionalProperties: false
+      description: Represents an attachment associated with a specific structure returned.
+    ExportField:
+      required:
+        - field
+        - label
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/StructureField'
+        label:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    FieldDetailResponse:
+      required:
+        - fieldName
+        - fieldType
+        - id
+        - section
+        - subSection
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the field.
+          format: int64
+        fieldName:
+          minLength: 1
+          type: string
+          description: Name of the field.
+        fieldType:
+          minLength: 1
+          type: string
+          description: 'Type of the field (combo, varchar, timestamp, int, decimal)'
+        value:
+          description: 'Value of the field (can be string, int, bool, timestamp, etc.).'
+          nullable: true
+        isVisible:
+          type: boolean
+          description: Indicates if the field is visible.
+        isRequired:
+          type: boolean
+          description: Indicates if the field is required.
+        section:
+          minLength: 1
+          type: string
+          description: Section to which the field belongs.
+        subSection:
+          minLength: 1
+          type: string
+          description: Subsection to which the field belongs.
+        minLength:
+          type: integer
+          description: Minimum length allowed for the field value.
+          format: int32
+          nullable: true
+        maxLength:
+          type: integer
+          description: Maximum length allowed for the field value.
+          format: int32
+          nullable: true
+        decimal:
+          type: integer
+          description: Decimal places allowed (if applicable).
+          format: int32
+          nullable: true
+        pattern:
+          type: string
+          description: Regular expression pattern for field validation.
+          nullable: true
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/OptionModel'
+          description: List of available options for combo-type fields.
+          nullable: true
+      additionalProperties: false
+      description: Represents the detail of a specific structure field returned.
+    FieldModel:
+      required:
+        - fieldName
+        - fieldType
+        - id
+        - section
+        - subSection
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the field.
+          format: int64
+        fieldName:
+          minLength: 1
+          type: string
+          description: The name of the field.
+        fieldType:
+          minLength: 1
+          type: string
+          description: 'The type of the field, represented as a string.'
+        description:
+          type: string
+          description: A description of the field.
+          nullable: true
+        section:
+          minLength: 1
+          type: string
+          description: The section the field belongs to.
+        subSection:
+          minLength: 1
+          type: string
+          description: The subsection the field belongs to.
+        minLength:
+          maximum: 2147483647.0
+          minimum: 1.0
+          type: integer
+          description: MinLength of the field
+          format: int32
+          nullable: true
+        maxLength:
+          maximum: 2147483647.0
+          minimum: 1.0
+          type: integer
+          description: MaxLength of the field
+          format: int32
+          nullable: true
+        decimal:
+          type: integer
+          description: The number of decimal places (applicable for decimals).
+          format: int32
+          nullable: true
+        lookupTable:
+          type: string
+          description: The lookup table associated with the field (applicable for combo fields).
+          nullable: true
+        mandatory:
+          type: boolean
+          description: The lookup table associated with the field (applicable for combo fields).
+        isRequired:
+          type: boolean
+          description: Whether the field is required by default fo all the templates
+        isVisible:
+          type: boolean
+          description: Whether the field is visible by default fo all the templates
+        pattern:
+          maxLength: 255
+          type: string
+          description: Pattern regex of the field
+          nullable: true
+      additionalProperties: false
+      description: Represents a field that can be used in structure templates.
+    FieldResponse:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: Name of the field.
+          nullable: true
+        value:
+          description: Value of the field.
+          nullable: true
+        description:
+          type: string
+          description: Description of the field.
+          nullable: true
+      additionalProperties: false
+      description: Response model of a single field returned.
+    GetStructuresRequestPayload:
+      type: object
+      properties:
+        buildingType:
+          type: integer
+          description: The type of the building.
+          format: int64
+          nullable: true
+        buildingAcronym:
+          type: string
+          description: The acronym of the building.
+          nullable: true
+        buildingName:
+          type: string
+          description: The name of the building.
+          nullable: true
+        name:
+          type: integer
+          description: The name of the structure.
+          format: int64
+          nullable: true
+        companyName:
+          type: string
+          description: The name of the Administrative related.
+          nullable: true
+        province:
+          type: integer
+          description: The province where the structure is located.
+          format: int64
+          nullable: true
+        region:
+          type: integer
+          description: The region where the structure is located.
+          format: int64
+          nullable: true
+        area:
+          type: integer
+          description: The area where the structure is located.
+          format: int64
+          nullable: true
+        status:
+          type: array
+          items:
+            type: string
+          description: The status of the structure.
+          nullable: true
+        createdAt:
+          type: string
+          description: The timestamp when the structure was created.
+          format: date-time
+          nullable: true
+        updatedAt:
+          type: string
+          description: The timestamp when the structure was last updated.
+          format: date-time
+          nullable: true
+        startOfOperationalActivity:
+          type: string
+          description: The activation date of the structure.
+          format: date-time
+          nullable: true
+        corporateGroupId:
+          type: integer
+          format: int64
+          nullable: true
+        warning:
+          type: boolean
+          description: Indicates whether there is a warning associated with the structure.
+          nullable: true
+        page:
+          type: integer
+          description: The page number for pagination.
+          format: int32
+          nullable: true
+        pageSize:
+          type: integer
+          description: The number of items per page.
+          format: int32
+          nullable: true
+        orderBy:
+          $ref: '#/components/schemas/OrderBy'
+        isDepot:
+          type: boolean
+          description: List of specific fields to return.
+          nullable: true
+        fieldsToReturn:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructureField'
+          nullable: true
+      additionalProperties: false
+      description: 'Request model for searching structures, with sorting and different filters and selecting specific fields to be returned.'
+    GetStructuresRequestPayloadExportCsv:
+      required:
+        - fieldsToReturn
+      type: object
+      properties:
+        buildingType:
+          type: integer
+          description: The type of the building.
+          format: int64
+          nullable: true
+        buildingAcronym:
+          type: string
+          description: The acronym of the building.
+          nullable: true
+        buildingName:
+          type: string
+          description: The name of the building.
+          nullable: true
+        name:
+          type: integer
+          description: The name of the structure.
+          format: int64
+          nullable: true
+        companyName:
+          type: string
+          description: The name of the Administrative related.
+          nullable: true
+        province:
+          type: integer
+          description: The province where the structure is located.
+          format: int64
+          nullable: true
+        region:
+          type: integer
+          description: The region where the structure is located.
+          format: int64
+          nullable: true
+        area:
+          type: integer
+          description: The area where the structure is located.
+          format: int64
+          nullable: true
+        status:
+          type: array
+          items:
+            type: string
+          description: The status of the structure.
+          nullable: true
+        createdAt:
+          type: string
+          description: The timestamp when the structure was created.
+          format: date-time
+          nullable: true
+        updatedAt:
+          type: string
+          description: The timestamp when the structure was last updated.
+          format: date-time
+          nullable: true
+        startOfOperationalActivity:
+          type: string
+          description: The activation date of the structure.
+          format: date-time
+          nullable: true
+        warning:
+          type: boolean
+          description: Indicates whether there is a warning associated with the structure.
+          nullable: true
+        page:
+          type: integer
+          description: The page number for pagination.
+          format: int32
+          nullable: true
+        pageSize:
+          type: integer
+          description: The number of items per page.
+          format: int32
+          nullable: true
+        orderBy:
+          $ref: '#/components/schemas/OrderBy'
+        fieldsToReturn:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportField'
+      additionalProperties: false
+      description: Request model for exporting structures to CSV
+    GetStructuresResponse:
+      required:
+        - structures
+        - totalItems
+        - totalPages
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          description: Current page number.
+          format: int32
+        pageSize:
+          type: integer
+          description: Number of items per page.
+          format: int32
+        totalItems:
+          type: integer
+          description: Total number of items found.
+          format: int32
+        totalPages:
+          type: integer
+          description: Total number of pages available.
+          format: int32
+        structures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructureResponse'
+          description: List of retrieved structures.
+      additionalProperties: false
+      description: Response model for structures search.
+    LookupModel:
+      required:
+        - groupName
+        - value
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Lookup model Id
+          format: int64
+        groupName:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: Lookup groupname
+        value:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: Lookup value
+      additionalProperties: false
+      description: Represents a lookup entity
+    OptionModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the option.
+          format: int64
+        value:
+          type: string
+          description: Value of the option.
+          nullable: true
+      additionalProperties: false
+      description: Represents a possible value for a specific structure combo field.
+    OrderBy:
+      required:
+        - direction
+        - field
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/StructureField'
+        direction:
+          minLength: 1
+          type: string
+          description: The sorting direction (ASC/DESC).
+      additionalProperties: false
+      description: OrderBy configuration for retrieving search records sorted.
+    ProvinceModel:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Province unique id
+          format: int64
+        name:
+          maxLength: 30
+          minLength: 1
+          type: string
+          description: Province Name
+        code:
+          maxLength: 4
+          type: string
+          description: Province Code
+          nullable: true
+        region:
+          maxLength: 20
+          type: string
+          description: Province region
+          nullable: true
+        idgls:
+          type: integer
+          description: Province idgls (incremental integer)
+          format: int32
+        canceled:
+          maxLength: 5
+          type: string
+          description: Canceled
+          nullable: true
+        idSupplier:
+          maxLength: 5
+          type: string
+          description: Idsupplier
+          nullable: true
+        lastUpdated:
+          type: string
+          description: Last Update Date
+          format: date-time
+      additionalProperties: false
+      description: Represents a province that can be used in searching structures.
+    RegionModel:
+      required:
+        - code
+        - description
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        code:
+          maxLength: 3
+          minLength: 1
+          type: string
+          description: Region code
+        description:
+          maxLength: 25
+          minLength: 1
+          type: string
+          description: Region Description
+      additionalProperties: false
+      description: Represents a region that can be used in searching structures.
+    StructureCreateModel:
+      required:
+        - buildingAcronym
+        - buildingType
+      type: object
+      properties:
+        buildingType:
+          type: integer
+          description: The type of the building (must reference a valid Template ID).
+          format: int64
+        buildingAcronym:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The acronym for the building
+      additionalProperties: false
+      description: Represents the request model for creating a new structure.
+    StructureDetailResponse:
+      required:
+        - buildingAcronym
+        - buildingAcronymMaxLength
+        - buildingAcronymMinLength
+        - buildingType
+        - createdAt
+        - createdBy
+        - fields
+        - icon
+        - id
+        - status
+        - templateId
+        - updatedAt
+        - updatedBy
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the structure.
+          format: int64
+        icon:
+          minLength: 1
+          type: string
+          description: Icon associated with the structure.
+        templateId:
+          type: integer
+          description: Identifier of the template associated with the structure.
+          format: int64
+        buildingAcronym:
+          minLength: 1
+          type: string
+          description: Acronym representing the building.
+        buildingType:
+          minLength: 1
+          type: string
+          description: Type of the building.
+        buildingAcronymMinLength:
+          type: integer
+          description: Minimum length allowed for the building acronym.
+          format: int32
+        buildingAcronymMaxLength:
+          type: integer
+          description: Maximum length allowed for the building acronym.
+          format: int32
+        status:
+          minLength: 1
+          type: string
+          description: Status of the structure.
+        createdBy:
+          minLength: 1
+          type: string
+          description: User who created the structure.
+        createdAt:
+          type: string
+          description: Timestamp of when the structure was created.
+          format: date-time
+        updatedBy:
+          minLength: 1
+          type: string
+          description: User who last updated the structure.
+        updatedAt:
+          type: string
+          description: Timestamp of the last update (nullable).
+          format: date-time
+        warning:
+          type: boolean
+          description: Indicates whether there is a warning associated with the structure.
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldDetailResponse'
+          description: List of fields providing detailed information about the structure.
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentResponse'
+          description: List of attachments associated with the structure.
+          nullable: true
+      additionalProperties: false
+      description: Represents the detail of a specific structure.
+    StructureField:
+      enum:
+        - Status
+        - CreatedBy
+        - CreatedAt
+        - UpdatedAt
+        - UpdatedBy
+        - Warning
+        - BuildingType
+        - BuildingAcronym
+        - BuildingName
+        - Name
+        - Island
+        - DepotReference
+        - DepotOnLabel
+        - Address
+        - PostalCode
+        - City
+        - Province
+        - Region
+        - Area
+        - WebsiteDescription
+        - DepotType
+        - Latitude
+        - Longitude
+        - BelongingRegionFranchisee
+        - CustomerPhone
+        - BuildingPhone
+        - Fax
+        - EmailCustomerCare
+        - BuildingEmail
+        - RegionManager
+        - DepotManager
+        - OperationalReference
+        - QualityReference
+        - EnvironmentReference
+        - SafetyReference
+        - FifoAdvisor
+        - Administration
+        - Claims
+        - Sales
+        - HdlProvider
+        - DistributionProvider
+        - StartOfOperationalActivity
+        - EndOfOperationalActivity
+        - DepotCancellation
+        - OnSiteVisibility
+        - DepotPickupShipments
+        - OpeningHoursPublicDepotPickup
+        - OperationalActivityStartEndTime
+        - DeliveryTimes
+        - Arrivals
+        - Departures
+        - AwaitingDelivery
+        - CodCashService
+        - WebLabeling
+        - IntranetCode
+        - CsmAdvanceHours
+        - DataTransferDwh
+        - GroupIntranetCode
+        - MgzSqm
+        - OfficesSqm
+        - NumberTypeOfFlaps
+        - TypeOfAutomationInstalled
+        - OtherEquipment
+        - YardDimensions
+        - EyeKnow
+        - WeightEyeKnow
+        - IncorrectSignatures
+        - WeightIncorrectSignatures
+        - CorporateImageControls
+        - CorporateImageWeightControls
+        - CorporateImageResults
+        - CorporateImageWeightResults
+        - Delivery
+        - WeightDeliveryTimes
+        - NetDeliveryTimes
+        - NetDeliveryTimesWeight
+        - PickUp
+        - WeightPickUp
+        - NetPickUp
+        - NetPickUpWeight
+        - OverallEvaluation
+        - ArrivalsPercentageEnt
+        - PercentageAss
+        - PercentageEntPlus
+        - PercentageAssPlus
+        - DeparturesPercentageUsc
+        - PercentageUscPlus
+        - LocationExcludedFromKpiCalculation
+      type: string
+      description: 'Enum of the possible fields that the user could select when search structures<ul><li><b>Status</b>: Stato della struttura, (DRAFT|COMPLETED|DISABLED|ACTIVE)</li><li><b>CreatedBy</b>: Creato da</li><li><b>CreatedAt</b>: Data di creazione</li><li><b>UpdatedAt</b>: Data di aggiornamento</li><li><b>UpdatedBy</b>: Aggiornato da</li><li><b>Warning</b>: Avviso</li><li><b>BuildingType</b>: Tipo di struttura</li><li><b>BuildingAcronym</b>: Acronimo struttura</li><li><b>BuildingName</b>: Nome struttura</li><li><b>Name</b>: Nome ragione sociale company collegata</li><li><b>Island</b>: Isola</li><li><b>DepotReference</b>: Sede di riferimento</li><li><b>DepotOnLabel</b>: Sede per segnacollo</li><li><b>Address</b>: Indirizzo</li><li><b>PostalCode</b>: CAP</li><li><b>City</b>: CittÃ </li><li><b>Province</b>: Provincia</li><li><b>Region</b>: Regione</li><li><b>Area</b>: Area</li><li><b>WebsiteDescription</b>: Descrizione sito web</li><li><b>DepotType</b>: Tipo Sede</li><li><b>Latitude</b>: Latitudine</li><li><b>Longitude</b>: Longitudine</li><li><b>BelongingRegionFranchisee</b>: Franchising regione di appartenenza</li><li><b>CustomerPhone</b>: Telefono customer</li><li><b>BuildingPhone</b>: Telefono struttura</li><li><b>Fax</b>: Fax</li><li><b>EmailCustomerCare</b>: Email assistenza clienti</li><li><b>BuildingEmail</b>: Email struttura</li><li><b>RegionManager</b>: Rif.Titolare di Sede /Region Manager</li><li><b>DepotManager</b>: Rif. Depot Manager/Responsabile di sede</li><li><b>OperationalReference</b>: Referente operativo</li><li><b>QualityReference</b>: Referente qualitÃ </li><li><b>EnvironmentReference</b>: Referente ambiente</li><li><b>SafetyReference</b>: Referente sicurezza</li><li><b>FifoAdvisor</b>: Consulente FIFO</li><li><b>Administration</b>: Amministrazione</li><li><b>Claims</b>: Reclami</li><li><b>Sales</b>: Vendite</li><li><b>HdlProvider</b>: Fornitore HDL</li><li><b>DistributionProvider</b>: Fornitore distribuzione</li><li><b>StartOfOperationalActivity</b>: Inizio attivitÃ  operativa</li><li><b>EndOfOperationalActivity</b>: Fine attivitÃ  operativa</li><li><b>DepotCancellation</b>: Annullamento Sede</li><li><b>OnSiteVisibility</b>: VisibilitÃ  sul sito</li><li><b>DepotPickupShipments</b>: Fermo deposito</li><li><b>OpeningHoursPublicDepotPickup</b>: Orari apertura pubblico e fermo deposito</li><li><b>OperationalActivityStartEndTime</b>: Orari inizio/fine attivitÃ  operativa</li><li><b>DeliveryTimes</b>: Tempi di resa</li><li><b>Arrivals</b>: Arrivi</li><li><b>Departures</b>: Partenze</li><li><b>AwaitingDelivery</b>: giacenze</li><li><b>CodCashService</b>: C/assegni</li><li><b>WebLabeling</b>: Web Labeling</li><li><b>IntranetCode</b>: Codice intranet</li><li><b>CsmAdvanceHours</b>: Ore anticipo CSM</li><li><b>DataTransferDwh</b>: Trasferimento dati DWH</li><li><b>GroupIntranetCode</b>: Codice intranet gruppo</li><li><b>MgzSqm</b>: MQ magazzino</li><li><b>OfficesSqm</b>: MQ uffici</li><li><b>NumberTypeOfFlaps</b>: Numero e tipologia Ribalte</li><li><b>TypeOfAutomationInstalled</b>: Tipo di automazione installata</li><li><b>OtherEquipment</b>: Altre attrezzature</li><li><b>YardDimensions</b>: Dimensioni piazzale</li><li><b>EyeKnow</b>: EyeKnow</li><li><b>WeightEyeKnow</b>: Peso Eye Know</li><li><b>IncorrectSignatures</b>: Firme errate</li><li><b>WeightIncorrectSignatures</b>: Peso firme errate</li><li><b>CorporateImageControls</b>: Immagine Coordinata - Controlli</li><li><b>CorporateImageWeightControls</b>: Peso Immagine Coordinata - Controlli</li><li><b>CorporateImageResults</b>: Immagine Coordinata - Esiti</li><li><b>CorporateImageWeightResults</b>: Peso Immagine Coordinata - Esiti</li><li><b>Delivery</b>: Resa</li><li><b>WeightDeliveryTimes</b>: Peso Resa</li><li><b>NetDeliveryTimes</b>: Resa Netta</li><li><b>NetDeliveryTimesWeight</b>: Peso resa netta</li><li><b>PickUp</b>: Ritiri</li><li><b>WeightPickUp</b>: Peso ritiri</li><li><b>NetPickUp</b>: Ritiri netti</li><li><b>NetPickUpWeight</b>: Peso ritiri netti</li><li><b>OverallEvaluation</b>: Valutazione complessiva</li><li><b>ArrivalsPercentageEnt</b>: Arrivi: % letture in entrata</li><li><b>PercentageAss</b>: Arrivi: % letture in assegnazione</li><li><b>PercentageEntPlus</b>: Arrivi: % letture in entrata plus</li><li><b>PercentageAssPlus</b>: Arrivi: % letture in assegnazione plus</li><li><b>DeparturesPercentageUsc</b>: Partenze: % letture in uscita</li><li><b>PercentageUscPlus</b>: Partenze: % leture in uscita plus</li><li><b>LocationExcludedFromKpiCalculation</b>: Sede esclusa dal calcolo KPI</li></ul>'
+    StructureFieldUpdateModel:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the field to be updated.
+          format: int64
+        value:
+          description: New value for the field.
+          nullable: true
+      additionalProperties: false
+      description: Model for updating the value of a specific structure field.
+    StructureModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the structure.
+          format: int64
+        buildingType:
+          type: integer
+          description: The type of the building.
+          format: int32
+        buildingAcronym:
+          type: string
+          description: The acronym of the building.
+          nullable: true
+        buildingName:
+          type: string
+          description: The name of the building.
+          nullable: true
+        status:
+          type: string
+          description: 'The status of the structure (e.g., DRAFT).'
+          nullable: true
+        createdBy:
+          type: string
+          description: User who created the structure.
+          nullable: true
+        createdAt:
+          type: string
+          description: The timestamp when the structure was created.
+          format: date-time
+        updatedBy:
+          type: string
+          description: The user who last updated the structure.
+          nullable: true
+        updatedAt:
+          type: string
+          description: The timestamp when the structure was last updated.
+          format: date-time
+      additionalProperties: false
+      description: Represents a specific structure without attachments and detail fields.
+    StructureResponse:
+      required:
+        - fields
+        - icon
+        - id
+        - status
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the structure.
+          format: int64
+        status:
+          minLength: 1
+          type: string
+          description: The status of the structure.
+        icon:
+          minLength: 1
+          type: string
+          description: Icon representing the structure.
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldResponse'
+          description: List of fields associated with the structure.
+      additionalProperties: false
+      description: Response model of the single structure returned.
+    StructureUpdateModel:
+      required:
+        - fields
+        - status
+      type: object
+      properties:
+        status:
+          minLength: 1
+          pattern: ^(DRAFT|COMPLETED|DISABLED|ACTIVE)$
+          type: string
+          description: 'The status of the structure, must be either DRAFT, ACTIVE, DISABLED or COMPLETED.'
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructureFieldUpdateModel'
+          description: List of fields to be updated within the structure.
+      additionalProperties: false
+      description: Represents the request model for updating an existing structure.
+    TemplateCreateModel:
+      required:
+        - buildingAcronymMaxLength
+        - buildingAcronymMinLength
+        - fields
+        - icon
+        - templateName
+      type: object
+      properties:
+        templateName:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: Name of the template
+        icon:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: Icon of the template
+        buildingAcronymMinLength:
+          maximum: 50.0
+          minimum: 1.0
+          type: integer
+          description: Min length building Acronym
+          format: int32
+        buildingAcronymMaxLength:
+          maximum: 50.0
+          minimum: 1.0
+          type: integer
+          description: Max length building Acronym
+          format: int32
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateFieldCreateModel'
+          description: "1\r\n            List of template fields associated to the template"
+      additionalProperties: false
+      description: Represent the request model for creating a new template.
+    TemplateDetailsModel:
+      required:
+        - buildingAcronymMaxLength
+        - buildingAcronymMinLength
+        - fields
+        - icon
+        - id
+        - templateName
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the template.
+          format: int64
+        templateName:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: The name of the template.
+        icon:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The icon of the template.
+        buildingAcronymMinLength:
+          type: integer
+          description: The minimum length for the structure code.
+          format: int32
+        buildingAcronymMaxLength:
+          type: integer
+          description: The maximum length for the structure code.
+          format: int32
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateFieldModel'
+          description: List of fields associated with the template.
+      additionalProperties: false
+      description: Represents the details of a structure template.
+    TemplateFieldCreateModel:
+      required:
+        - fieldId
+        - isRequired
+        - isVisible
+      type: object
+      properties:
+        fieldId:
+          type: integer
+          description: Unique Identifier for the field
+          format: int64
+        isVisible:
+          type: boolean
+          description: Define if the field is visible or not
+        isRequired:
+          type: boolean
+          description: Define if the field is required or not
+      additionalProperties: false
+      description: Represent the request model for template fields creation.
+    TemplateFieldModel:
+      required:
+        - fieldName
+        - id
+        - section
+        - subSection
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the field.
+          format: int64
+        fieldName:
+          minLength: 1
+          type: string
+          description: The name of the field.
+        section:
+          minLength: 1
+          type: string
+          description: The section of the field
+        subSection:
+          minLength: 1
+          type: string
+          description: The subsection of the field
+        isVisible:
+          type: boolean
+          description: Indicates whether the field is included in the template.
+        isRequired:
+          type: boolean
+          description: Indicates whether the field is mandatory.
+        mandatory:
+          type: boolean
+          description: The subsection of the field
+      additionalProperties: false
+      description: Represents a field within a structure template.
+    TemplateFieldUpdateModel:
+      required:
+        - fieldId
+      type: object
+      properties:
+        fieldId:
+          type: integer
+          description: The unique ID of the field.
+          format: int64
+        isVisible:
+          type: boolean
+          description: Indicates whether the field should be visible in the template.
+        isRequired:
+          type: boolean
+          description: Indicates whether the field is required in the template.
+      additionalProperties: false
+      description: Represent the request model for updating a template field.
+    TemplateModel:
+      required:
+        - buildingAcronymMaxLength
+        - buildingAcronymMinLength
+        - icon
+        - id
+        - templateName
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique Identifier for the template
+          format: int64
+        templateName:
+          minLength: 1
+          type: string
+          description: Name of the template
+        icon:
+          minLength: 1
+          type: string
+          description: Icon of the template
+        createdAt:
+          type: string
+          description: Creation date of the template
+          format: date-time
+        updatedAt:
+          type: string
+          description: Update date of the template
+          format: date-time
+        createdBy:
+          type: string
+          description: User who created the template.
+          nullable: true
+        updatedBy:
+          type: string
+          description: The user who last updated the template.
+          nullable: true
+        buildingAcronymMinLength:
+          type: integer
+          description: Minimum length for the strcture code
+          format: int32
+        buildingAcronymMaxLength:
+          type: integer
+          description: Maximum length for the strcture code
+          format: int32
+      additionalProperties: false
+      description: Represents a record of GLS.EVA.Cloud.Core.Network.Abstractions.Models.TemplateModel that is used to interact with GLS.EVA.Cloud.Core.Network.Abstractions.ITemplateService
+    TemplateUpdateModel:
+      required:
+        - buildingAcronymMaxLength
+        - buildingAcronymMinLength
+        - fields
+        - icon
+        - id
+        - templateName
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique ID of the template to update.
+          format: int64
+        templateName:
+          minLength: 1
+          type: string
+          description: The Icon of the template
+        icon:
+          minLength: 1
+          type: string
+          description: The Icon of the template
+        buildingAcronymMinLength:
+          type: integer
+          description: Minimum length for the strcture code
+          format: int32
+        buildingAcronymMaxLength:
+          type: integer
+          description: Maximum length for the strcture code
+          format: int32
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateFieldUpdateModel'
+          description: List of template fields associated with the template.
+      additionalProperties: false
+      description: Represent the request model for updating a template.
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
+tags:
+  - name: Attachment
+    description: API controller for managing attachments.
+  - name: Export
+    description: API controller for managing csv export.
+  - name: Structure
+    description: API controller for structures.
+  - name: Template
+    description: API controller for managing templates and fields with CRUD operations.
+  - name: ReferenceData
+    description: API controller for managing secondary tables and dropdown values.

@@ -1,0 +1,105 @@
+<div class="row">
+  <!-- Column with title -->
+  <div class="col-md-6">
+    <h2 class="fw-bold">{{ 'administrative.subjectEdit.subjectContactInformation.title' | translate }}</h2>
+  </div>
+  @if (isWriting()) {
+    <!-- Column with form -->
+    <div class="col-md-6">
+      <form [formGroup]="formContactDetail()">
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="''"
+            [formGroup]="formContactDetail()"
+            [controlName]="'email'"
+            [label]="'administrative.subjectEdit.subjectContactInformation.labelEmail'"
+            [placeholder]="'administrative.subjectEdit.subjectContactInformation.placeholderEmail' | translate"
+            [type]="'email'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="''"
+            [formGroup]="formContactDetail()"
+            [controlName]="'telephone'"
+            [label]="'administrative.subjectEdit.subjectContactInformation.labelPhone'"
+            [placeholder]="'administrative.subjectEdit.subjectContactInformation.placeholderPhone' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="''"
+            [formGroup]="formContactDetail()"
+            [controlName]="'fax'"
+            [label]="'administrative.subjectEdit.subjectContactInformation.labelFax'"
+            [placeholder]="'administrative.subjectEdit.subjectContactInformation.placeholderFax' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="''"
+            [formGroup]="formContactDetail()"
+            [controlName]="'mobilePhone'"
+            [label]="'administrative.subjectEdit.subjectContactInformation.labelCellPhone'"
+            [placeholder]="'administrative.subjectEdit.subjectContactInformation.placeholderCellPhone' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="''"
+            [formGroup]="formContactDetail()"
+            [controlName]="'contact'"
+            [label]="'administrative.subjectEdit.subjectContactInformation.labelContact'"
+            [placeholder]="'administrative.subjectEdit.subjectContactInformation.placeholderContact' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+      </form>
+    </div>
+  } @else {
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.subjectEdit.subjectContactInformation.labelEmail' | translate }}</div>
+        <div class="col-6 text-break">{{ formContactDetail().get('email')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.subjectEdit.subjectContactInformation.labelPhone' | translate }}</div>
+        <div class="col-6 text-break">{{ formContactDetail().get('telephone')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.subjectEdit.subjectContactInformation.labelFax' | translate }}</div>
+        <div class="col-6 text-break">{{ formContactDetail().get('fax')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.subjectEdit.subjectContactInformation.labelCellPhone' | translate }}</div>
+        <div class="col-6 text-break">{{ formContactDetail().get('mobilePhone')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.subjectEdit.subjectContactInformation.labelContact' | translate }}</div>
+        <div class="col-6 text-break">{{ formContactDetail().get('contact')?.value || '--' }}</div>
+      </div>
+    </div>
+  }
+</div>

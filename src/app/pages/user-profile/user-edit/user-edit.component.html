@@ -1,0 +1,242 @@
+<div class="container-box user-mngment-edit-container">
+  <section aria-label="User Edit" class="d-flex justify-content-between w-100 flex-wrap">
+    @if (userEditResponse) {
+      <div class="col-12 col-md-6">
+        <div>
+          <h1 class="w-100 container-header">
+            {{ userEditResponse.name + ' ' + userEditResponse.surname }}
+          </h1>
+        </div>
+        <ng-container id="budges">
+          <div class="row mt-3">
+            <gls-title-budge
+              class="col-auto notranslate"
+              [label]="'userProfile.userDetail.profile' | translate"
+              [value]="getProfileValue(userEditResponse)">
+            </gls-title-budge>
+            <gls-title-budge
+              class="col-auto notranslate"
+              [label]="'userProfile.userDetail.state' | translate"
+              [value]="'userProfile.userList.state.' + (userEditResponse ? userEditResponse.status?.toLowerCase() : 'state') | translate">
+              >
+            </gls-title-budge>
+            <gls-title-budge
+              class="col-auto"
+              [label]="'userProfile.userDetail.lastModified' | translate"
+              [value]="userEditResponse.updatedAt | date: 'dd/MM/yyyy'">
+              <i class="bi bi-calendar3 me-2" before-value></i>
+              <i class="bi bi-clock ms-2" after-value></i>
+              <span class="ms-1" after-value>{{ userEditResponse.updatedAt | date: 'HH:mm' }}</span>
+            </gls-title-budge>
+          </div>
+        </ng-container>
+      </div>
+    }
+    <div [ngClass]="{ 'w-100 pt-3': isSmallMobile() }" class="d-flex flex-column align-items-start">
+      @if (userEditResponse?.status === 'ACTIVE') {
+        <button
+          (click)="openDisableUserModal()"
+          [ngClass]="{ 'w-100': isSmallMobile() }"
+          [attr.aria-label]="'generic.disableUser' | translate"
+          class="btn btn-outline-primary"
+          type="button">
+          <em class="bi bi-power"></em>
+          {{ 'generic.disableUser' | translate }}
+        </button>
+      }
+    </div>
+  </section>
+  <hr />
+  <section aria-label="General Information">
+    <div class="row pb-3">
+      <div [ngClass]="{ 'w-100': isSmallMobile() }" class="col-md-6 pb-3">
+        <h2 class="fw-bold">{{ 'userProfile.userDetail.section.generalInformation' | translate }}</h2>
+      </div>
+      <div [ngClass]="{ 'w-100': isSmallMobile() }" class="col-md-6">
+        <div class="row">
+          <div class="col-6 label">
+            <strong>{{ 'userProfile.userDetail.labels.name' | translate }}</strong>
+          </div>
+          <div class="col-6 value">
+            <p class="info-value view-company-value notranslate">
+              {{ userEditResponse?.name || '--' }}
+            </p>
+          </div>
+          <div class="col-6 label">
+            <strong>{{ 'userProfile.userDetail.labels.surname' | translate }}</strong>
+          </div>
+          <div class="col-6 value">
+            <p class="info-value view-company-value notranslate">
+              {{ userEditResponse?.surname || '--' }}
+            </p>
+          </div>
+          <div class="col-6 label">
+            <strong>{{ 'userProfile.userDetail.labels.corporateGroup' | translate }}</strong>
+          </div>
+          <div class="col-6 value">
+            <p class="info-value view-company-value notranslate">
+              {{ (userEditResponse?.corporateGroup)!.corporateName || '--' }}
+            </p>
+          </div>
+          <div class="col-6 label">
+            <strong>{{ 'userProfile.userDetail.labels.email' | translate }}</strong>
+          </div>
+          <div class="col-6 value">
+            <p class="info-value view-company-value notranslate">
+              {{ userEditResponse?.email || '--' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <hr />
+  <section aria-label="Society and Structures">
+    <div class="row pb-3">
+      <div [ngClass]="{ 'w-100': isSmallMobile() }" class="col-md-6 pb-3">
+        <h2 class="fw-bold">{{ 'userProfile.userDetail.section.societyAndStructures' | translate }}</h2>
+      </div>
+      <div [ngClass]="{ 'w-100': isSmallMobile() }" class="col-md-6">
+        <div #cardContainer></div>
+        <button (click)="addCard()" [ngClass]="{ 'w-100': isSmallMobile() }" aria-pressed="true"
+                class="me-2 btn my-3 btn-outline-secondary card-width" type="button">
+          <i class="bi bi-plus"></i>
+          {{ 'userProfile.userEdit.addCompany' | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+  <hr />
+  <section aria-label="Roles">
+    <div class="row pb-3">
+      <div [ngClass]="{ 'w-100': isSmallMobile() }" class="col-md-6 pb-3">
+        <h2 class="fw-bold">{{ 'userProfile.userDetail.section.role' | translate }}</h2>
+      </div>
+      <div [ngClass]="{ 'w-100': isSmallMobile() }" class="col-md-6">
+        <div class="d-block">
+          <div class="label mb-1">{{ 'userProfile.userEdit.listOfSelectedRoles' | translate }}</div>
+          <div class="d-flex container-fluid p-0">
+            <div class="border rounded-2 border-1 list-border-color w-100">
+              <ul class="list-group list-group-flush rounded-2">
+                @for (role of rolePermissionsArray; track role?.id) {
+                  <li class="list-group-item d-flex justify-content-between align-items-center notranslate">
+                    {{ role?.name }}
+                    <app-app-special-badge [showBadge]="checkIsSpecial(role)"></app-app-special-badge>
+                  </li>
+                } @empty {
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ 'userProfile.userDetail.noRoles' | translate }}
+                  </li>
+                }
+              </ul>
+            </div>
+            <gls-input-status-section
+              [controlName]="'roles'"
+              [formGroup]="roleForm"
+              [showError]="roleForm.get('roles')?.invalid && (roleForm.get('roles')?.dirty || roleForm.get('roles')?.touched)"
+              class="align-content-center ">
+            </gls-input-status-section>
+          </div>
+        </div>
+        <button (click)="openRoleModal()" (keyup.enter)="openRoleModal()" aria-pressed="true"
+                class="btn my-3 btn-secondary" type="button">
+          {{
+            rolePermissionsArray.length === 0
+              ? ('userProfile.userEdit.youChoose' | translate)
+              : ('userProfile.userEdit.editList' | translate)
+          }}
+        </button>
+      </div>
+    </div>
+  </section>
+  <app-form-footer
+    (exitEvent)="goToExit()"
+    (nextBtnEvent)="UserSave()"
+    [disableNextBtn]="!areAllDropdownsSelected() || rolePermissionsArray.length === 0"
+    [labelNextBtn]="'anagrafica.structure.footerButtons.saveModifications'"
+    [showDraftExit]="false" />
+</div>
+<ng-template #cardTemplate>
+  <div *ngFor="let card of cardFormArray.controls; let i = index" [formGroup]="getCardFormGroup(i)">
+    <div [ngClass]="{ 'w-100': isSmallMobile() }" class="card mb-1">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <p>{{ 'userProfile.userDetail.labels.society' | translate }} *</p>
+          <button (click)="removeCard(i)" aria-label="Remove" aria-pressed="true" class="btn my-3 btn-link-secondary ms-auto"
+                  type="button">
+            <!-- {{ 'userProfile.userEdit.removeCompany' | translate }} -->
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+        <div class="d-flex align-items-center">
+          <gls-input-dropdown
+            (change)="onCardChange(i, 'societyDropdown', $event)"
+            [controlName]="'societyDropdown'"
+            [formGroup]="getCardFormGroup(i)"
+            [keyDecsName]="'name'"
+            [keyValue]="'id'"
+            [options]="societyDropdownArray"
+            class="flex-grow-1 notranslate"
+            placeholder="{{ 'userProfile.userEdit.selectCompanies' | translate }}">
+          </gls-input-dropdown>
+          <gls-input-status-section
+            [controlName]="'societyDropdown'"
+            [formGroup]="getCardFormGroup(i)"
+            [showError]="true"
+            class="align-content-center ">
+          </gls-input-status-section>
+        </div>
+        <p class="mt-3">{{ 'userProfile.userDetail.labels.structureEnablement' | translate }}</p>
+        <div class="d-flex flex-column">
+          <div class="form-check">
+            <gls-input-checkbox
+              (change)="onCardChange(i, 'automatic', 'automatic')"
+              [checked]="getCardFormGroup(i).get('automatic')?.value"
+              [class]="'form-check-input feature-radio'"
+              [controlName]="'automatic'"
+              [formGroup]="getCardFormGroup(i)"
+              [label]="'userProfile.userEdit.automatic'"
+              [type]="'radio'"
+              id="type_automatic_manual_{{ i }}">
+            </gls-input-checkbox>
+            <p>{{ 'userProfile.userEdit.allExistingFacilities' | translate }}</p>
+          </div>
+          <div class="form-check">
+            <gls-input-checkbox
+              (change)="onCardChange(i, 'manual', 'manual')"
+              [checked]="getCardFormGroup(i).get('manual')?.value"
+              [class]="'form-check-input feature-radio'"
+              [controlName]="'manual'"
+              [formGroup]="getCardFormGroup(i)"
+              [label]="'userProfile.userEdit.manual'"
+              [type]="'radio'"
+              id="type_automatic_manual_{{ i }}">
+            </gls-input-checkbox>
+            <p>{{ 'userProfile.userEdit.futureStructuresManually' | translate }}</p>
+          </div>
+        </div>
+        @if (cardStructureLists[i].length > 0 && getCardFormGroup(i).get('manual')?.value) {
+          <p class="mt-3">{{ 'userProfile.userEdit.listofSelectedStructures' | translate }}</p>
+          <div class="border rounded-2 border-1 list-border-color w-100">
+            <ul class="list-group list-group-flush rounded-2 structure-li-height" [id]="i">
+              @for (structure of cardStructureLists[i]; track structure?.id) {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span class="fw-bold me-auto"> {{ getStructureName(structure) }}</span>
+                  @if (getIcon(structure) && gettemplateName(structure)) {
+                    <gls-title-budge-template
+                      [src]="getIcon(structure)"
+                      [templateName]="gettemplateName(structure)"></gls-title-budge-template>
+                  }
+                </li>
+              }
+            </ul>
+          </div>
+        }
+        <button (click)="openStructureModal(i)" [disabled]="!getCardFormGroup(i).get('manual')?.value"
+                class="btn my-3 btn-secondary">
+          {{ 'userProfile.userEdit.selectStructures' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,43 @@
+@import '../../../../../assets/scss/variables';
+.table-border-color {
+  border-color: #{$border-color};
+}
+.profile-field-color {
+  background-color: #{$sky-blue};
+}
+.profile-user-color {
+  background-color: #{$bright-orange};
+}
+.profile-admin-color {
+  background-color: #{$gls-yellow};
+}
+.text-disabled {
+  color: #{$btn-text-disabled};
+}
+.user-list-table {
+  .table-card {
+    background-color: white;
+    box-shadow: 0 2px 3px #b7b7b7;
+    padding: 0.5rem;
+    max-width: calc(100vw - 2em);
+    border-collapse: collapse;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: random($limit: 1);
+    scrollbar-color: #061ab1 #ffffff;
+    -webkit-scrollbar-thumb: 1;
+  }
+}
+.capitalize-text {
+  text-transform: capitalize;
+}
+
+.filter-tablet-ratio .d-flex > gls-input-dropdown {
+  flex: 0 0 22.3333%;
+  max-width: 22.3333%;
+}
+.filter-tablet-ratio .d-flex > gls-input {
+  flex: 0 0 70.6667%;
+  max-width: 70.6667%;
+}

@@ -1,0 +1,49 @@
+<div [formGroup]="formGroup" class="w-100">
+  <label *ngIf="label" [for]="id" class="form-label gls-form-label"
+    >{{ label | translate }}{{ utility.requiredFieldControl(formGroup, controlName) }}:</label
+  >
+  <div class="input-group">
+    <select
+      (change)="onChange($event)"
+      [attr.aria-label]="label || placeholder || 'generic.select' | translate"
+      [formControlName]="controlName"
+      [id]="id"
+      [ngClass]="{ 'gls-form-input': true, error: invalid() && dirty() }"
+      [attr.aria-label]="label || id | translate"
+      [attr.aria-describedby]="label || id | translate"
+      class="form-select">
+      <option hidden selected value="">{{ placeholder || 'generic.select' | translate }}</option>
+      <ng-container *ngIf="options?.length === 0">
+        <option disabled>{{ 'generic.emptyDataMessage' | translate }}</option>
+      </ng-container>
+      <ng-container *ngIf="emptyOption">
+        <option [value]="emptyOptionValue">{{ emptyOption | translate }}</option>
+      </ng-container>
+      <ng-container *ngIf="options?.length !== 0">
+        <option *ngFor="let option of options" [value]="option[keyValue]">
+          {{ option[keyDecsName] | translate }}
+        </option>
+      </ng-container>
+      <ng-container *ngIf="customOptions?.length !== 0 && optionType === 'customOptionValue'">
+        <option *ngFor="let option of customOptions" [value]="option.id">
+          {{ option[keyDecsName] | translate }}
+        </option>
+      </ng-container>
+      <ng-container *ngIf="customOptions?.length !== 0 && multipleDecNameShow === 'multiple'">
+        <option *ngFor="let option of customOptions" [value]="option.id">
+          {{ option[keyCode] + ' - ' + option[keyDecsName] | translate }}
+        </option>
+      </ng-container>
+    </select>
+    @if (showStatus) {
+      <gls-input-status-section
+        class="align-content-center ms-2"
+        [formGroup]="formGroup"
+        [controlName]="controlName"
+        [showError]="showError"></gls-input-status-section>
+    }
+  </div>
+  <span *ngIf="invalid() && showError" [id]="id + '-error-label'" class="gls-form-error">{{
+    utility.getErrorMessage(fc.errors, errorMessage) | translate
+  }}</span>
+</div>

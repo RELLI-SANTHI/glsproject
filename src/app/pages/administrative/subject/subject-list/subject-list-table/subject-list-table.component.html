@@ -1,0 +1,107 @@
+<section class="w-100 mt-4">
+  @if (showRotateSubject()) {
+    <div class="my-4">
+      <app-info-mobile class="my-4" [label]="'generic.mobile.table-view'" />
+    </div>
+  }
+  <div #datatableWrapper class="table-card">
+    <ngx-datatable
+      #table
+      (sort)="sort.emit($event)"
+      [columnMode]="'force'"
+      [footerHeight]="false"
+      [headerHeight]="50"
+      [limit]="10"
+      [messages]="{ emptyMessage: 'administrative.subjectList.subjectListTableColum.emptyTableMessage' | translate }"
+      [rowHeight]="50"
+      [rows]="subjectList()"
+      [scrollbarH]="true"
+      class="material striped">
+      <!-- warning -->
+      <ngx-datatable-column
+        [name]="'administrative.subjectList.subjectListTableColum.warning' | translate"
+        [sortable]="true"
+        [width]="100"
+        prop="warningOrError">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <td>
+            <app-warning-status [row]="row" [label]="'administrative.tooltipStatus.warning.subject' | translate"></app-warning-status>
+          </td>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- state -->
+      <ngx-datatable-column
+        [name]="'administrative.subjectList.subjectListTableColum.state' | translate"
+        [sortable]="true"
+        [width]="120"
+        prop="status">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <em class="bi fs-5 pe-2" [class]="getStatusClass(row)" [ngClass]="'bi bi-record-circle'"></em>
+          <span>{{ getStatusLabel(row) | translate }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- company name -->
+      <ngx-datatable-column
+        [name]="'administrative.subjectList.subjectListTableColum.companyName' | translate"
+        [sortable]="true"
+        [width]="270"
+        prop="surnameNameCompanyName">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <button (click)="goToSubjectDetail(row.id)" class="btn btn-link">
+            {{ row.surnameNameCompanyName }}
+          </button>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <!-- partita iva -->
+      <ngx-datatable-column
+        [name]="'administrative.subjectList.subjectListTableColum.vatNumber' | translate"
+        [sortable]="true"
+        [width]="120"
+        prop="vatNumber">
+      </ngx-datatable-column>
+
+      <!-- fiscal code -->
+      <ngx-datatable-column
+        [name]="'administrative.subjectList.subjectListTableColum.fiscalCode' | translate"
+        [sortable]="true"
+        [width]="140"
+        prop="taxCode">
+      </ngx-datatable-column>
+
+      <!-- Nazione sede legale-->
+
+      <ngx-datatable-column
+        [name]="'administrative.subjectList.subjectListTableColum.countryRegisteredOffice' | translate"
+        [sortable]="true"
+        [width]="180"
+        prop="nation">
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+
+  @if (subjectList().length) {
+    <div class="d-flex justify-content-end align-items-center mt-3 mb-5 flex-wrap" style="width: 100%">
+      <b class="pb-3 pe-2 result">
+        {{
+          'structureList.table.results'
+            | translate
+              : {
+                  firstResult: getFirstResult(),
+                  lastResult: getLastResult(),
+                  listLength: totalItems()
+                }
+        }}
+      </b>
+      <gls-paginator
+        (pageChange)="pageChange.emit($event)"
+        [pageSize]="pageSize()"
+        [page]="currentPage()"
+        [totalItems]="totalItems()"
+        [totalPages]="totalPages()">
+      </gls-paginator>
+    </div>
+  }
+</section>

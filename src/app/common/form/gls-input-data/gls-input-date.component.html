@@ -1,0 +1,31 @@
+<div class="w-100" [formGroup]="formGroup">
+  <label *ngIf="label" [for]="id" class="form-label gls-form-label"
+    >{{ label | translate }}{{ utility.requiredFieldControl(formGroup, controlName) }}:</label
+  >
+  <div class="input-group">
+    <input
+      [id]="id"
+      [formControlName]="controlName"
+      [class]="class"
+      [ngClass]="{ 'gls-form-input': true, error: invalid() }"
+      [placeholder]="placeholder || 'generic.dataFormat' | translate"
+      name="dp"
+      ngbDatepicker
+      #d="ngbDatepicker"
+      [attr.aria-label]="label || id | translate"
+      [attr.aria-describedby]="label || id | translate" />
+    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button">
+      <span class="visually-hidden">{{ label || '' | translate }}_{{ 'datepicker.buttonOpen' }}</span>
+    </button>
+    @if (showStatus) {
+      <gls-input-status-section
+        class="align-content-center ms-2"
+        [formGroup]="formGroup"
+        [controlName]="controlName"
+        [showError]="showError"></gls-input-status-section>
+    }
+  </div>
+  <span [id]="id + '-error-label'" *ngIf="invalid()" class="gls-form-error">{{
+    utility.getErrorMessage(fc.errors, errorMessage) | translate
+  }}</span>
+</div>

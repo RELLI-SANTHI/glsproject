@@ -1,0 +1,97 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ 'administrative.historyModal.historyEdits' | translate }}</h5>
+</div>
+<div class="modal-body">
+  <div class="d-flex flex-column">
+    <!-- Search Section -->
+    <div [ngClass]="isSmallMobile() ? 'flex-column gap-2 w-100 mb-3' : 'input-group-prepend align-items-center gap-3'" class="d-flex">
+      <div class="form-group mb-3">
+        <gls-input-dropdown
+          [controlName]="'searchField'"
+          [formGroup]="historyFilterForm"
+          [id]="'typeId'"
+          [keyDecsName]="'value'"
+          [keyValue]="'id'"
+          [label]="'' | translate"
+          [options]="optionsHistory"
+          [placeholder]="'generic.select' | translate"
+          [showError]="false"
+          [showStatus]="false">
+        </gls-input-dropdown>
+      </div>
+      <div class="form-group mb-3">
+        <gls-input
+          [class]="'form-control'"
+          [controlName]="'searchTerm'"
+          [formGroup]="historyFilterForm"
+          [id]="'searchPayment'"
+          [label]="'' | translate"
+          [placeholder]="'generic.search' | translate"
+          [showError]="false"
+          [showStatus]="false"
+          [type]="'text'">
+        </gls-input>
+      </div>
+      <button (click)="searchHistory()" [disabled]="!enableSearch()" class="mb-3 btn btn-primary" type="button">
+        {{ 'generic.search' | translate }}
+      </button>
+    </div>
+
+    <div>
+      <div class="table-card">
+        <ngx-datatable
+          (sort)="sortCol($event)"
+          (treeAction)="onTreeAction($event)"
+          [columnMode]="'force'"
+          [externalSorting]="true"
+          [footerHeight]="false"
+          [headerHeight]="50"
+          [messages]="{ emptyMessage: 'administrative.historyModal.emptyTableMessage' | translate }"
+          [reorderable]="false"
+          [rowHeight]="50"
+          [rows]="historyLocalList()"
+          [scrollbarH]="true"
+          [treeFromRelation]="'parentId'"
+          [treeToRelation]="'id'"
+          class="material striped">
+          <ngx-datatable-column
+            [flexGrow]="3"
+            [isTreeColumn]="true"
+            [name]="'administrative.historyModal.dateValue' | translate"
+            prop="fieldName">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <!-- 
+              The main rows (those that can be expanded/collapsed) are in bold.
+              The child rows (with treeStatus equal to 'disabled') are NOT in bold.
+               -->
+              <span [style.font-weight]="row.treeStatus !== 'disabled' ? 'bold' : 'normal'">
+                <ng-container *ngIf="row.treeStatus === 'disabled'; else parentRow">
+                  {{ translateChildValue(value) | translate }}
+                </ng-container>
+
+                <ng-template #parentRow>
+                  {{ (row.prefixLabel ? row.prefixLabel : '') + value | translate }}
+                </ng-template>
+              </span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column [flexGrow]="1" [name]="'administrative.historyModal.editDate' | translate" prop="lastUpdate">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <span [style.font-weight]="row.treeStatus !== 'disabled' ? 'bold' : 'normal'">
+                {{ value }}
+              </span>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="closeModal()" (keyup.enter)="closeModal()" aria-label="Reload" class="btn btn-outline-primary" type="button">
+    {{ 'administrative.historyModal.close' | translate }}
+  </button>
+  <button (click)="exportHistory()" (keyup.enter)="exportHistory()" aria-pressed="true" class="me-2 btn btn-primary" type="button">
+    <em class="bi bi-download pe-2"></em>{{ 'administrative.historyModal.exportData' | translate }}
+  </button>
+</div>

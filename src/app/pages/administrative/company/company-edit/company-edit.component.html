@@ -1,0 +1,83 @@
+<div class="container-box mt-4">
+  @if (isWrite() && !idCompany) {
+    <app-content-header
+      [isSmallMobile]="isSmallMobile()"
+      [image]="''"
+      [subTitle]="'administrative.companyCreate.subtitle'"
+      [title]="'administrative.companyCreate.title'" />
+  }
+
+  @if (idCompany) {
+    <app-content-header [isSmallMobile]="isSmallMobile()" [image]="''" [subTitle]="''" [title]="adminDataResponse?.name ?? ''">
+      @if (!isWrite()) {
+        <ng-container rightContainer>
+          <button
+            *ngIf="hasAccess(PROFILE.any, FUNCTIONALITY.networkAdministrativeCompany, PERMISSION.write)"
+            (click)="manageCompany()"
+            [attr.aria-label]="''"
+            [ngClass]="{ 'w-100 my-1': isSmallMobile(), 'my-3': !isSmallMobile() }"
+            class="btn btn-primary"
+            type="button">
+            <em class="bi bi-pencil-square"></em>
+            {{ 'administrative.companyEdit.button' | translate }}
+          </button>
+        </ng-container>
+      }
+    </app-content-header>
+
+    <div class="d-flex flex-wrap mt-3">
+      <gls-title-budge
+        [label]="'administrative.companyEdit.corporateGroup' | translate"
+        [value]="adminDataResponse?.corporateGroupName ?? ''"
+        class="col-auto me-3 mb-3" />
+      <gls-title-budge
+        [label]="'administrative.companyEdit.state' | translate"
+        [value]="labelStatus | translate"
+        class="col-auto me-3 mb-3" />
+      <gls-title-budge
+        [label]="'administrative.companyEdit.lastModified' | translate"
+        value="{{ adminDataResponse?.lastUpdated | date: 'dd/MM/yyyy - HH:mm' }}"
+        class="col-auto me-3 mb-3" />
+      @if (!isWrite()) {
+        <app-badge-link (linkClick)="onClickGetHistoricalInfo()" [label]="'administrative.subjectEdit.historicalChanges'" [value]="''">
+          <img src="assets/img/icons/clock-history.svg" alt="Icona" class="me-2 ms-1 img-fluid icon-clock" />
+        </app-badge-link>
+      }
+    </div>
+  }
+
+  <hr />
+
+  <gls-messages />
+
+  @if (companySocietyForm) {
+    <app-company-edit-body
+      [isWrite]="isWrite()"
+      [id]="idCompany"
+      [formParent]="companySocietyForm"
+      [companyData]="adminDataResponse"
+      [nationList]="nationList()"
+      [nationDefault]="nationDefault()"
+      [isDraft]="isDraft" />
+  }
+
+  @if (isWrite()) {
+    <app-form-footer
+      (exitEvent)="goBack()"
+      [showDraftExit]="adminDataResponse?.status === 'DRAFT' || this.type === ADMINISTRATIVE_COMPANY_CONSTANTS.CREATE"
+      (saveDraftExitEvent)="saveDraftCompany()"
+      (nextBtnEvent)="confirmComapnyCreation()"
+      [disableDraftExit]="isDraftDisabled()"
+      [disableNextBtn]="!companySocietyForm.valid"
+      [labelNextBtn]="labelBtnNext()">
+      @if (idCompany) {
+        <ng-container leftContainer>
+          <button class="btn btn-outline-primary" (click)="deleteCompany(idCompany)" [attr.aria-label]="labelDelete | translate">
+            {{ labelDelete | translate }}
+            <em class="bi bi-trash"></em>
+          </button>
+        </ng-container>
+      }
+    </app-form-footer>
+  }
+</div>

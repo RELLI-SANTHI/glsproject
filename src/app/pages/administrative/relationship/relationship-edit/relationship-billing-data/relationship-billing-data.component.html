@@ -1,0 +1,232 @@
+@if (isWriting()) {
+  <div class="row mt-3">
+    <div class="col-md-4">
+      <h2 class="fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipBillingData.title' | translate }}</h2>
+    </div>
+
+    <div class="col-md-8">
+      <div class="form-group-mb-3">
+        <gls-input-date
+          [id]="'startOfAccountingActivity'"
+          [formGroup]="relationshipBillingDataForm()"
+          [controlName]="'startOfAccountingActivity'"
+          [label]="'administrative.relationshipEdit.relationshipBillingData.startOfAccountingActivity' | translate"
+          [type]="'date'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input-date>
+      </div>
+
+      <div class="form-group-mb-4">
+        <gls-input-date
+          [id]="'endOfAccountingActivity'"
+          [formGroup]="relationshipBillingDataForm()"
+          [controlName]="'endOfAccountingActivity'"
+          [label]="'administrative.relationshipEdit.relationshipBillingData.endOfAccountingActivity' | translate"
+          [type]="'date'"
+          [class]="'form-control'"
+          [errorMessage]="{
+            endBeforeStart: 'generic.error.endBeforeStart'
+          }"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input-date>
+      </div>
+
+      <div class="form-group mb-3 mt-4">
+        <p>
+          {{
+            'administrative.relationshipEdit.relationshipBillingData.paymentId' | translate
+          }}{{ utility.requiredFieldControl(relationshipBillingDataForm(), 'paymentId') }}
+        </p>
+        @if (selectedPayment) {
+          <p class="fw-bold">{{ selectedPayment.codPay + ' - ' + selectedPayment.description }}</p>
+        }
+        <div class="d-flex align-items-center">
+          <button (click)="choosePaymentCode()" class="btn btn-secondary" [disabled]="">
+            {{ getPaymentCodeBtnLabel() | translate }}
+          </button>
+
+          <gls-input-status-section
+            class="align-content-center ms-5"
+            [formGroup]="relationshipBillingDataForm()"
+            [controlName]="'paymentId'"
+            [showError]="true" />
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <p class="mb-1 form-label gls-form-label">
+          {{ 'administrative.relationshipEdit.relationshipBillingData.xmlInvoiceStamp' | translate }}
+        </p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'xmlInvoiceStampYes'"
+            [formGroup]="relationshipBillingDataForm()"
+            [controlName]="'xmlInvoiceStamp'"
+            [class]="'form-check-input feature-radio'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [type]="'radio'"
+            [checked]="relationshipBillingDataForm().get('xmlInvoiceStamp')?.value === true"
+            (valueChange)="relationshipBillingDataForm().get('xmlInvoiceStamp')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'xmlInvoiceStampNo'"
+            [formGroup]="relationshipBillingDataForm()"
+            [controlName]="'xmlInvoiceStamp'"
+            [class]="'form-check-input feature-radio'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [type]="'radio'"
+            [checked]="relationshipBillingDataForm().get('xmlInvoiceStamp')?.value === false"
+            (valueChange)="relationshipBillingDataForm().get('xmlInvoiceStamp')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <p class="mb-1 form-label gls-form-label">
+          {{ 'administrative.relationshipEdit.relationshipBillingData.invoiceInPDF' | translate }}
+        </p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'invoiceInPDFYes'"
+            [formGroup]="relationshipBillingDataForm()"
+            [controlName]="'invoiceInPDF'"
+            [class]="'form-check-input feature-radio'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [type]="'radio'"
+            [checked]="relationshipBillingDataForm().get('invoiceInPDF')?.value === true"
+            (valueChange)="relationshipBillingDataForm().get('invoiceInPDF')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'invoiceInPDFNo'"
+            [formGroup]="relationshipBillingDataForm()"
+            [controlName]="'invoiceInPDF'"
+            [class]="'form-check-input feature-radio'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [type]="'radio'"
+            [checked]="relationshipBillingDataForm().get('invoiceInPDF')?.value === false"
+            (valueChange)="relationshipBillingDataForm().get('invoiceInPDF')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <gls-input
+          [id]="'invoiceEmail'"
+          [formGroup]="relationshipBillingDataForm()"
+          [controlName]="'invoiceEmail'"
+          [label]="'administrative.relationshipEdit.relationshipBillingData.invoiceEmail' | translate"
+          [placeholder]="'administrative.relationshipEdit.relationshipBillingData.invoiceEmail' | translate"
+          [type]="'text'"
+          [class]="'form-control'"
+          [showError]="true"
+          [showStatus]="true">
+        </gls-input>
+      </div>
+
+      <div class="mb-2">
+        <p class="mb-1 form-label gls-form-label">
+          {{ 'administrative.relationshipEdit.relationshipBillingData.invoiceDelivery' | translate }}
+        </p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'invoiceDeliveryYes'"
+            [formGroup]="relationshipBillingDataForm()"
+            [controlName]="'invoiceDelivery'"
+            [label]="'administrative.generalData.radioValues.yes'"
+            [type]="'radio'"
+            [class]="'form-check-input feature-radio'"
+            [checked]="relationshipBillingDataForm().get('invoiceDelivery')?.value === true"
+            (valueChange)="relationshipBillingDataForm().get('invoiceDelivery')?.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'invoiceDeliveryNo'"
+            [formGroup]="relationshipBillingDataForm()"
+            [controlName]="'invoiceDelivery'"
+            [class]="'form-check-input feature-radio'"
+            [label]="'administrative.generalData.radioValues.no'"
+            [type]="'radio'"
+            [checked]="relationshipBillingDataForm().get('invoiceDelivery')?.value === false"
+            (valueChange)="relationshipBillingDataForm().get('invoiceDelivery')?.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="row mb-3 mt-3">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.relationshipEdit.relationshipBillingData.title' | translate }}</h2>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipBillingData.startOfAccountingActivity' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipBillingDataForm().get('startOfAccountingActivity')?.value | date: 'dd/MM/yyyy' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipBillingData.endOfAccountingActivity' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{ relationshipBillingDataForm().get('endOfAccountingActivity')?.value | date: 'dd/MM/yyyy' }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">{{ 'administrative.relationshipEdit.relationshipBillingData.paymentId' | translate }}</div>
+        <div class="col-6 text-break">{{ selectedPayment?.codPay + ' - ' + selectedPayment?.description }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipBillingData.xmlInvoiceStamp' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipBillingDataForm().get('xmlInvoiceStamp')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipBillingData.invoiceInPDF' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipBillingDataForm().get('invoiceInPDF')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipBillingData.invoiceEmail' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ relationshipBillingDataForm().get('invoiceEmail')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.relationshipEdit.relationshipBillingData.invoiceDelivery' | translate }}
+        </div>
+        <div class="col-6 text-break">
+          {{
+            ((relationshipBillingDataForm().get('invoiceDelivery')?.value
+              ? 'administrative.generalData.radioValues.yes'
+              : 'administrative.generalData.radioValues.no'
+            ) | translate) || '--'
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+}

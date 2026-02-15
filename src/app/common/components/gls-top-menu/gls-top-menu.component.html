@@ -1,0 +1,40 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white top-menu-container">
+  <div class="container-fluid">
+    <button
+      (click)="toggleNavIcon()"
+      *ngIf="isIconEnabled"
+      class="btn btn-icon-primary"
+      id="sidebarExpand"
+      aria-label="Toggle sidebar navigation">
+      <i class="bi {{ isSmallScreen ? 'bi-list' : 'bi-arrow-bar-right' }}"></i>
+    </button>
+    <div class="breadcrumb-container ps-2">
+      <ol class="breadcrumb">
+        <li *ngIf="isSmallScreen; else fullBreadcrumb" aria-current="page" class="breadcrumb-item active">
+          <span class="breadcrumb-link">.. </span>/
+          <span class="last-crumb notranslate">{{
+            breadcrumb[breadcrumb.length - 1]!.label + (isSmallScreen ? '-mobile' : '') | translate
+          }}</span>
+        </li>
+        <ng-template #fullBreadcrumb>
+          <li *ngFor="let crumb of breadcrumb; let last = last" [class.active]="last" aria-current="page" class="breadcrumb-item">
+            <button
+              *ngIf="!last; else lastCrumb"
+              aria-pressed="true"
+              (click)="navigateTo(crumb.url)"
+              class="btn mx-2 px-2 btn-link notranslate">
+              {{ crumb.label | translate }}
+            </button>
+            <ng-template #lastCrumb>
+              <span class="last-crumb notranslate">{{ crumb.label | translate }}</span>
+            </ng-template>
+          </li>
+        </ng-template>
+      </ol>
+    </div>
+    <div class="top-menu-right">
+      <app-change-lang />
+      <app-user-detail />
+    </div>
+  </div>
+</nav>

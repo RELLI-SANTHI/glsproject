@@ -1,0 +1,39 @@
+@import '../../../../../../assets/scss/variables';
+
+.warning-icon {
+  color: #ffc107;
+  font-size: 24px;
+}
+
+.warning-message-title {
+  color: #000;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.warning-message-body {
+  color: #000;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.warning-close-icon {
+  font-size: 15px;
+  color: #061ab1;
+}
+
+.search-result-number {
+  font-family: 'Newson GLS DTP', sans-serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.4;
+  letter-spacing: 0;
+  font-weight: 900;
+  color: $primary; // <-- ora funziona
+  margin-left: 10px;
+}
+
+.flex-start {
+  display: flex;
+  justify-content: flex-start;
+}

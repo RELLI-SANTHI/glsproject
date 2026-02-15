@@ -1,0 +1,13 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ 'modal.attention' | translate }}</h5>
+</div>
+<div class="modal-body">
+  <p class="card-text">
+    {{ getMessage() | translate }}
+  </p>
+</div>
+<div class="modal-footer">
+  <button (click)="reload()" (keyup.enter)="reload()" aria-label="Reload" class="btn btn-primary" type="button">
+    {{ 'modal.reload' | translate }}
+  </button>
+</div>

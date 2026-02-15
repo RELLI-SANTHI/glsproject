@@ -1,0 +1,23 @@
+.special-badge {
+  display: flex;
+  align-items: center;
+  width: 170px;
+  height: 24px;
+  gap: var(--spacing-xxxs); /* Assuming Spacing/XXXS is defined in your CSS variables */
+  padding-right: 10px;
+  padding-left: 10px;
+  border-radius: 5px;
+  border: 1px solid #8b8c8d; /* Add a color if needed */
+  font-weight: bold;
+}
+
+.special-badge i {
+  font-size: 16px; /* Adjust icon size if necessary */
+  color: #dc3545; /* Set the icon color to white for contrast */
+  align-items: center;
+}
+
+.special-badge span {
+  font-size: 12px; /* Adjust text size if necessary */
+  color: #dc3545; // Apply the color to the span element
+}

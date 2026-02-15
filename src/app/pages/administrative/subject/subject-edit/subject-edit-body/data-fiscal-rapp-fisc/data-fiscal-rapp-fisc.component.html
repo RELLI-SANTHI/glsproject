@@ -1,0 +1,216 @@
+@if (isWriting()) {
+  <div class="row">
+    <div class="col-md-4">
+      <h2 class="fw-bold">{{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.title' | translate }}</h2>
+    </div>
+    <!-- Column with form -->
+    <div class="col-md-8">
+      <div class="mb-2">
+        <p class="mb-1 form-label gls-form-label">{{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.subtitle' | translate }}</p>
+        <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox">
+          <gls-input-checkbox
+            [id]="'fiscalRappYes'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'selectRadioFiscalRapp'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelYes'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="!!dataFiscalRappFiscForm().get('selectRadioFiscalRapp')?.value"
+            (valueChange)="dataFiscalRappFiscForm().get('selectRadioFiscalRapp')!.setValue(true)">
+          </gls-input-checkbox>
+          <gls-input-checkbox
+            [id]="'fiscalRappNo'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'selectRadioFiscalRapp'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelNo'"
+            [class]="'form-check-input feature-radio'"
+            [type]="'radio'"
+            [checked]="!dataFiscalRappFiscForm().get('selectRadioFiscalRapp')?.value"
+            (valueChange)="dataFiscalRappFiscForm().get('selectRadioFiscalRapp')!.setValue(false)">
+          </gls-input-checkbox>
+        </div>
+      </div>
+
+      @if (dataFiscalRappFiscForm().get('selectRadioFiscalRapp')?.value) {
+        <div class="form-group mb-3">
+          <gls-input-dropdown
+            [id]="'country'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'countryID'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepCountryId'"
+            [placeholder]="'administrative.subjectEdit.subjectDataFiscalRappFisc.placeholderTaxRepCountryId' | translate"
+            [options]="nations"
+            [keyValue]="'id'"
+            [keyDecsName]="'value'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input-dropdown>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'taxRepCodeId'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'codeId'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepCodeId'"
+            [placeholder]="'administrative.subjectEdit.subjectDataFiscalRappFisc.placeholderTaxRepCodeId' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'taxCodeId'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'taxCode'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepTaxCode'"
+            [placeholder]="'administrative.subjectEdit.subjectDataFiscalRappFisc.placeholderTaxRepTaxCode' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'taxCodeSecondLine'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'taxCodeSecondLine'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelSecondRowTaxCode'"
+            [placeholder]="'administrative.subjectEdit.subjectDataFiscalRappFisc.placeholderSecondRowTaxCode' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <!-- @if (!isPhysicalPerson) { -->
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'companyNameId'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'companyName'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepCompanyName'"
+            [placeholder]="'administrative.subjectEdit.subjectDataFiscalRappFisc.placeholderTaxRepCompanyName' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'companyNameSecondLine'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'companyNameSecondLine'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelSecondRowCompanyName'"
+            [placeholder]="'administrative.subjectEdit.subjectDataFiscalRappFisc.placeholderSecondRowCompanyName' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+        <!-- } -->
+
+        <!-- @if (isPhysicalPerson) { -->
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'surnameId'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'surname'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepLastName'"
+            [placeholder]="'administrative.subjectEdit.subjectDataFiscalRappFisc.placeholderTaxRepLastName' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+
+        <div class="form-group mb-3">
+          <gls-input
+            [id]="'nameId'"
+            [formGroup]="dataFiscalRappFiscForm()"
+            [controlName]="'name'"
+            [label]="'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepFirstName'"
+            [placeholder]="'administrative.subjectEdit.subjectDataFiscalRappFisc.placeholderTaxRepFirstName' | translate"
+            [type]="'text'"
+            [class]="'form-control'"
+            [showError]="!isDraft()"
+            [showStatus]="true">
+          </gls-input>
+        </div>
+        <!-- } -->
+      }
+    </div>
+  </div>
+} @else {
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.title' | translate }}</h2>
+    </div>
+    <div class="col-md-6">
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepCountryId' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ dataFiscalRappFiscForm().get('countryName')?.value || '--' }}</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepCodeId' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ dataFiscalRappFiscForm().get('codeId')?.value || '--' }}</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepTaxCode' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ dataFiscalRappFiscForm().get('taxCode')?.value || '--' }}</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.labelSecondRowTaxCode' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ dataFiscalRappFiscForm().get('taxCodeSecondLine')?.value || '--' }}</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepCompanyName' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ dataFiscalRappFiscForm().get('companyName')?.value || '--' }}</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.labelSecondRowCompanyName' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ dataFiscalRappFiscForm().get('companyNameSecondLine')?.value || '--' }}</div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepLastName' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ dataFiscalRappFiscForm().get('surname')?.value || '--' }}</div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6 fw-bold text-break">
+          {{ 'administrative.subjectEdit.subjectDataFiscalRappFisc.labelTaxRepFirstName' | translate }}
+        </div>
+        <div class="col-6 text-break">{{ dataFiscalRappFiscForm().get('name')?.value || '--' }}</div>
+      </div>
+    </div>
+  </div>
+}

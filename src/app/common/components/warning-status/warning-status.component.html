@@ -1,0 +1,18 @@
+<ng-container *ngIf="row()?.error; else checkWarning">
+  <i
+    class="bi fs-6"
+    [ngClass]="'bi-exclamation-circle status-danger'"
+    [ngbTooltip]="label() | translate"
+    [tooltipClass]="'custom-tooltip'"></i>
+</ng-container>
+<ng-template #checkWarning>
+  <ng-container *ngIf="row()?.warning">
+    <img
+      src="assets/img/administrative/bell.svg"
+      alt="Warning"
+      width="20"
+      height="20"
+      [ngbTooltip]="label() | translate"
+      [tooltipClass]="'custom-tooltip'" />
+  </ng-container>
+</ng-template>

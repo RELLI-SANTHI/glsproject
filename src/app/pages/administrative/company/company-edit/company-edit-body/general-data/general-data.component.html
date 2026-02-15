@@ -1,0 +1,133 @@
+<section class="container-fluid p-0">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="fw-bold">{{ 'administrative.generalData.generalData' | translate }}</h2>
+    </div>
+    <div class="col-md-6">
+      @if (isWriting()) {
+        <form [formGroup]="generalDataFg()" class="general-data-form">
+          <div class="mb-3">
+            <gls-input
+              [id]="'companyname'"
+              [formGroup]="generalDataFg()"
+              [controlName]="'companyname'"
+              [label]="'administrative.companyCreate.dataGeneral.companyName'"
+              [placeholder]="'administrative.companyCreate.dataGeneral.companyName' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mb-3">
+            <p class="mb-1 form-label gls-form-label">{{ 'administrative.generalData.vatGroup' | translate }}</p>
+            <div class="d-flex flex-row justify-content-start map-3 leagal-data-checkbox form-check px-0">
+              <gls-input-checkbox
+                [id]="'radioValuesYes'"
+                [formGroup]="generalDataFg()"
+                [class]="'form-check-input feature-radio'"
+                [controlName]="'vatGr'"
+                [label]="'administrative.generalData.radioValues.yes'"
+                [type]="'radio'"
+                [checked]="generalDataFg().get('vatGr')?.value"
+                (valueChange)="generalDataFg().get('vatGr')?.setValue(true)">
+              </gls-input-checkbox>
+              <gls-input-checkbox
+                [id]="'radioValuesNo'"
+                [formGroup]="generalDataFg()"
+                [controlName]="'vatGr'"
+                [class]="'form-check-input feature-radio'"
+                [label]="'administrative.generalData.radioValues.no'"
+                [type]="'radio'"
+                [checked]="!generalDataFg().get('vatGr')?.value"
+                (valueChange)="generalDataFg().get('vatGr')?.setValue(false)">
+              </gls-input-checkbox>
+            </div>
+          </div>
+          <div class="mb-3">
+            <gls-input
+              [id]="'2'"
+              [formGroup]="generalDataFg()"
+              [controlName]="'vatNo'"
+              [label]="'administrative.companyCreate.dataGeneral.vatNo'"
+              [placeholder]="'administrative.companyCreate.dataGeneral.vatNo' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="true"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mb-3">
+            <gls-input
+              [id]="'3'"
+              [formGroup]="generalDataFg()"
+              [controlName]="'taxIdcode'"
+              [label]="'administrative.companyCreate.legalData.taxIdcode'"
+              [placeholder]="'administrative.companyCreate.legalData.taxIdcode' | translate"
+              [type]="'text'"
+              [class]="'form-control'"
+              [showError]="!isDraft()"
+              [showStatus]="true">
+            </gls-input>
+          </div>
+          <div class="mt-2 mb-3">
+            <gls-input-dropdown
+              [id]="'4'"
+              [formGroup]="generalDataFg()"
+              [controlName]="'languageId'"
+              [options]="languageList"
+              [label]="'administrative.companyCreate.legalData.language'"
+              [keyValue]="'id'"
+              [keyDecsName]="'description'"
+              [showError]="!isDraft()"
+              [showStatus]="true"
+              [required]="true">
+            </gls-input-dropdown>
+          </div>
+        </form>
+      } @else {
+        <div class="row pb-3">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.dataGeneral.companyName' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.name || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.generalData.vatGroup' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">
+                  {{
+                    (companyData?.vatGroup ? 'administrative.generalData.radioValues.yes' : 'administrative.generalData.radioValues.no')
+                      | translate
+                  }}
+                </p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.dataGeneral.vatNo' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.vatNumber || '--' }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.legalData.taxIdcode' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.taxCode }}</p>
+              </div>
+              <div class="col-6 label">
+                <strong>{{ 'administrative.companyCreate.legalData.language' | translate }}</strong>
+              </div>
+              <div class="col-6 value">
+                <p class="info-value view-company-value notranslate">{{ companyData?.languageName }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

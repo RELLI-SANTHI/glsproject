@@ -1,0 +1,105 @@
+<section class="container-fluid p-0">
+  <ul #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs nav-tabs-top pt-5 justify-content-start gap-2" ngbNav>
+    <li ngbNavItem="tab1">
+      <button ngbNavLink>
+        @if (isSectionInvalid('generalData')) {
+          <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+        }
+        {{ 'administrative.generalData.generalData' | translate }}
+      </button>
+      <ng-template ngbNavContent>
+        <app-general-data
+          [isWriting]="isWrite()"
+          [companyData]="companyData()"
+          [parentForm]="formParent()"
+          [generalDataFg]="getGeneralDataForm()"
+          [nationList]="nationList()"
+          [nationDefault]="nationDefault()"
+          [isDraft]="isDraft()" />
+        <hr />
+        <app-registered-office-address
+          [isWriting]="isWrite()"
+          [companyData]="companyData()"
+          [officeAddressFg]="getOfficeAddressForm()"
+          [isDraft]="isDraft()" />
+        <hr />
+        <app-contact-info
+          [isWriting]="isWrite()"
+          [companyData]="companyData()"
+          [parentForm]="formParent()"
+          [contactInformationForm]="getContactInformationForm()"
+          [isDraft]="isDraft()" />
+        <hr />
+        <app-end-activity
+          [isWriting]="isWrite()"
+          [companyData]="companyData()"
+          [parentForm]="formParent()"
+          [activityEndDateFg]="getActivityEndDateForm()"
+          [isDraft]="isDraft()" />
+        <hr />
+      </ng-template>
+    </li>
+    <li ngbNavItem="tab2">
+      <button ngbNavLink>
+        @if (isSectionInvalid('billingData')) {
+          <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+        }
+        {{ 'administrative.billingData.billingCompanyData' | translate }}
+      </button>
+      <ng-template ngbNavContent>
+        <app-billing-data
+          [isWriting]="isWrite()"
+          [companyData]="companyData()"
+          [billingDataFg]="getBillingDataForm()"
+          [isDraft]="isDraft()" />
+        <hr />
+        <app-company-data
+          [isWriting]="isWrite()"
+          [companyData]="companyData()"
+          [companyDataFg]="getCompanyDataForm()"
+          [isDraft]="isDraft()" />
+      </ng-template>
+    </li>
+    <li ngbNavItem="tab3">
+      <button ngbNavLink>
+        @if (isSectionInvalid('administrativeRelations')) {
+          <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+        }
+        {{ 'administrative.companyCreate.administrativeRelations' | translate }}
+      </button>
+      <ng-template ngbNavContent>
+        <app-administrative-relations
+          [isWriting]="isWrite()"
+          [companyData]="companyData()"
+          [parentForm]="formParent()"
+          [adminRelationFg]="getAdminRelationForm()"
+          [isDraft]="isDraft()" />
+      </ng-template>
+    </li>
+    @if (!isWrite()) {
+      <li ngbNavItem="tab4">
+        <button ngbNavLink>
+          @if (isSectionInvalid('commercialRelations')) {
+            <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+          }
+          {{ 'administrative.commercialRelations.commercialRelations' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          <app-company-commercial-relations />
+        </ng-template>
+      </li>
+      <li ngbNavItem="tab5">
+        <button ngbNavLink>
+          @if (isSectionInvalid('structures')) {
+            <em aria-label="Error" class="bi bi-exclamation-circle-fill ko-icon"></em>
+          }
+          {{ 'navmenu.structures' | translate }}
+        </button>
+        <ng-template ngbNavContent>
+          <app-administrative-structures [isWriting]="isWrite()" [companyId]="id" />
+        </ng-template>
+      </li>
+    }
+  </ul>
+  <div [ngbNavOutlet]="nav"></div>
+</section>
